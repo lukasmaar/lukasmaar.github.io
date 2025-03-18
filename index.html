@@ -49,7 +49,7 @@
           </a>
           <div class="dropdown-menu" id="papers">
             <a class="dropdown-item" href="#papers2025">
-              2025: 4
+              2025: 5
             </a>
             <a class="dropdown-item" href="#papers2024">
               2024: 5
@@ -183,6 +183,44 @@
                 </b>
               </div>
               <div class="col-xs-11">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="timeline-entry">
+              <div class="col-md-1">
+              </div>
+              <div class="col-md-11">
+                <i class="fa fa-file">
+                </i>
+                <a class="title" href="papers/host25-clpe.pdf">
+                  Cryptographic Least Privilege Enforcement for Scalable Memory Isolation
+                </a>
+                <br>
+                <small>
+                  Martin Unterguggenberger, David Schrammel, <b>Lukas Maar</b>, Lukas Lamster, Vedad Hadzic, Stefan Mangard
+                  <br>
+                  IEEE International Symposium on Hardware Oriented Security and Trust (HOST) 2025
+                  <br>
+                  <span class="sbtn" onclick="toggleBox('info:CLPE')"><a href="#0"><i
+                        class="fa fa-info-circle"></i>
+                      Info</a></span>
+                  <span class="sbtn" onclick="toggleBox('bibtex:CLPE')"><a href="#0"><i
+                        class="fa fa-quote-left"></i>
+                      BibTex</a></span>
+                </small>
+                <div id="info:CLPE" class="infobox" style="display: none;">
+                  In this paper, we present Cryptographic Least Privilege Enforcement (CLPE), a lightweight ISA extension using Message Authentication Codes (MACs) to enforce fine-grained memory isolation in C/C++ systems. CLPE enhances security with minimal performance overhead while maintaining compatibility with legacy software.
+                </div>
+                <div id="bibtex:CLPE" class="box" style="display: none;">
+                  <pre style="white-space: pre-wrap;">
+@inproceedings{Unterguggenberger2025CLPE,
+  author = {Martin Unterguggenberger and David Schrammel and Lukas Maar and Lukas Lamster and Vedad Hadzic and Stefan Mangard},
+  booktitle = {{HOST}},
+  title = {{Cryptographic Least Privilege Enforcement for Scalable Memory Isolation}},
+  year = {2025}
+}</pre>
+                </div>
               </div>
             </div>
           </div>
@@ -716,7 +754,7 @@
     <footer>
       <p>&copy; 2025 Lukas Maar.
         <small>
-          Last updated: 2025-11-03. Template by
+          Last updated: 2025-18-03. Template by
           <a class="title" href="https://andreaskogler.com/">Andreas Kogler</a> <span
             style='font-size:15px;'>&#10230;</span> <a class="title" href="https://fabianrauscher.com/">Fabian
             Rauscher</a> <span style='font-size:15px;'>&#10230;</span> <a class="title" href="#">Lukas Maar</a>
