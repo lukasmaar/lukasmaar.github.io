@@ -51,7 +51,7 @@
           </a>
           <div class="dropdown-menu" id="papers">
             <a class="dropdown-item" href="#papers2025">
-              2025: 5
+              2025: 6
             </a>
             <a class="dropdown-item" href="#papers2024">
               2024: 5
@@ -67,7 +67,7 @@
           </a>
           <div class="dropdown-menu" id="talks">
             <a class="dropdown-item" href="#talks2025">
-              2025: 3
+              2025: 7
             </a>
             <a class="dropdown-item" href="#talks2024">
               2024: 4
@@ -211,33 +211,30 @@
               <div class="col-md-11">
                 <i class="fa fa-file">
                 </i>
-                <a class="title" href="papers/host25-clpe.pdf">
-                  Cryptographic Least Privilege Enforcement for Scalable Memory Isolation
+                <a class="title" href="#">
+                  The Doom of Device Drivers: Your Android Device (Most Likely) has N-Day Kernel Vulnerabilities
                 </a>
                 <br>
                 <small>
-                  Martin Unterguggenberger, David Schrammel, <b>Lukas Maar</b>, Lukas Lamster, Vedad Hadzic, Stefan
-                  Mangard
+                  <b>Lukas Maar</b>, Florian Draschbacher, Lorenz Schumm, Ernesto Martínez García, Stefan Mangard
                   <br>
-                  IEEE International Symposium on Hardware Oriented Security and Trust (HOST) 2025
+                  USENIX Security Symposium 2025
                   <br>
-                  <span class="sbtn" onclick="toggleBox('info:CLPE')"><a href="#0"><i class="fa fa-info-circle"></i>
+                  <span class="sbtn" onclick="toggleBox('info:DeviceDrivers')"><a href="#0"><i
+                        class="fa fa-info-circle"></i>
                       Info</a></span>
-                  <span class="sbtn" onclick="toggleBox('bibtex:CLPE')"><a href="#0"><i class="fa fa-quote-left"></i>
+                  <span class="sbtn" onclick="toggleBox('bibtex:DeviceDrivers')"><a href="#0"><i
+                        class="fa fa-quote-left"></i>
                       BibTex</a></span>
                 </small>
-                <div id="info:CLPE" class="infobox" style="display: none;">
-                  In this paper, we present Cryptographic Least Privilege Enforcement (CLPE), a lightweight ISA
-                  extension using Message Authentication Codes (MACs) to enforce fine-grained memory isolation in C/C++
-                  systems. CLPE enhances security with minimal performance overhead while maintaining compatibility with
-                  legacy software.
+                <div id="info:DeviceDrivers" class="infobox" style="display: none;">
                 </div>
-                <div id="bibtex:CLPE" class="box" style="display: none;">
+                <div id="bibtex:DeviceDrivers" class="box" style="display: none;">
                   <pre style="white-space: pre-wrap;">
-@inproceedings{Unterguggenberger2025CLPE,
-  author = {Martin Unterguggenberger and David Schrammel and Lukas Maar and Lukas Lamster and Vedad Hadzic and Stefan Mangard},
-  booktitle = {{HOST}},
-  title = {{Cryptographic Least Privilege Enforcement for Scalable Memory Isolation}},
+@inproceedings{Maar2025DeviceDrivers,
+  author = {Lukas Maar and Florian Draschbacher and Lorenz Schumm and Ernesto Martinez Garcia and Stefan Mangard},
+  booktitle = {{USENIX Security}},
+  title = {{The Doom of Device Drivers: Your Android Device (Most Likely) has N-Day Kernel Vulnerabilities}},
   year = {2025}
 }</pre>
                 </div>
@@ -277,6 +274,8 @@
                       GitHub</a></span>
                   <span class="sbtn"><a href="https://zenodo.org/records/15105521"><i class="fa fa-code"></i>
                       Zenodo</a></span>
+                  <span class="sbtn"><a href="#"><i class="fa fa-user-secret"></i>
+                      Black Hat USA</a></span>
                 </small>
                 <div id="info:LocationDisclosures" class="infobox" style="display: none;">
                   <div>
@@ -347,6 +346,46 @@
   author = {Florian Draschbacher and Lukas Maar and Mathias Oberhuber and Stefan Mangard},
   booktitle = {{USENIX Security}},
   title = {{ChoiceJacking: Compromising Mobile Devices through Malicious Chargers like a Decade ago}},
+  year = {2025}
+}</pre>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="timeline-entry">
+              <div class="col-md-1">
+              </div>
+              <div class="col-md-11">
+                <i class="fa fa-file">
+                </i>
+                <a class="title" href="papers/host25-clpe.pdf">
+                  Cryptographic Least Privilege Enforcement for Scalable Memory Isolation
+                </a>
+                <br>
+                <small>
+                  Martin Unterguggenberger, David Schrammel, <b>Lukas Maar</b>, Lukas Lamster, Vedad Hadzic, Stefan
+                  Mangard
+                  <br>
+                  IEEE International Symposium on Hardware Oriented Security and Trust (HOST) 2025
+                  <br>
+                  <span class="sbtn" onclick="toggleBox('info:CLPE')"><a href="#0"><i class="fa fa-info-circle"></i>
+                      Info</a></span>
+                  <span class="sbtn" onclick="toggleBox('bibtex:CLPE')"><a href="#0"><i class="fa fa-quote-left"></i>
+                      BibTex</a></span>
+                </small>
+                <div id="info:CLPE" class="infobox" style="display: none;">
+                  In this paper, we present Cryptographic Least Privilege Enforcement (CLPE), a lightweight ISA
+                  extension using Message Authentication Codes (MACs) to enforce fine-grained memory isolation in C/C++
+                  systems. CLPE enhances security with minimal performance overhead while maintaining compatibility with
+                  legacy software.
+                </div>
+                <div id="bibtex:CLPE" class="box" style="display: none;">
+                  <pre style="white-space: pre-wrap;">
+@inproceedings{Unterguggenberger2025CLPE,
+  author = {Martin Unterguggenberger and David Schrammel and Lukas Maar and Lukas Lamster and Vedad Hadzic and Stefan Mangard},
+  booktitle = {{HOST}},
+  title = {{Cryptographic Least Privilege Enforcement for Scalable Memory Isolation}},
   year = {2025}
 }</pre>
                 </div>
@@ -815,6 +854,99 @@
               <div class="col-md-11">
                 <i class="fa fa-television">
                 </i>
+                <a class="title" href="#">
+                  Derandomizing Kernel Object Locations with Software- and Hardware-Induced Side Channels
+                </a>
+                <br>
+                <small>
+                  <b>Lukas Maar</b>
+                  <br>
+                  Nullcon Berlin 2025
+                  <br>
+                </small>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="timeline-entry">
+              <div class="col-md-1">
+              </div>
+              <div class="col-md-11">
+                <i class="fa fa-television">
+                </i>
+                <a class="title" href="#">
+                  The Doom of Device Drivers: Your Android Device (Most Likely) has N-Day Kernel Vulnerabilities
+                </a>
+                <br>
+                <small>
+                  <b>Lukas Maar</b>
+                  <br>
+                  USENIX Security 2025
+                  <br>
+                  <span class="sbtn"><a
+                      href="https://www.usenix.org/conference/usenixsecurity25/presentation/maar-doom"><i
+                        class="fa fa-globe"></i>
+                      Website</a></span>
+                </small>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="timeline-entry">
+              <div class="col-md-1">
+              </div>
+              <div class="col-md-11">
+                <i class="fa fa-television">
+                </i>
+                <a class="title" href="#">
+                  When Good Kernel Defenses Go Bad: Reliable and Stable Kernel Exploits via Defense-Amplified TLB
+                  Side-Channel Leaks
+                </a>
+                <br>
+                <small>
+                  <b>Lukas Maar</b>
+                  <br>
+                  USENIX Security 2025
+                  <br>
+                  <span class="sbtn"><a
+                      href="https://www.usenix.org/conference/usenixsecurity25/presentation/maar-kernel"><i
+                        class="fa fa-globe"></i>
+                      Website</a></span>
+                </small>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="timeline-entry">
+              <div class="col-md-1">
+              </div>
+              <div class="col-md-11">
+                <i class="fa fa-television">
+                </i>
+                <a class="title" href="#">
+                  Derandomizing the Location of Security-Critical Kernel Objects in the Linux Kernel
+                </a>
+                <br>
+                <small>
+                  <b>Lukas Maar</b>, Lukas Giner
+                  <br>
+                  Black Hat USA 2025
+                  <br>
+                  <span class="sbtn"><a
+                      href="https://www.blackhat.com/us-25/briefings/schedule/#derandomizing-the-location-of-security-critical-kernel-objects-in-the-linux-kernel-44902"><i
+                        class="fa fa-globe"></i>
+                      Website</a></span>
+                </small>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="timeline-entry">
+              <div class="col-md-1">
+              </div>
+              <div class="col-md-11">
+                <i class="fa fa-television">
+                </i>
                 <a class="title" href="slides/bhasia25-kernelsnitch.pdf">
                   KernelSnitch: Leaking Kernel Heap Pointers by Exploiting Software-Induced Side-Channel Leakage of
                   Kernel Hash Tables
@@ -882,7 +1014,7 @@
                       href="https://www.ndss-symposium.org/ndss-paper/kernelsnitch-side-channel-attacks-on-kernel-data-structures/"><i
                         class="fa fa-globe"></i>
                       Website</a></span>
-                  <span class="sbtn"><a href="#"><i class="fa fa-television"></i>
+                  <span class="sbtn"><a href="https://www.youtube.com/watch?v=qQfraHsHkGw"><i class="fa fa-television"></i>
                       Recording</a></span>
                 </small>
               </div>
@@ -1040,7 +1172,7 @@
     <footer>
       <p>&copy; 2025 Lukas Maar.
         <small>
-          Last updated: 2025-06-04. Template by
+          Last updated: 2025-06-27. Template by
           <a class="title" href="https://andreaskogler.com/">Andreas Kogler</a> <span
             style='font-size:15px;'>&#10230;</span> <a class="title" href="https://fabianrauscher.com/">Fabian
             Rauscher</a> <span style='font-size:15px;'>&#10230;</span> <a class="title" href="#">Lukas Maar</a>
