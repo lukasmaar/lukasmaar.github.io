@@ -1,0 +1,176 @@
+/* Home page */
+body.home-page .container {
+    background-color: var(--bg-page);
+}
+
+body.home-page .container li {
+    margin-top: 3px;
+    margin-bottom: 3px;
+    margin-left: -10px;
+}
+
+body.home-page hr {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border-top: 1px solid var(--rule);
+}
+
+body.home-page .timeline {
+    margin-top: -20px;
+    position: relative;
+    margin-bottom: 15px;
+}
+
+body.home-page .timeline:before {
+    position: absolute;
+    content: "";
+    width: 6px;
+    height: calc(100% - 15px);
+    background: var(--timeline-rail);
+    left: 40px;
+    top: 25px;
+    border-radius: 100px;
+}
+
+body.home-page .timeline-entry {
+    position: relative;
+    margin-top: 15px;
+    margin-bottom: 0;
+    padding: 10px 0;
+    left: 0;
+    background: var(--bg-card);
+    display: inline-block;
+    border-radius: 0;
+    border: 2px solid #000;
+    width: 100%;
+}
+
+body.home-page .timeline-date {
+    position: relative;
+    left: 5px;
+    width: 100%;
+    top: 25px;
+    margin-bottom: 15px;
+}
+
+@media (min-width: 300px) {
+    body.home-page hr.timeline-sep {
+        top: -200px;
+    }
+}
+
+@media (min-width: 576px) {
+    body.home-page hr.timeline-sep {
+        position: relative;
+        top: -6px;
+        border-radius: 5px;
+    }
+}
+
+body.home-page .box {
+    background-color: var(--bg-white);
+    height: auto;
+    border-radius: 10px;
+    padding-top: 2px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+body.home-page .infobox code {
+    color: #5f6368;
+    font-family: Consolas, Monaco, "Courier New", monospace;
+    font-size: 0.88rem;
+}
+
+body.home-page .infobox {
+    background-color: var(--bg-white);
+    height: auto;
+    border-radius: 10px;
+    padding-top: 10px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-bottom: 7px;
+}
+
+body.home-page .link-target {
+    margin-top: -60px;
+    position: absolute;
+}
+
+body.home-page .anchor {
+    position: absolute;
+    top: -60px;
+    visibility: hidden;
+}
+
+body.home-page .icon-row {
+    margin: auto;
+    width: 171px;
+}
+
+body.home-page .edu-list {
+    margin-left: 50px;
+}
+
+body.home-page .text-muted-small {
+    color: var(--muted);
+    font-size: 0.8em;
+}
+
+body.home-page .text-muted {
+    color: var(--muted);
+}
+
+body.home-page .text-purple {
+    color: var(--brand-purple);
+}
+
+body.home-page .text-black {
+    color: #000;
+}
+
+body.home-page .text-gold {
+    color: #eccb11;
+}
+
+body.home-page .pre-wrap {
+    white-space: pre-wrap;
+}
+
+body.home-page .is-hidden {
+    display: none;
+}
+
+body.home-page .is-hidden-overflow {
+    display: none;
+    max-height: 100%;
+    overflow: hidden;
+}
+
+body.home-page .thumb-left {
+    float: left;
+    margin: 0 15px 0 0;
+}
+
+body.home-page .thumb-left-small {
+    float: left;
+    margin: 0 10px 0 0;
+}
+
+body.home-page .thumb-left-top {
+    float: left;
+    margin: 10px 10px 0 0;
+}
+
+body.home-page .thumb-left-responsive {
+    float: left;
+    margin: 0 10px 5px 0;
+    max-width: 100%;
+    height: auto;
+}
+
+body.home-page .footer-arrow {
+    font-size: 15px;
+}

@@ -1,0 +1,201 @@
+[
+  {
+    "year": 2025,
+    "title": "Kernel Security in the Wild",
+    "href": "slides/kernel-security-in-the-wild.pdf",
+    "authors": "<b>Lukas Maar</b>",
+    "venue": "PhD Thesis",
+    "links": []
+  },
+  {
+    "year": 2025,
+    "title": "Derandomizing Kernel Object Locations with Software- and Hardware-Induced Side Channels",
+    "href": "slides/nullcon25-sidechannels.pdf",
+    "authors": "<b>Lukas Maar</b>",
+    "venue": "Nullcon Berlin 2025",
+    "links": [
+      {
+        "href": "https://nullcon.net/berlin-2025/speaker-speaker-derandomizing-kernel-object-locations",
+        "icon": "fa-globe",
+        "label": "Website"
+      },
+      {
+        "href": "https://www.youtube.com/watch?v=_6BcuHpp9eU",
+        "icon": "fa-television",
+        "label": "Recording"
+      }
+    ]
+  },
+  {
+    "year": 2025,
+    "title": "The Doom of Device Drivers: Your Android Device (Most Likely) has N-Day Kernel Vulnerabilities",
+    "href": "slides/usenix25-drivers.pdf",
+    "authors": "<b>Lukas Maar</b>",
+    "venue": "USENIX Security 2025",
+    "links": [
+      {
+        "href": "https://www.usenix.org/conference/usenixsecurity25/presentation/maar-doom",
+        "icon": "fa-globe",
+        "label": "Website"
+      }
+    ]
+  },
+  {
+    "year": 2025,
+    "title": "When Good Kernel Defenses Go Bad: Reliable and Stable Kernel Exploits via Defense-Amplified TLB Side-Channel Leaks",
+    "href": "slides/usenix25-tlbsidechannel.pdf",
+    "authors": "<b>Lukas Maar</b>",
+    "venue": "USENIX Security 2025",
+    "links": [
+      {
+        "href": "https://www.usenix.org/conference/usenixsecurity25/presentation/maar-kernel",
+        "icon": "fa-globe",
+        "label": "Website"
+      }
+    ]
+  },
+  {
+    "year": 2025,
+    "title": "Derandomizing the Location of Security-Critical Kernel Objects in the Linux Kernel",
+    "href": "slides/bhus25-tlbsidechannel.pdf",
+    "authors": "<b>Lukas Maar</b>, Lukas Giner",
+    "venue": "Black Hat USA 2025",
+    "links": [
+      {
+        "href": "https://www.blackhat.com/us-25/briefings/schedule/#derandomizing-the-location-of-security-critical-kernel-objects-in-the-linux-kernel-44902",
+        "icon": "fa-globe",
+        "label": "Website"
+      },
+      {
+        "href": "https://www.youtube.com/watch?v=nOXwh8BfRDo&list=PLH15HpR5qRsXtV3t9TlkRZBmIfcIC6THE&index=6",
+        "icon": "fa-television",
+        "label": "Recording"
+      }
+    ]
+  },
+  {
+    "year": 2025,
+    "title": "KernelSnitch: Leaking Kernel Heap Pointers by Exploiting Software-Induced Side-Channel Leakage of Kernel Hash Tables",
+    "href": "slides/bhasia25-kernelsnitch.pdf",
+    "authors": "<b>Lukas Maar</b>, Jonas Juffinger",
+    "venue": "Black Hat Asia 2025",
+    "links": [
+      {
+        "href": "https://www.blackhat.com/asia-25/briefings/schedule/#kernelsnitch-leaking-kernel-heap-pointers-by-exploiting-software-induced-side-channel-leakage-of-kernel-hash-tables-43247",
+        "icon": "fa-globe",
+        "label": "Website"
+      },
+      {
+        "href": "https://www.youtube.com/watch?v=jfgpIv5cbeY&list=PLH15HpR5qRsWXApxW0vAsRduq9xa3ifCG&index=17",
+        "icon": "fa-television",
+        "label": "Recording"
+      }
+    ]
+  },
+  {
+    "year": 2025,
+    "title": "Watch Your Phone: Novel USB-Based File Access Attacks Against Mobile Devices",
+    "href": "slides/bhasia25-choicejacking.pdf",
+    "authors": "Florian Draschbacher, <b>Lukas Maar</b>",
+    "venue": "Black Hat Asia 2025",
+    "links": [
+      {
+        "href": "https://www.blackhat.com/asia-25/briefings/schedule/#watch-your-phone-novel-usb-based-file-access-attacks-against-mobile-devices-43262",
+        "icon": "fa-globe",
+        "label": "Website"
+      },
+      {
+        "href": "https://www.youtube.com/watch?v=UYKet66vLsg&list=PLH15HpR5qRsWXApxW0vAsRduq9xa3ifCG&index=16",
+        "icon": "fa-television",
+        "label": "Recording"
+      }
+    ]
+  },
+  {
+    "year": 2025,
+    "title": "KernelSnitch: Side-Channel Attacks on Kernel Data Structures",
+    "href": "slides/ndss25-kernelsnitch.pdf",
+    "authors": "<b>Lukas Maar</b>",
+    "venue": "Network and Distributed System Security (NDSS) 2025",
+    "links": [
+      {
+        "href": "https://www.ndss-symposium.org/ndss-paper/kernelsnitch-side-channel-attacks-on-kernel-data-structures/",
+        "icon": "fa-globe",
+        "label": "Website"
+      },
+      {
+        "href": "https://www.youtube.com/watch?v=qQfraHsHkGw",
+        "icon": "fa-television",
+        "label": "Recording"
+      }
+    ]
+  },
+  {
+    "year": 2024,
+    "title": "SLUBStick: Arbitrary Memory Writes through Practical Software Cross-Cache Attacks within the Linux Kernel",
+    "href": "slides/csaw24-slubstick.pdf",
+    "authors": "<b>Lukas Maar</b>",
+    "venue": "CSAW Europe Applied Research Competition (ARC) 2024",
+    "links": []
+  },
+  {
+    "year": 2024,
+    "title": "Defects-in-Depth: Analyzing the Integration of Effective Defenses against One-Day Exploits in Android Kernels",
+    "href": "slides/usenix24-defectsindepth.pdf",
+    "authors": "<b>Lukas Maar</b>",
+    "venue": "USENIX Security Symposium 2024",
+    "links": [
+      {
+        "href": "https://www.usenix.org/conference/usenixsecurity24/presentation/maar-defects",
+        "icon": "fa-globe",
+        "label": "Website"
+      },
+      {
+        "href": "https://www.youtube.com/watch?v=xb3WD0KJ03w",
+        "icon": "fa-television",
+        "label": "Recording"
+      }
+    ]
+  },
+  {
+    "year": 2024,
+    "title": "SLUBStick: Arbitrary Memory Writes through Practical Software Cross-Cache Attacks within the Linux Kernel",
+    "href": "slides/usenix24-slubstick.pdf",
+    "authors": "<b>Lukas Maar</b>",
+    "venue": "USENIX Security Symposium 2024",
+    "links": [
+      {
+        "href": "https://www.usenix.org/conference/usenixsecurity24/presentation/maar-slubstick",
+        "icon": "fa-globe",
+        "label": "Website"
+      },
+      {
+        "href": "https://www.youtube.com/watch?v=dPyJZxY0N7w",
+        "icon": "fa-television",
+        "label": "Recording"
+      }
+    ]
+  },
+  {
+    "year": 2024,
+    "title": "Beyond the Edges of Kernel Control-Flow Hijacking Protection with HEK-CFI",
+    "href": "slides/asiaccs24-hekcfi.pdf",
+    "authors": "<b>Lukas Maar</b>",
+    "venue": "ACM ASIA Conference on Computer and Communications Security (AsiaCCS) 2024",
+    "links": []
+  },
+  {
+    "year": 2023,
+    "title": "DOPE: DOmain Protection Enforcement with PKS",
+    "href": "slides/acsac23-dope.pdf",
+    "authors": "<b>Lukas Maar</b>",
+    "venue": "Annual Computer Security Applications Conference (ACSAC) 2023",
+    "links": [
+      {
+        "href": "https://www.acsac.org/2023/program/final/s51.html",
+        "icon": "fa-globe",
+        "label": "Website"
+      }
+    ]
+  }
+]

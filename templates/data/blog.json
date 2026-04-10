@@ -1,0 +1,15 @@
+[
+  {
+    "year": 2026,
+    "title": "From KernelSnitch to Practical msg_msg/pipe_buffer Heap KASLR Leaks",
+    "href": "posts/heap-kaslr-leak/index.html",
+    "author_html": "<b>Lukas Maar</b>",
+    "info_id": "info:HeapKASLRLeak",
+    "github": "https://github.com/lukasmaar/kernelsnitch",
+    "info": {
+      "id": "info:HeapKASLRLeak",
+      "class": "infobox is-hidden",
+      "html": "<ul><li><b>Portable Core Leak:</b> KernelSnitch is a software-only timing side channel that leaks <code>mm_struct</code>-backed page locations without relying on a memory-safety bug, with its POC having a near-100% success rate.</li><li><b>Practical pivot:</b> Combined with cross-cache reuse, this core yields practical <code>msg_msg</code>/<code>pipe_buffer</code> heap KASLR leaks: above 98% on desktop kernels and KernelCTF instances, and practical on the Android kernel.</li><li><b>Security implication:</b> This leakage class remains exploitable under MTE because it avoids invalid tagged accesses, and the core leak can also recover the tag of tagged kernel <code>mm_struct</code> addresses.</li></ul>"
+    }
+  }
+]

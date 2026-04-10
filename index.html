@@ -12,7 +12,8 @@
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/home.css">
 
   <!-- Google indexing -->
   <meta name="google-site-verification" content="E5UvMoMvf70F4qryQh3Jai_sonvfM7zp4btOn06tgm0" />
@@ -32,73 +33,50 @@
   <title>Lukas Maar</title>
 </head>
 
-<body data-spy="scroll" data-target="#navbar" data-offset="0">
-  <!-- NAVBAR -->
+<body class="home-page" data-spy="scroll" data-target="#navbar" data-offset="0">
   <nav class="navbar navbar-dark bg-dark navbar-expand-md fixed-top" id="navbar">
-    <a class="navbar-brand" href="#">Lukas Maar</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+  <a class="navbar-brand" href="index.html">Lukas Maar</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
 
-    <div class="collapse navbar-collapse nav-pills" id="navbar-collapse">
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item" style="margin-right:0.5cm;">
-          <a class="nav-link" href="#about_me">About Me</a>
-        </li>
-        <li class="nav-item dropdown" id="#" style="margin-right:0.5cm;">
-          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
-            Publications
-          </a>
-          <div class="dropdown-menu" id="papers">
-            <a class="dropdown-item" href="#papers2026">
-              2026: 1
-            </a>
-            <a class="dropdown-item" href="#papers2025">
-              2025: 7
-            </a>
-            <a class="dropdown-item" href="#papers2024">
-              2024: 5
-            </a>
-            <a class="dropdown-item" href="#papers2023">
-              2023: 1
-            </a>
-          </div>
-        </li>
-        <li class="nav-item dropdown" id="#" style="margin-right:0.5cm;">
-          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
-            Talks
-          </a>
-          <div class="dropdown-menu" id="talks">
-            <a class="dropdown-item" href="#talks2025">
-              2025: 8
-            </a>
-            <a class="dropdown-item" href="#talks2024">
-              2024: 4
-            </a>
-            <a class="dropdown-item" href="#talks2023">
-              2023: 1
-            </a>
-          </div>
-        </li>
-        <li class="nav-item dropdown" id="#" style="margin-right:0.5cm;">
-          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
-            Awards and CVEs
-          </a>
-          <div class="dropdown-menu" id="awards">
-            <a class="dropdown-item" href="#awards2025">
-              2025: 13
-            </a>
-            <a class="dropdown-item" href="#awards2024">
-              2024: 1
-            </a>
-            <a class="dropdown-item" href="#awards2023">
-              2023: 1
-            </a>
-          </div>
-        </li>
-      </ul>
-    </div>
-  </nav>
+  <div class="collapse navbar-collapse nav-pills" id="navbar-collapse">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item topbar-item"><a class="nav-link" href="index.html#about_me">About Me</a></li>
+      <li class="nav-item dropdown topbar-item">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Blog</a>
+        <div class="dropdown-menu" id="blog">
+          <a class="dropdown-item" href="index.html#blog2026">2026: 1</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown topbar-item">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Publications</a>
+        <div class="dropdown-menu" id="publications">
+          <a class="dropdown-item" href="index.html#publications2026">2026: 2</a>
+          <a class="dropdown-item" href="index.html#publications2025">2025: 7</a>
+          <a class="dropdown-item" href="index.html#publications2024">2024: 5</a>
+          <a class="dropdown-item" href="index.html#publications2023">2023: 1</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown topbar-item">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Talks</a>
+        <div class="dropdown-menu" id="talks">
+          <a class="dropdown-item" href="index.html#talks2025">2025: 8</a>
+          <a class="dropdown-item" href="index.html#talks2024">2024: 4</a>
+          <a class="dropdown-item" href="index.html#talks2023">2023: 1</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown topbar-item">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Awards and CVEs</a>
+        <div class="dropdown-menu" id="awards">
+          <a class="dropdown-item" href="index.html#awards2025">2025: 13</a>
+          <a class="dropdown-item" href="index.html#awards2024">2024: 1</a>
+          <a class="dropdown-item" href="index.html#awards2023">2023: 1</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
 
   <div class="container">
     <!-- About Me -->
@@ -127,7 +105,7 @@
         </div>
 
         <!-- Icons -->
-        <div class="row" style="margin: auto; width: 171px;">
+        <div class="row icon-row">
           <span class="fa-stack fa-lg">
             <a href="https://github.com/lukasmaar">
               <i class="fa fa-github fa-stack-1x "></i>
@@ -154,7 +132,7 @@
       <!-- Description -->
       <div class="col-md-7">
         <p>Hey and welcome to my site. I am a security researcher from Austria. I defended my PhD titled <a
-            href="kernel-security-in-the-wild.pdf">Kernel Security in the Wild</a> at the Institute of Information
+            href="publications/kernel-security-in-the-wild.pdf">Kernel Security in the Wild</a> at the Institute of Information
           Security (former IAIK), Graz University of Technology. My research focuses on system security, with a
           particular focus on kernel attacks and defenses, side-channel attacks targeting the kernel, and Android kernel
           security.
@@ -172,15 +150,15 @@
           </div>
           <div class="col-md-6">
             <b>Education</b>
-            <ul class="fa-ul" style="margin-left: 50px;">
+            <ul class="fa-ul edu-list">
               <li><span class="fa-li"><i class="fa fa-graduation-cap"></i></span> PhD in Computer Science, 2025<br><span
-                  style="color:#6e6e6e; font-size: 0.8em;"> Graz University of Technology</span></li>
+                  class="text-muted-small"> Graz University of Technology</span></li>
               <li><span class="fa-li"><i class="fa fa-graduation-cap"></i></span> MSc in Electrical Engineering,
-                2022<br><span style="color:#6e6e6e; font-size: 0.8em;"> Graz University of Technology</span></li>
+                2022<br><span class="text-muted-small"> Graz University of Technology</span></li>
               <li><span class="fa-li"><i class="fa fa-graduation-cap"></i></span> BSc in Computer Science, 2022<br><span
-                  style="color:#6e6e6e; font-size: 0.8em;"> Graz University of Technology</span></li>
+                  class="text-muted-small"> Graz University of Technology</span></li>
               <li><span class="fa-li"><i class="fa fa-graduation-cap"></i></span> BSc in Electrical Engineering,
-                2018<br><span style="color:#6e6e6e; font-size: 0.8em;"> Graz University of Technology</span></li>
+                2018<br><span class="text-muted-small"> Graz University of Technology</span></li>
             </ul>
           </div>
         </div>
@@ -188,7 +166,73 @@
       <div class="col-md-2"></div>
     </div>
 
-    <div id="papers" class="row">
+    <div id="blog" class="row">
+      <div class="col-md-1">
+      </div>
+      <div class="col-md-10">
+        <hr>
+        <h3>
+          <i class="fa fa-edit">
+          </i>
+          Blog
+        </h3>
+      </div>
+      <div class="col-md-1">
+      </div>
+    </div>
+
+        <div class="row">
+      <div class="col-md-1">
+      </div>
+      <div class="col-md-10">
+        <div class="timeline">
+
+          <div class="row">
+            <div class="timeline-date">
+              <span id="blog2026" class="anchor">
+              </span>
+              <div class="col-xs-1">
+                <b class="hi">
+                  2026
+                </b>
+              </div>
+              <div class="col-xs-11">
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="timeline-entry">
+              <div class="col-md-1">
+              </div>
+              <div class="col-md-11">
+                <i class="fa fa-edit">
+                </i>
+                <a class="title" href="posts/heap-kaslr-leak/index.html">
+                  From KernelSnitch to Practical msg_msg/pipe_buffer Heap KASLR Leaks
+                </a>
+                <br>
+                <small>
+                  <b>Lukas Maar</b>
+                  <br>
+                  <span class="sbtn" onclick="toggleBox('info:HeapKASLRLeak')"><a href="#0"><i class="fa fa-info-circle"></i>
+                      Info</a></span>
+                  <span class="sbtn"><a href="https://github.com/lukasmaar/kernelsnitch"><i class="fa fa-github"></i>
+                      GitHub</a></span>
+                </small>
+                <div id="info:HeapKASLRLeak" class="infobox is-hidden">
+                  <ul><li><b>Portable Core Leak:</b> KernelSnitch is a software-only timing side channel that leaks <code>mm_struct</code>-backed page locations without relying on a memory-safety bug, with its POC having a near-100% success rate.</li><li><b>Practical pivot:</b> Combined with cross-cache reuse, this core yields practical <code>msg_msg</code>/<code>pipe_buffer</code> heap KASLR leaks: above 98% on desktop kernels and KernelCTF instances, and practical on the Android kernel.</li><li><b>Security implication:</b> This leakage class remains exploitable under MTE because it avoids invalid tagged accesses, and the core leak can also recover the tag of tagged kernel <code>mm_struct</code> addresses.</li></ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+    <div id="publications" class="row">
       <div class="col-md-1">
       </div>
       <div class="col-md-10">
@@ -202,14 +246,16 @@
       <div class="col-md-1">
       </div>
     </div>
-    <div class="row">
+
+        <div class="row">
       <div class="col-md-1">
       </div>
       <div class="col-md-10">
         <div class="timeline">
+
           <div class="row">
             <div class="timeline-date">
-              <span id="papers2026" class="anchor">
+              <span id="publications2026" class="anchor">
               </span>
               <div class="col-xs-1">
                 <b class="hi">
@@ -220,6 +266,49 @@
               </div>
             </div>
           </div>
+
+          <div class="row">
+            <div class="timeline-entry">
+              <div class="col-md-1">
+              </div>
+              <div class="col-md-11">
+                <i class="fa fa-file">
+                </i>
+                <a class="title" href="#">
+                  Clone2Pwn: A Systematic Security Analysis of Data Migration Tools in the Android Ecosystem
+                </a>
+                <br>
+                <small>
+                  Florian Draschbacher, <b>Lukas Maar</b>, Lorenz Schumm, Rene Denifl, Lukas Treffner, Stefan Mangard
+                  <br>
+                  European Symposium on Research in Computer Security (ESORICS) 2026
+                  <br>
+                  <span class="text-muted">
+                    <i class="fa fa-bug text-black"></i> CVE-2025-15515, CVE-2025-21060, CVE-2025-21061, CVE-2025-21062, CVE-2025-21064, CVE-2025-21078, CVE-2025-27387
+                  </span>
+                  <br>
+                  <span class="sbtn" onclick="toggleBox('info:Clone2Pwn')"><a href="#0"><i class="fa fa-info-circle"></i>
+                      Info</a></span>
+                  <span class="sbtn" onclick="toggleBox('bibtex:Clone2Pwn')"><a href="#0"><i class="fa fa-quote-left"></i>
+                      BibTex</a></span>
+                  <span class="sbtn"><a href="#"><i class="fa fa-github"></i>
+                      GitHub</a></span>
+                </small>
+                <div id="info:Clone2Pwn" class="infobox is-hidden">
+                </div>
+                <div id="bibtex:Clone2Pwn" class="box is-hidden">
+                  <pre class="pre-wrap">
+@inproceedings{Draschbacher2026Clone2Pwn,
+  author = {Florian Draschbacher and Lukas Maar and Lorenz Schumm and Rene Denifl and Lukas Treffner and Stefan Mangard},
+  booktitle = {{ESORICS}},
+  title = {{Clone2Pwn: A Systematic Security Analysis of Data Migration Tools in the Android Ecosystem}},
+  year = {2026}
+}</pre>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div class="row">
             <div class="timeline-entry">
               <div class="col-md-1">
@@ -236,29 +325,25 @@
                   <br>
                   Network and Distributed System Security (NDSS) 2026
                   <br>
-                  <span style="color:#6e6e6e;">
-                    <i class="fa fa-certificate" style="color:#8c41ca;"></i> Artifacts evaluated: Available, Functional,
-                    Reproduced&ensp;
-                    <i class="fa fa-bug" style="color:#000000;"></i> CVE-2025-21691
+                  <span class="text-muted">
+                    <i class="fa fa-certificate text-purple"></i> Artifacts evaluated: Available, Functional, Reproduced&ensp;
+                    <i class="fa fa-bug text-black"></i> CVE-2025-21691
                   </span>
                   <br>
-                  <span class="sbtn" onclick="toggleBox('info:EvictionNotive')"><a href="#0"><i
-                        class="fa fa-info-circle"></i>
+                  <span class="sbtn" onclick="toggleBox('info:EvictionNotive')"><a href="#0"><i class="fa fa-info-circle"></i>
                       Info</a></span>
-                  <span class="sbtn" onclick="toggleBox('bibtex:EvictionNotive')"><a href="#0"><i
-                        class="fa fa-quote-left"></i>
+                  <span class="sbtn" onclick="toggleBox('bibtex:EvictionNotive')"><a href="#0"><i class="fa fa-quote-left"></i>
                       BibTex</a></span>
-                  <span class="sbtn"><a href="https://github.com/isec-tugraz/Eviction-Notice"><i
-                        class="fa fa-github"></i>
+                  <span class="sbtn"><a href="https://github.com/isec-tugraz/Eviction-Notice"><i class="fa fa-github"></i>
                       GitHub</a></span>
                   <span class="sbtn"><a href="https://zenodo.org/records/17915256"><i class="fa fa-code"></i>
                       Zenodo</a></span>
                 </small>
-                <div id="info:EvictionNotive" class="infobox" style="display: none;">
+                <div id="info:EvictionNotive" class="infobox is-hidden">
                   In this paper, we revive page cache attacks and provide a systematic classification of primitives which interact with the page cache. This helps us advance page cache attacks, including speeding up previously known mechanisms by six orders of magnitude.
                 </div>
-                <div id="bibtex:EvictionNotive" class="box" style="display: none;">
-                  <pre style="white-space: pre-wrap;">
+                <div id="bibtex:EvictionNotive" class="box is-hidden">
+                  <pre class="pre-wrap">
 @inproceedings{Neela2026EvictionNotive,
   author = {Sudheendra Raghav Neela and Jonas Juffinger and Lukas Maar and Daniel Gruss},
   booktitle = {{NDSS}},
@@ -269,9 +354,10 @@
               </div>
             </div>
           </div>
+
           <div class="row">
             <div class="timeline-date">
-              <span id="papers2025" class="anchor">
+              <span id="publications2025" class="anchor">
               </span>
               <div class="col-xs-1">
                 <b class="hi">
@@ -282,6 +368,7 @@
               </div>
             </div>
           </div>
+
           <div class="row">
             <div class="timeline-entry">
               <div class="col-md-1">
@@ -289,7 +376,7 @@
               <div class="col-md-11">
                 <i class="fa fa-file">
                 </i>
-                <a class="title" href="kernel-security-in-the-wild.pdf">
+                <a class="title" href="publications/kernel-security-in-the-wild.pdf">
                   Kernel Security in the Wild
                 </a>
                 <br>
@@ -298,23 +385,18 @@
                   <br>
                   PhD Thesis
                   <br>
-                  <span class="sbtn" onclick="toggleBox('info:PhDThesis')"><a href="#0"><i
-                        class="fa fa-info-circle"></i>
+                  <span class="sbtn" onclick="toggleBox('info:PhDThesis')"><a href="#0"><i class="fa fa-info-circle"></i>
                       Info</a></span>
-                  <span class="sbtn" onclick="toggleBox('bibtex:PhDThesis')"><a href="#0"><i
-                        class="fa fa-quote-left"></i>
+                  <span class="sbtn" onclick="toggleBox('bibtex:PhDThesis')"><a href="#0"><i class="fa fa-quote-left"></i>
                       BibTex</a></span>
                   <span class="sbtn"><a href="slides/kernel-security-in-the-wild.pdf"><i class="fa fa-slideshare"></i>
                       Slides</a></span>
                 </small>
-                <div id="info:PhDThesis" class="infobox" style="display: none; max-height: 100%; overflow: hidden;">
-                  <div>
-                    <img src="images/kernel-security-in-the-wild.jpg" alt="image:thesis" width="820px"
-                      style="float: left; margin: 0 10px 5px 0; max-width: 100%; height: auto;" />
-                  </div>
+                <div id="info:PhDThesis" class="infobox is-hidden-overflow">
+                  <div> <img src="images/kernel-security-in-the-wild.jpg" alt="image:thesis" width="820px" class="thumb-left-responsive" /> </div>
                 </div>
-                <div id="bibtex:PhDThesis" class="box" style="display: none;">
-                  <pre style="white-space: pre-wrap;">
+                <div id="bibtex:PhDThesis" class="box is-hidden">
+                  <pre class="pre-wrap">
 @phdthesis{Maar2025KernelSecurityInTheWild,
   author = {Lukas Maar},
   title = {{Kernel Security in the Wild}},
@@ -326,6 +408,7 @@
               </div>
             </div>
           </div>
+
           <div class="row">
             <div class="timeline-entry">
               <div class="col-md-1">
@@ -333,7 +416,7 @@
               <div class="col-md-11">
                 <i class="fa fa-file">
                 </i>
-                <a class="title" href="papers/usenix25-drivers.pdf">
+                <a class="title" href="publications/usenix25-drivers.pdf">
                   The Doom of Device Drivers: Your Android Device (Most Likely) has N-Day Kernel Vulnerabilities
                 </a>
                 <br>
@@ -342,30 +425,20 @@
                   <br>
                   USENIX Security Symposium 2025
                   <br>
-                  <span class="sbtn" onclick="toggleBox('info:DeviceDrivers')"><a href="#0"><i
-                        class="fa fa-info-circle"></i>
+                  <span class="sbtn" onclick="toggleBox('info:DeviceDrivers')"><a href="#0"><i class="fa fa-info-circle"></i>
                       Info</a></span>
-                  <span class="sbtn" onclick="toggleBox('bibtex:DeviceDrivers')"><a href="#0"><i
-                        class="fa fa-quote-left"></i>
+                  <span class="sbtn" onclick="toggleBox('bibtex:DeviceDrivers')"><a href="#0"><i class="fa fa-quote-left"></i>
                       BibTex</a></span>
                   <span class="sbtn"><a href="slides/usenix25-drivers.pdf"><i class="fa fa-slideshare"></i>
                       Slides</a></span>
                   <span class="sbtn"><a href="posters/usenix25-drivers.pdf"><i class="fa fa-image"></i>
                       Poster</a></span>
                 </small>
-                <div id="info:DeviceDrivers" class="infobox" style="display: none; max-height: 100%; overflow: hidden;">
-                  <div>
-                    <img src="images/doom.svg" alt="image:drivers" width="145px"
-                      style="float: left; margin: 0 10px 0 0;" />
-                  </div>
-                  In this paper, we examine the security of Android devices against n-day exploitation. First, we
-                  identify kernel drivers accessible to untrusted apps, revealing a broader-than-expected kernel attack
-                  surface. Using public sources like git history, we then identify n-day vulnerabilities in these
-                  drivers. Finally, we perform a patch analysis that shows many remain unpatched for extended periods.
-                  This enables malicious actors to exploit n-days instead of relying on costly zero-days.
+                <div id="info:DeviceDrivers" class="infobox is-hidden-overflow">
+                  <div> <img src="images/doom.svg" alt="image:drivers" width="145px" class="thumb-left-small" /> </div> In this paper, we examine the security of Android devices against n-day exploitation. First, we identify kernel drivers accessible to untrusted apps, revealing a broader-than-expected kernel attack surface. Using public sources like git history, we then identify n-day vulnerabilities in these drivers. Finally, we perform a patch analysis that shows many remain unpatched for extended periods. This enables malicious actors to exploit n-days instead of relying on costly zero-days.
                 </div>
-                <div id="bibtex:DeviceDrivers" class="box" style="display: none;">
-                  <pre style="white-space: pre-wrap;">
+                <div id="bibtex:DeviceDrivers" class="box is-hidden">
+                  <pre class="pre-wrap">
 @inproceedings{Maar2025DeviceDrivers,
   author = {Lukas Maar and Florian Draschbacher and Lorenz Schumm and Ernesto Martinez Garcia and Stefan Mangard},
   booktitle = {{USENIX Security}},
@@ -376,6 +449,7 @@
               </div>
             </div>
           </div>
+
           <div class="row">
             <div class="timeline-entry">
               <div class="col-md-1">
@@ -383,9 +457,8 @@
               <div class="col-md-11">
                 <i class="fa fa-file">
                 </i>
-                <a class="title" href="papers/usenix25-tlbsidechannel.pdf">
-                  When Good Kernel Defenses Go Bad: Reliable and Stable Kernel Exploits via Defense-Amplified TLB
-                  Side-Channel Leaks
+                <a class="title" href="publications/usenix25-tlbsidechannel.pdf">
+                  When Good Kernel Defenses Go Bad: Reliable and Stable Kernel Exploits via Defense-Amplified TLB Side-Channel Leaks
                 </a>
                 <br>
                 <small>
@@ -393,19 +466,15 @@
                   <br>
                   USENIX Security Symposium 2025
                   <br>
-                  <span style="color:#6e6e6e;">
-                    <i class="fa fa-certificate" style="color:#8c41ca;"></i> Artifacts evaluated: Available, Functional,
-                    Reproduced
+                  <span class="text-muted">
+                    <i class="fa fa-certificate text-purple"></i> Artifacts evaluated: Available, Functional, Reproduced
                   </span>
                   <br>
-                  <span class="sbtn" onclick="toggleBox('info:LocationDisclosures')"><a href="#0"><i
-                        class="fa fa-info-circle"></i>
+                  <span class="sbtn" onclick="toggleBox('info:LocationDisclosures')"><a href="#0"><i class="fa fa-info-circle"></i>
                       Info</a></span>
-                  <span class="sbtn" onclick="toggleBox('bibtex:LocationDisclosures')"><a href="#0"><i
-                        class="fa fa-quote-left"></i>
+                  <span class="sbtn" onclick="toggleBox('bibtex:LocationDisclosures')"><a href="#0"><i class="fa fa-quote-left"></i>
                       BibTex</a></span>
-                  <span class="sbtn"><a href="https://github.com/isec-tugraz/TLBSideChannel"><i
-                        class="fa fa-github"></i>
+                  <span class="sbtn"><a href="https://github.com/isec-tugraz/TLBSideChannel"><i class="fa fa-github"></i>
                       GitHub</a></span>
                   <span class="sbtn"><a href="https://zenodo.org/records/15105521"><i class="fa fa-code"></i>
                       Zenodo</a></span>
@@ -418,19 +487,11 @@
                   <span class="sbtn"><a href="slides/nullcon25-sidechannels.pdf"><i class="fa fa-user-secret"></i>
                       Nullcon Berlin</a></span>
                 </small>
-                <div id="info:LocationDisclosures" class="infobox" style="display: none;">
-                  <div>
-                    <img src="images/tlb-side-channel.svg" alt="image:tlb-side-channel" width="217px"
-                      style="float: left; margin: 10px 10px 0 0;" />
-                  </div>
-                  In this paper, we show how side-channel leakage in kernel defenses can expose the locations of
-                  security-critical kernel objects, enabling reliable kernel exploitation. We show that fine-graining
-                  the object's memory mapping by enabling any of three defenses exposes exploitable TLB contention
-                  patterns observable via a side channel. Combined with kernel allocator massaging, this allows location
-                  disclosure attacks, revealing the locations of kernel heap objects, page tables and stacks.
+                <div id="info:LocationDisclosures" class="infobox is-hidden">
+                  <div> <img src="images/tlb-side-channel.svg" alt="image:tlb-side-channel" width="217px" class="thumb-left-top" /> </div> In this paper, we show how side-channel leakage in kernel defenses can expose the locations of security-critical kernel objects, enabling reliable kernel exploitation. We show that fine-graining the object's memory mapping by enabling any of three defenses exposes exploitable TLB contention patterns observable via a side channel. Combined with kernel allocator massaging, this allows location disclosure attacks, revealing the locations of kernel heap objects, page tables and stacks.
                 </div>
-                <div id="bibtex:LocationDisclosures" class="box" style="display: none;">
-                  <pre style="white-space: pre-wrap;">
+                <div id="bibtex:LocationDisclosures" class="box is-hidden">
+                  <pre class="pre-wrap">
 @inproceedings{Maar2025LocationDisclosures,
   author = {Lukas Maar and Lukas Giner and Daniel Gruss and Stefan Mangard},
   booktitle = {{USENIX Security}},
@@ -441,6 +502,7 @@
               </div>
             </div>
           </div>
+
           <div class="row">
             <div class="timeline-entry">
               <div class="col-md-1">
@@ -448,7 +510,7 @@
               <div class="col-md-11">
                 <i class="fa fa-file">
                 </i>
-                <a class="title" href="papers/usenix25-choicejacking.pdf">
+                <a class="title" href="publications/usenix25-choicejacking.pdf">
                   ChoiceJacking: Compromising Mobile Devices through Malicious Chargers like a Decade ago
                 </a>
                 <br>
@@ -457,32 +519,25 @@
                   <br>
                   USENIX Security Symposium 2025
                   <br>
-                  <span style="color:#6e6e6e;">
-                    <i class="fa fa-certificate" style="color:#8c41ca;"></i> Artifacts evaluated: Available&ensp;
-                    <i class="fa fa-bug" style="color:#000000;"></i> CVE-2024-20900, CVE-2024-43085, CVE-2025-24193,
-                    CVE-2024-54096
+                  <span class="text-muted">
+                    <i class="fa fa-certificate text-purple"></i> Artifacts evaluated: Available&ensp;
+                    <i class="fa fa-bug text-black"></i> CVE-2024-20900, CVE-2024-43085, CVE-2025-24193, CVE-2024-54096
                   </span>
                   <br>
-                  <span class="sbtn" onclick="toggleBox('info:ChoiceJacking')"><a href="#0"><i
-                        class="fa fa-info-circle"></i>
+                  <span class="sbtn" onclick="toggleBox('info:ChoiceJacking')"><a href="#0"><i class="fa fa-info-circle"></i>
                       Info</a></span>
-                  <span class="sbtn" onclick="toggleBox('bibtex:ChoiceJacking')"><a href="#0"><i
-                        class="fa fa-quote-left"></i>
+                  <span class="sbtn" onclick="toggleBox('bibtex:ChoiceJacking')"><a href="#0"><i class="fa fa-quote-left"></i>
                       BibTex</a></span>
                   <span class="sbtn"><a href="https://zenodo.org/records/14726532"><i class="fa fa-code"></i>
                       Zenodo</a></span>
                   <span class="sbtn"><a href="slides/bhasia25-choicejacking.pdf"><i class="fa fa-user-secret"></i>
                       Black Hat Asia</a></span>
                 </small>
-                <div id="info:ChoiceJacking" class="infobox" style="display: none;">
-                  In this paper, we introduce ChoiceJacking, a novel USB-based attack exploiting the flawed assumption
-                  that attackers cannot inject input events during data connection establishment. Our platform-agnostic
-                  attack enables a malicious charger to spoof user input, enabling data transfer on Android and iOS.
-                  Testing across devices from 8 vendors reveals critical USB security flaws, allowing sensitive file
-                  access, even from locked devices in some cases.
+                <div id="info:ChoiceJacking" class="infobox is-hidden">
+                  In this paper, we introduce ChoiceJacking, a novel USB-based attack exploiting the flawed assumption that attackers cannot inject input events during data connection establishment. Our platform-agnostic attack enables a malicious charger to spoof user input, enabling data transfer on Android and iOS. Testing across devices from 8 vendors reveals critical USB security flaws, allowing sensitive file access, even from locked devices in some cases.
                 </div>
-                <div id="bibtex:ChoiceJacking" class="box" style="display: none;">
-                  <pre style="white-space: pre-wrap;">
+                <div id="bibtex:ChoiceJacking" class="box is-hidden">
+                  <pre class="pre-wrap">
 @inproceedings{Draschbacher2025ChoiceJacking,
   author = {Florian Draschbacher and Lukas Maar and Mathias Oberhuber and Stefan Mangard},
   booktitle = {{USENIX Security}},
@@ -493,6 +548,7 @@
               </div>
             </div>
           </div>
+
           <div class="row">
             <div class="timeline-entry">
               <div class="col-md-1">
@@ -500,7 +556,7 @@
               <div class="col-md-11">
                 <i class="fa fa-file">
                 </i>
-                <a class="title" href="papers/host25-clpe.pdf">
+                <a class="title" href="publications/host25-clpe.pdf">
                   Cryptographic Least Privilege Enforcement for Scalable Memory Isolation
                 </a>
                 <br>
@@ -515,14 +571,11 @@
                   <span class="sbtn" onclick="toggleBox('bibtex:CLPE')"><a href="#0"><i class="fa fa-quote-left"></i>
                       BibTex</a></span>
                 </small>
-                <div id="info:CLPE" class="infobox" style="display: none;">
-                  In this paper, we present Cryptographic Least Privilege Enforcement (CLPE), a lightweight ISA
-                  extension using Message Authentication Codes (MACs) to enforce fine-grained memory isolation in C/C++
-                  systems. CLPE enhances security with minimal performance overhead while maintaining compatibility with
-                  legacy software.
+                <div id="info:CLPE" class="infobox is-hidden">
+                  In this paper, we present Cryptographic Least Privilege Enforcement (CLPE), a lightweight ISA extension using Message Authentication Codes (MACs) to enforce fine-grained memory isolation in C/C++ systems. CLPE enhances security with minimal performance overhead while maintaining compatibility with legacy software.
                 </div>
-                <div id="bibtex:CLPE" class="box" style="display: none;">
-                  <pre style="white-space: pre-wrap;">
+                <div id="bibtex:CLPE" class="box is-hidden">
+                  <pre class="pre-wrap">
 @inproceedings{Unterguggenberger2025CLPE,
   author = {Martin Unterguggenberger and David Schrammel and Lukas Maar and Lukas Lamster and Vedad Hadzic and Stefan Mangard},
   booktitle = {{HOST}},
@@ -533,6 +586,7 @@
               </div>
             </div>
           </div>
+
           <div class="row">
             <div class="timeline-entry">
               <div class="col-md-1">
@@ -540,7 +594,7 @@
               <div class="col-md-11">
                 <i class="fa fa-file">
                 </i>
-                <a class="title" href="papers/ndss25-kernelsnitch.pdf">
+                <a class="title" href="publications/ndss25-kernelsnitch.pdf">
                   KernelSnitch: Side-Channel Attacks on Kernel Data Structures
                 </a>
                 <br>
@@ -549,17 +603,14 @@
                   <br>
                   Network and Distributed System Security (NDSS) 2025
                   <br>
-                  <span style="color:#6e6e6e;">
-                    <i class="fa fa-certificate" style="color:#8c41ca;"></i> Artifacts evaluated: Available, Functional,
-                    Reproduced&ensp;
-                    <i class="fa fa-star" style="color:#eccb11;"></i> Pwnie Award Nominee
+                  <span class="text-muted">
+                    <i class="fa fa-certificate text-purple"></i> Artifacts evaluated: Available, Functional, Reproduced&ensp;
+                    <i class="fa fa-star text-gold"></i> Pwnie Award Nominee
                   </span>
                   <br>
-                  <span class="sbtn" onclick="toggleBox('info:KernelSnitch')"><a href="#0"><i
-                        class="fa fa-info-circle"></i>
+                  <span class="sbtn" onclick="toggleBox('info:KernelSnitch')"><a href="#0"><i class="fa fa-info-circle"></i>
                       Info</a></span>
-                  <span class="sbtn" onclick="toggleBox('bibtex:KernelSnitch')"><a href="#0"><i
-                        class="fa fa-quote-left"></i>
+                  <span class="sbtn" onclick="toggleBox('bibtex:KernelSnitch')"><a href="#0"><i class="fa fa-quote-left"></i>
                       BibTex</a></span>
                   <span class="sbtn"><a href="https://github.com/isec-tugraz/KernelSnitch"><i class="fa fa-github"></i>
                       GitHub</a></span>
@@ -570,19 +621,11 @@
                   <span class="sbtn"><a href="slides/nullcon25-sidechannels.pdf"><i class="fa fa-user-secret"></i>
                       Nullcon Berlin</a></span>
                 </small>
-                <div id="info:KernelSnitch" class="infobox" style="display: none;">
-                  <div>
-                    <img src="images/KernelSnitch.svg" alt="image:KernelSnitch" width="114px"
-                      style="float: left; margin: 0 15px 0 0;" />
-                  </div>
-                  In this paper, we introduce KernelSnitch, a novel hardware-agnostic side-channel attack that exploits
-                  timing variations in kernel data structures like hash tables and trees to leak sensitive information.
-                  We demonstrate leakage amplification approaches to make this side channel exploitable from user space.
-                  Through a kernel heap pointer leak, covert channel and activity monitoring, we demonstrate practical
-                  attacks.
+                <div id="info:KernelSnitch" class="infobox is-hidden">
+                  <div> <img src="images/KernelSnitch.svg" alt="image:KernelSnitch" width="114px" class="thumb-left" /> </div> In this paper, we introduce KernelSnitch, a novel hardware-agnostic side-channel attack that exploits timing variations in kernel data structures like hash tables and trees to leak sensitive information. We demonstrate leakage amplification approaches to make this side channel exploitable from user space. Through a kernel heap pointer leak, covert channel and activity monitoring, we demonstrate practical attacks.
                 </div>
-                <div id="bibtex:KernelSnitch" class="box" style="display: none;">
-                  <pre style="white-space: pre-wrap;">
+                <div id="bibtex:KernelSnitch" class="box is-hidden">
+                  <pre class="pre-wrap">
 @inproceedings{Maar2025KernelSnitch,
   author = {Lukas Maar and Jonas Juffinger and Thomas Steinbauer and Daniel Gruss and Stefan Mangard},
   booktitle = {{NDSS}},
@@ -593,6 +636,7 @@
               </div>
             </div>
           </div>
+
           <div class="row">
             <div class="timeline-entry">
               <div class="col-md-1">
@@ -600,7 +644,7 @@
               <div class="col-md-11">
                 <i class="fa fa-file">
                 </i>
-                <a class="title" href="papers/ndss25-power.pdf">
+                <a class="title" href="publications/ndss25-power.pdf">
                   Power-Related Side-Channel Attacks using the Android Sensor Framework
                 </a>
                 <br>
@@ -609,20 +653,16 @@
                   <br>
                   Network and Distributed System Security (NDSS) 2025
                   <br>
-                  <span class="sbtn" onclick="toggleBox('info:PowerAndroidSensor')"><a href="#0"><i
-                        class="fa fa-info-circle"></i>
+                  <span class="sbtn" onclick="toggleBox('info:PowerAndroidSensor')"><a href="#0"><i class="fa fa-info-circle"></i>
                       Info</a></span>
-                  <span class="sbtn" onclick="toggleBox('bibtex:PowerAndroidSensor')"><a href="#0"><i
-                        class="fa fa-quote-left"></i>
+                  <span class="sbtn" onclick="toggleBox('bibtex:PowerAndroidSensor')"><a href="#0"><i class="fa fa-quote-left"></i>
                       BibTex</a></span>
                 </small>
-                <div id="info:PowerAndroidSensor" class="infobox" style="display: none;">
-                  In this paper, we uncover novel power-related side channels in Android devices by analyzing
-                  unprivileged sensors. Through extensive evaluations and case studies, we demonstrate attacks such as
-                  pixel stealing and AES key leakage.
+                <div id="info:PowerAndroidSensor" class="infobox is-hidden">
+                  In this paper, we uncover novel power-related side channels in Android devices by analyzing unprivileged sensors. Through extensive evaluations and case studies, we demonstrate attacks such as pixel stealing and AES key leakage.
                 </div>
-                <div id="bibtex:PowerAndroidSensor" class="box" style="display: none;">
-                  <pre style="white-space: pre-wrap;">
+                <div id="bibtex:PowerAndroidSensor" class="box is-hidden">
+                  <pre class="pre-wrap">
 @inproceedings{Oberhuber2025PowerAndroidSensor,
   author = {Mathias Oberhuber and Martin Unterguggenberger and Lukas Maar and Andreas Kogler and Stefan Mangard},
   booktitle = {{NDSS}},
@@ -633,9 +673,10 @@
               </div>
             </div>
           </div>
+
           <div class="row">
             <div class="timeline-date">
-              <span id="papers2024" class="anchor">
+              <span id="publications2024" class="anchor">
               </span>
               <div class="col-xs-1">
                 <b class="hi">
@@ -646,6 +687,7 @@
               </div>
             </div>
           </div>
+
           <div class="row">
             <div class="timeline-entry">
               <div class="col-md-1">
@@ -653,7 +695,7 @@
               <div class="col-md-11">
                 <i class="fa fa-file">
                 </i>
-                <a class="title" href="papers/acsac24-manifest.pdf">
+                <a class="title" href="publications/acsac24-manifest.pdf">
                   Manifest Problems: Analyzing Code Transparency for Android Application Bundles
                 </a>
                 <br>
@@ -662,29 +704,23 @@
                   <br>
                   Annual Computer Security Applications Conference (ACSAC) 2024
                   <br>
-                  <span style="color:#6e6e6e;">
-                    <i class="fa fa-certificate" style="color:#8c41ca;"></i> Artifacts evaluated: Available, Functional,
-                    Reproduced&ensp;
-                    <i class="fa fa-bug" style="color:#000000;"></i> CVE-2023-21387
+                  <span class="text-muted">
+                    <i class="fa fa-certificate text-purple"></i> Artifacts evaluated: Available, Functional, Reproduced&ensp;
+                    <i class="fa fa-bug text-black"></i> CVE-2023-21387
                   </span>
                   <br>
-                  <span class="sbtn" onclick="toggleBox('info:ManifestProblems')"><a href="#0"><i
-                        class="fa fa-info-circle"></i>
+                  <span class="sbtn" onclick="toggleBox('info:ManifestProblems')"><a href="#0"><i class="fa fa-info-circle"></i>
                       Info</a></span>
-                  <span class="sbtn" onclick="toggleBox('bibtex:ManifestProblems')"><a href="#0"><i
-                        class="fa fa-quote-left"></i>
+                  <span class="sbtn" onclick="toggleBox('bibtex:ManifestProblems')"><a href="#0"><i class="fa fa-quote-left"></i>
                       BibTex</a></span>
-                  <span class="sbtn"><a href="https://github.com/asit-fdraschbacher/artifacts_manifest_problems"><i
-                        class="fa fa-github"></i>
+                  <span class="sbtn"><a href="https://github.com/asit-fdraschbacher/artifacts_manifest_problems"><i class="fa fa-github"></i>
                       GitHub</a></span>
                 </small>
-                <div id="info:ManifestProblems" class="infobox" style="display: none;">
-                  In this paper, we present the first security analysis of Code Transparency for Android Application
-                  Bundles (AAB). Our analysis uncovers significant shortcomings in Code Transparency,
-                  leaving developers unprotected against supply chain attacks enabled by AAB.
+                <div id="info:ManifestProblems" class="infobox is-hidden">
+                  In this paper, we present the first security analysis of Code Transparency for Android Application Bundles (AAB). Our analysis uncovers significant shortcomings in Code Transparency, leaving developers unprotected against supply chain attacks enabled by AAB.
                 </div>
-                <div id="bibtex:ManifestProblems" class="box" style="display: none;">
-                  <pre style="white-space: pre-wrap;">
+                <div id="bibtex:ManifestProblems" class="box is-hidden">
+                  <pre class="pre-wrap">
 @inproceedings{Draschbacher2024ManifestProblems,
   author = {Florian Draschbacher and Lukas Maar},
   booktitle = {{ACSAC}},
@@ -695,6 +731,7 @@
               </div>
             </div>
           </div>
+
           <div class="row">
             <div class="timeline-entry">
               <div class="col-md-1">
@@ -702,9 +739,8 @@
               <div class="col-md-11">
                 <i class="fa fa-file">
                 </i>
-                <a class="title" href="papers/usenix24-defectsindepth.pdf">
-                  Defects-in-Depth: Analyzing the Integration of Effective Defenses against One-Day Exploits in Android
-                  Kernels
+                <a class="title" href="publications/usenix24-defectsindepth.pdf">
+                  Defects-in-Depth: Analyzing the Integration of Effective Defenses against One-Day Exploits in Android Kernels
                 </a>
                 <br>
                 <small>
@@ -712,36 +748,24 @@
                   <br>
                   USENIX Security Symposium 2024
                   <br>
-                  <span style="color:#6e6e6e;">
-                    <i class="fa fa-certificate" style="color:#8c41ca;"></i> Artifacts evaluated: Available, Functional,
-                    Reproduced
+                  <span class="text-muted">
+                    <i class="fa fa-certificate text-purple"></i> Artifacts evaluated: Available, Functional, Reproduced
                   </span>
                   <br>
-                  <span class="sbtn" onclick="toggleBox('info:DefectsInDepth')"><a href="#0"><i
-                        class="fa fa-info-circle"></i>
+                  <span class="sbtn" onclick="toggleBox('info:DefectsInDepth')"><a href="#0"><i class="fa fa-info-circle"></i>
                       Info</a></span>
-                  <span class="sbtn" onclick="toggleBox('bibtex:DefectsInDepth')"><a href="#0"><i
-                        class="fa fa-quote-left"></i>
+                  <span class="sbtn" onclick="toggleBox('bibtex:DefectsInDepth')"><a href="#0"><i class="fa fa-quote-left"></i>
                       BibTex</a></span>
-                  <span class="sbtn"><a href="https://github.com/isec-tugraz/DefectsInDepth"><i
-                        class="fa fa-github"></i>
+                  <span class="sbtn"><a href="https://github.com/isec-tugraz/DefectsInDepth"><i class="fa fa-github"></i>
                       GitHub</a></span>
                   <span class="sbtn"><a href="slides/usenix24-defectsindepth.pdf"><i class="fa fa-slideshare"></i>
                       Slides</a></span>
                 </small>
-                <div id="info:DefectsInDepth" class="infobox" style="display: none;">
-                  <div>
-                    <img src="images/DefectsInDepth.svg" alt="image:DefectsInDepth" width="132px"
-                      style="float: left; margin: 0 15px 0 0;" />
-                  </div>
-                  In this paper, we present Defects-in-Depth, a two-fold analysis of the security of downstreamed
-                  Android kernels from the top device vendors. Initially, we analyze one-day exploits and kernel
-                  defense-in-depth mechanisms, allowing us to quantify the level of security that can be reached with
-                  these defenses. We then analyze the effectiveness and inclusion of the defenses in downstreamed
-                  Android kernels and found that the level of security that is actually reached is severely lacking.
+                <div id="info:DefectsInDepth" class="infobox is-hidden">
+                  <div> <img src="images/DefectsInDepth.svg" alt="image:DefectsInDepth" width="132px" class="thumb-left" /> </div> In this paper, we present Defects-in-Depth, a two-fold analysis of the security of downstreamed Android kernels from the top device vendors. Initially, we analyze one-day exploits and kernel defense-in-depth mechanisms, allowing us to quantify the level of security that can be reached with these defenses. We then analyze the effectiveness and inclusion of the defenses in downstreamed Android kernels and found that the level of security that is actually reached is severely lacking.
                 </div>
-                <div id="bibtex:DefectsInDepth" class="box" style="display: none;">
-                  <pre style="white-space: pre-wrap;">
+                <div id="bibtex:DefectsInDepth" class="box is-hidden">
+                  <pre class="pre-wrap">
 @inproceedings{Maar2024DefectsInDepth,
   author = {Lukas Maar and Florian Draschbacher and Lukas Lamster and Stefan Mangard},
   booktitle = {{USENIX Security}},
@@ -752,6 +776,7 @@
               </div>
             </div>
           </div>
+
           <div class="row">
             <div class="timeline-entry">
               <div class="col-md-1">
@@ -759,9 +784,8 @@
               <div class="col-md-11">
                 <i class="fa fa-file">
                 </i>
-                <a class="title" href="papers/usenix24-slubstick.pdf">
-                  SLUBStick: Arbitrary Memory Writes through Practical Software Cross-Cache Attacks within the Linux
-                  Kernel
+                <a class="title" href="publications/usenix24-slubstick.pdf">
+                  SLUBStick: Arbitrary Memory Writes through Practical Software Cross-Cache Attacks within the Linux Kernel
                 </a>
                 <br>
                 <small>
@@ -769,18 +793,14 @@
                   <br>
                   USENIX Security Symposium 2024
                   <br>
-                  <span style="color:#6e6e6e;">
-                    <i class="fa fa-certificate" style="color:#8c41ca;"></i> Artifacts evaluated: Available, Functional,
-                    Reproduced&ensp;
-                    <i class="fa fa-star" style="color:#eccb11;"></i> CSAW'24 Europe Applied Research Competition (ARC)
-                    Finalist
+                  <span class="text-muted">
+                    <i class="fa fa-certificate text-purple"></i> Artifacts evaluated: Available, Functional, Reproduced&ensp;
+                    <i class="fa fa-star text-gold"></i> CSAW'24 Europe Applied Research Competition (ARC) Finalist
                   </span>
                   <br>
-                  <span class="sbtn" onclick="toggleBox('info:SLUBStick')"><a href="#0"><i
-                        class="fa fa-info-circle"></i>
+                  <span class="sbtn" onclick="toggleBox('info:SLUBStick')"><a href="#0"><i class="fa fa-info-circle"></i>
                       Info</a></span>
-                  <span class="sbtn" onclick="toggleBox('bibtex:SLUBStick')"><a href="#0"><i
-                        class="fa fa-quote-left"></i>
+                  <span class="sbtn" onclick="toggleBox('bibtex:SLUBStick')"><a href="#0"><i class="fa fa-quote-left"></i>
                       BibTex</a></span>
                   <span class="sbtn"><a href="posters/csaw24-slubstick.pdf"><i class="fa fa-image"></i>
                       Poster</a></span>
@@ -789,20 +809,11 @@
                   <span class="sbtn"><a href="slides/usenix24-slubstick.pdf"><i class="fa fa-slideshare"></i>
                       Slides</a></span>
                 </small>
-                <div id="info:SLUBStick" class="infobox" style="display: none;">
-                  <div>
-                    <img src="images/SLUBStick.svg" alt="image:SLUBStick" width="250px"
-                      style="float: left; margin: 0 15px 0 0;" />
-                  </div>
-                  In this paper, we present SLUBStick, which provides a practical solution for converting a kernel heap
-                  vulnerability into a physical arbitrary r/w primitive with state-of-the-art kernel defenses enabled.
-                  Initially, SLUBStick exploits a timing side-channel on the SLUB allocator to reliably perform
-                  cross-cache reuse. SLUBStick then exploits code patterns in the kernel to convert a limited write (due
-                  to a heap vulnerability) into a page-manipulation primitive, enabling the physical arbitrary r/w
-                  primitive.
+                <div id="info:SLUBStick" class="infobox is-hidden">
+                  <div> <img src="images/SLUBStick.svg" alt="image:SLUBStick" width="250px" class="thumb-left" /> </div> In this paper, we present SLUBStick, which provides a practical solution for converting a kernel heap vulnerability into a physical arbitrary r/w primitive with state-of-the-art kernel defenses enabled. Initially, SLUBStick exploits a timing side-channel on the SLUB allocator to reliably perform cross-cache reuse. SLUBStick then exploits code patterns in the kernel to convert a limited write (due to a heap vulnerability) into a page-manipulation primitive, enabling the physical arbitrary r/w primitive.
                 </div>
-                <div id="bibtex:SLUBStick" class="box" style="display: none;">
-                  <pre style="white-space: pre-wrap;">
+                <div id="bibtex:SLUBStick" class="box is-hidden">
+                  <pre class="pre-wrap">
 @inproceedings{Maar2024SLUBStick,
   author = {Lukas Maar and Stefan Gast and Martin Unterguggenberger and Mathias Oberhuber and Stefan Mangard},
   booktitle = {{USENIX Security}},
@@ -813,6 +824,7 @@
               </div>
             </div>
           </div>
+
           <div class="row">
             <div class="timeline-entry">
               <div class="col-md-1">
@@ -820,7 +832,7 @@
               <div class="col-md-11">
                 <i class="fa fa-file">
                 </i>
-                <a class="title" href="papers/asiaccs24-hekcfi.pdf">
+                <a class="title" href="publications/asiaccs24-hekcfi.pdf">
                   Beyond the Edges of Kernel Control-Flow Hijacking Protection with HEK-CFI
                 </a>
                 <br>
@@ -836,18 +848,11 @@
                   <span class="sbtn"><a href="slides/asiaccs24-hekcfi.pdf"><i class="fa fa-slideshare"></i>
                       Slides</a></span>
                 </small>
-                <div id="info:HEKCFI" class="infobox" style="display: none; max-height: 100%; overflow: hidden;">
-                  <div>
-                    <img src="images/hek-cfi.svg" alt="image:HEK-CFI" width="145px"
-                      style="float: left; margin: 0 15px 0 0;" />
-                  </div>
-                  In this paper, we present HEK-CFI, a novel approach leveraging Intel CET to protect control-flow data
-                  during system events, function pointers, operation table pointers, and return addresses. We implement
-                  and evaluate a HEK-CFI proof-of-concept, demonstrating reasonable performance overhead while providing
-                  superior protection compared to other kernel CFI schemes.
+                <div id="info:HEKCFI" class="infobox is-hidden-overflow">
+                  <div> <img src="images/hek-cfi.svg" alt="image:HEK-CFI" width="145px" class="thumb-left" /> </div> In this paper, we present HEK-CFI, a novel approach leveraging Intel CET to protect control-flow data during system events, function pointers, operation table pointers, and return addresses. We implement and evaluate a HEK-CFI proof-of-concept, demonstrating reasonable performance overhead while providing superior protection compared to other kernel CFI schemes.
                 </div>
-                <div id="bibtex:HEKCFI" class="box" style="display: none;">
-                  <pre style="white-space: pre-wrap;">
+                <div id="bibtex:HEKCFI" class="box is-hidden">
+                  <pre class="pre-wrap">
 @inproceedings{Maar2024HEKCFI,
   author = {Lukas Maar and Pascal Nasahl and Stefan Mangard},
   booktitle = {{AsiaCCS}},
@@ -858,6 +863,7 @@
               </div>
             </div>
           </div>
+
           <div class="row">
             <div class="timeline-entry">
               <div class="col-md-1">
@@ -874,19 +880,16 @@
                   <br>
                   Financial Cryptography (FC) 2024
                   <br>
-                  <span class="sbtn" onclick="toggleBox('info:JavaSQUIP')"><a href="#0"><i
-                        class="fa fa-info-circle"></i>
+                  <span class="sbtn" onclick="toggleBox('info:JavaSQUIP')"><a href="#0"><i class="fa fa-info-circle"></i>
                       Info</a></span>
-                  <span class="sbtn" onclick="toggleBox('bibtex:JavaSQUIP')"><a href="#0"><i
-                        class="fa fa-quote-left"></i>
+                  <span class="sbtn" onclick="toggleBox('bibtex:JavaSQUIP')"><a href="#0"><i class="fa fa-quote-left"></i>
                       BibTex</a></span>
                 </small>
-                <div id="info:JavaSQUIP" class="infobox" style="display: none;">
-                  In this paper, we present scheduler contention on AMD Zen 3 and Zen 4, demonstrating an
-                  inter-keystroke timing and a JavaScript covert-channel attack.
+                <div id="info:JavaSQUIP" class="infobox is-hidden">
+                  In this paper, we present scheduler contention on AMD Zen 3 and Zen 4, demonstrating an inter-keystroke timing and a JavaScript covert-channel attack.
                 </div>
-                <div id="bibtex:JavaSQUIP" class="box" style="display: none;">
-                  <pre style="white-space: pre-wrap;">
+                <div id="bibtex:JavaSQUIP" class="box is-hidden">
+                  <pre class="pre-wrap">
 @inproceedings{Gast2024Remote,
   author = {Stefan Gast and Jonas Juffinger and Lukas Maar and Christoph Royer and Andreas Kogler and Daniel Gruss},
   booktitle = {{FC}},
@@ -897,9 +900,10 @@
               </div>
             </div>
           </div>
+
           <div class="row">
             <div class="timeline-date">
-              <span id="papers2023" class="anchor">
+              <span id="publications2023" class="anchor">
               </span>
               <div class="col-xs-1">
                 <b class="hi">
@@ -910,6 +914,7 @@
               </div>
             </div>
           </div>
+
           <div class="row">
             <div class="timeline-entry">
               <div class="col-md-1">
@@ -917,7 +922,7 @@
               <div class="col-md-11">
                 <i class="fa fa-file">
                 </i>
-                <a class="title" href="papers/acsac23-dope.pdf">
+                <a class="title" href="publications/acsac23-dope.pdf">
                   DOPE: DOmain Protection Enforcement with PKS
                 </a>
                 <br>
@@ -926,8 +931,8 @@
                   <br>
                   Annual Computer Security Applications Conference (ACSAC) 2023
                   <br>
-                  <span style="color:#6e6e6e;">
-                    <i class="fa fa-certificate" style="color:#8c41ca;"></i> Artifacts evaluated: Functional
+                  <span class="text-muted">
+                    <i class="fa fa-certificate text-purple"></i> Artifacts evaluated: Functional
                   </span>
                   <br>
                   <span class="sbtn" onclick="toggleBox('info:DOPE')"><a href="#0"><i class="fa fa-info-circle"></i>
@@ -939,18 +944,11 @@
                   <span class="sbtn"><a href="slides/acsac23-dope.pdf"><i class="fa fa-slideshare"></i>
                       Slides</a></span>
                 </small>
-                <div id="info:DOPE" class="infobox" style="display: none; max-height: 100%; overflow: hidden;">
-                  <div>
-                    <img src="images/dope.svg" alt="image:DOPE" width="145px"
-                      style="float: left; margin: 0 15px 0 0;" />
-                  </div>
-                  In this paper, we present DOPE, a novel approach leveraging Intel PKS to protect sensitive data from
-                  data-oriented attacks. We implement and evaluate a DOPE proof-of-concept, demonstrating reasonable
-                  performance overhead while providing superior protection compared to other kernel data protection
-                  schemes.
+                <div id="info:DOPE" class="infobox is-hidden-overflow">
+                  <div> <img src="images/dope.svg" alt="image:DOPE" width="145px" class="thumb-left" /> </div> In this paper, we present DOPE, a novel approach leveraging Intel PKS to protect sensitive data from data-oriented attacks. We implement and evaluate a DOPE proof-of-concept, demonstrating reasonable performance overhead while providing superior protection compared to other kernel data protection schemes.
                 </div>
-                <div id="bibtex:DOPE" class="box" style="display: none;">
-                  <pre style="white-space: pre-wrap;">
+                <div id="bibtex:DOPE" class="box is-hidden">
+                  <pre class="pre-wrap">
 @inproceedings{Maar2023DOPE,
   author = {Lukas Maar and Martin Schwarzl and Fabian Rauscher and Daniel Gruss and Stefan Mangard},
   booktitle = {{ACSAC}},
@@ -961,11 +959,11 @@
               </div>
             </div>
           </div>
+
         </div>
       </div>
-      <div class="col-md-1">
-      </div>
     </div>
+
 
     <div id="talks" class="row">
       <div class="col-md-1">
@@ -981,11 +979,13 @@
       <div class="col-md-1">
       </div>
     </div>
-    <div class="row">
+
+        <div class="row">
       <div class="col-md-1">
       </div>
       <div class="col-md-10">
         <div class="timeline">
+
           <div class="row">
             <div class="timeline-date">
               <span id="talks2025" class="anchor">
@@ -999,6 +999,7 @@
               </div>
             </div>
           </div>
+
           <div class="row">
             <div class="timeline-entry">
               <div class="col-md-1">
@@ -1018,6 +1019,7 @@
               </div>
             </div>
           </div>
+
           <div class="row">
             <div class="timeline-entry">
               <div class="col-md-1">
@@ -1034,18 +1036,15 @@
                   <br>
                   Nullcon Berlin 2025
                   <br>
-                  <span class="sbtn"><a
-                      href="https://nullcon.net/berlin-2025/speaker-speaker-derandomizing-kernel-object-locations"><i
-                        class="fa fa-globe"></i>
+                  <span class="sbtn"><a href="https://nullcon.net/berlin-2025/speaker-speaker-derandomizing-kernel-object-locations"><i class="fa fa-globe"></i>
                       Website</a></span>
-                  <span class="sbtn"><a
-                      href="https://www.youtube.com/watch?v=_6BcuHpp9eU"><i
-                        class="fa fa-television"></i>
+                  <span class="sbtn"><a href="https://www.youtube.com/watch?v=_6BcuHpp9eU"><i class="fa fa-television"></i>
                       Recording</a></span>
                 </small>
               </div>
             </div>
           </div>
+
           <div class="row">
             <div class="timeline-entry">
               <div class="col-md-1">
@@ -1062,14 +1061,13 @@
                   <br>
                   USENIX Security 2025
                   <br>
-                  <span class="sbtn"><a
-                      href="https://www.usenix.org/conference/usenixsecurity25/presentation/maar-doom"><i
-                        class="fa fa-globe"></i>
+                  <span class="sbtn"><a href="https://www.usenix.org/conference/usenixsecurity25/presentation/maar-doom"><i class="fa fa-globe"></i>
                       Website</a></span>
                 </small>
               </div>
             </div>
           </div>
+
           <div class="row">
             <div class="timeline-entry">
               <div class="col-md-1">
@@ -1078,8 +1076,7 @@
                 <i class="fa fa-television">
                 </i>
                 <a class="title" href="slides/usenix25-tlbsidechannel.pdf">
-                  When Good Kernel Defenses Go Bad: Reliable and Stable Kernel Exploits via Defense-Amplified TLB
-                  Side-Channel Leaks
+                  When Good Kernel Defenses Go Bad: Reliable and Stable Kernel Exploits via Defense-Amplified TLB Side-Channel Leaks
                 </a>
                 <br>
                 <small>
@@ -1087,14 +1084,13 @@
                   <br>
                   USENIX Security 2025
                   <br>
-                  <span class="sbtn"><a
-                      href="https://www.usenix.org/conference/usenixsecurity25/presentation/maar-kernel"><i
-                        class="fa fa-globe"></i>
+                  <span class="sbtn"><a href="https://www.usenix.org/conference/usenixsecurity25/presentation/maar-kernel"><i class="fa fa-globe"></i>
                       Website</a></span>
                 </small>
               </div>
             </div>
           </div>
+
           <div class="row">
             <div class="timeline-entry">
               <div class="col-md-1">
@@ -1111,18 +1107,15 @@
                   <br>
                   Black Hat USA 2025
                   <br>
-                  <span class="sbtn"><a
-                      href="https://www.blackhat.com/us-25/briefings/schedule/#derandomizing-the-location-of-security-critical-kernel-objects-in-the-linux-kernel-44902"><i
-                        class="fa fa-globe"></i>
+                  <span class="sbtn"><a href="https://www.blackhat.com/us-25/briefings/schedule/#derandomizing-the-location-of-security-critical-kernel-objects-in-the-linux-kernel-44902"><i class="fa fa-globe"></i>
                       Website</a></span>
-                  <span class="sbtn"><a
-                      href="https://www.youtube.com/watch?v=nOXwh8BfRDo&list=PLH15HpR5qRsXtV3t9TlkRZBmIfcIC6THE&index=6"><i
-                        class="fa fa-television"></i>
+                  <span class="sbtn"><a href="https://www.youtube.com/watch?v=nOXwh8BfRDo&amp;list=PLH15HpR5qRsXtV3t9TlkRZBmIfcIC6THE&amp;index=6"><i class="fa fa-television"></i>
                       Recording</a></span>
                 </small>
               </div>
             </div>
           </div>
+
           <div class="row">
             <div class="timeline-entry">
               <div class="col-md-1">
@@ -1131,8 +1124,7 @@
                 <i class="fa fa-television">
                 </i>
                 <a class="title" href="slides/bhasia25-kernelsnitch.pdf">
-                  KernelSnitch: Leaking Kernel Heap Pointers by Exploiting Software-Induced Side-Channel Leakage of
-                  Kernel Hash Tables
+                  KernelSnitch: Leaking Kernel Heap Pointers by Exploiting Software-Induced Side-Channel Leakage of Kernel Hash Tables
                 </a>
                 <br>
                 <small>
@@ -1140,18 +1132,15 @@
                   <br>
                   Black Hat Asia 2025
                   <br>
-                  <span class="sbtn"><a
-                      href="https://www.blackhat.com/asia-25/briefings/schedule/#kernelsnitch-leaking-kernel-heap-pointers-by-exploiting-software-induced-side-channel-leakage-of-kernel-hash-tables-43247"><i
-                        class="fa fa-globe"></i>
+                  <span class="sbtn"><a href="https://www.blackhat.com/asia-25/briefings/schedule/#kernelsnitch-leaking-kernel-heap-pointers-by-exploiting-software-induced-side-channel-leakage-of-kernel-hash-tables-43247"><i class="fa fa-globe"></i>
                       Website</a></span>
-                  <span class="sbtn"><a
-                      href="https://www.youtube.com/watch?v=jfgpIv5cbeY&list=PLH15HpR5qRsWXApxW0vAsRduq9xa3ifCG&index=17"><i
-                        class="fa fa-television"></i>
+                  <span class="sbtn"><a href="https://www.youtube.com/watch?v=jfgpIv5cbeY&amp;list=PLH15HpR5qRsWXApxW0vAsRduq9xa3ifCG&amp;index=17"><i class="fa fa-television"></i>
                       Recording</a></span>
                 </small>
               </div>
             </div>
           </div>
+
           <div class="row">
             <div class="timeline-entry">
               <div class="col-md-1">
@@ -1160,8 +1149,7 @@
                 <i class="fa fa-television">
                 </i>
                 <a class="title" href="slides/bhasia25-choicejacking.pdf">
-                  Watch Your Phone: Novel USB-Based File Access Attacks Against
-                  Mobile Devices
+                  Watch Your Phone: Novel USB-Based File Access Attacks Against Mobile Devices
                 </a>
                 <br>
                 <small>
@@ -1169,18 +1157,15 @@
                   <br>
                   Black Hat Asia 2025
                   <br>
-                  <span class="sbtn"><a
-                      href="https://www.blackhat.com/asia-25/briefings/schedule/#watch-your-phone-novel-usb-based-file-access-attacks-against-mobile-devices-43262"><i
-                        class="fa fa-globe"></i>
+                  <span class="sbtn"><a href="https://www.blackhat.com/asia-25/briefings/schedule/#watch-your-phone-novel-usb-based-file-access-attacks-against-mobile-devices-43262"><i class="fa fa-globe"></i>
                       Website</a></span>
-                  <span class="sbtn"><a
-                      href="https://www.youtube.com/watch?v=UYKet66vLsg&list=PLH15HpR5qRsWXApxW0vAsRduq9xa3ifCG&index=16"><i
-                        class="fa fa-television"></i>
+                  <span class="sbtn"><a href="https://www.youtube.com/watch?v=UYKet66vLsg&amp;list=PLH15HpR5qRsWXApxW0vAsRduq9xa3ifCG&amp;index=16"><i class="fa fa-television"></i>
                       Recording</a></span>
                 </small>
               </div>
             </div>
           </div>
+
           <div class="row">
             <div class="timeline-entry">
               <div class="col-md-1">
@@ -1197,17 +1182,15 @@
                   <br>
                   Network and Distributed System Security (NDSS) 2025
                   <br>
-                  <span class="sbtn"><a
-                      href="https://www.ndss-symposium.org/ndss-paper/kernelsnitch-side-channel-attacks-on-kernel-data-structures/"><i
-                        class="fa fa-globe"></i>
+                  <span class="sbtn"><a href="https://www.ndss-symposium.org/ndss-paper/kernelsnitch-side-channel-attacks-on-kernel-data-structures/"><i class="fa fa-globe"></i>
                       Website</a></span>
-                  <span class="sbtn"><a href="https://www.youtube.com/watch?v=qQfraHsHkGw"><i
-                        class="fa fa-television"></i>
+                  <span class="sbtn"><a href="https://www.youtube.com/watch?v=qQfraHsHkGw"><i class="fa fa-television"></i>
                       Recording</a></span>
                 </small>
               </div>
             </div>
           </div>
+
           <div class="row">
             <div class="timeline-date">
               <span id="talks2024" class="anchor">
@@ -1221,6 +1204,7 @@
               </div>
             </div>
           </div>
+
           <div class="row">
             <div class="timeline-entry">
               <div class="col-md-1">
@@ -1229,19 +1213,18 @@
                 <i class="fa fa-television">
                 </i>
                 <a class="title" href="slides/csaw24-slubstick.pdf">
-                  SLUBStick: Arbitrary Memory Writes through Practical Software Cross-Cache Attacks within the Linux
-                  Kernel
+                  SLUBStick: Arbitrary Memory Writes through Practical Software Cross-Cache Attacks within the Linux Kernel
                 </a>
                 <br>
                 <small>
                   <b>Lukas Maar</b>
                   <br>
                   CSAW Europe Applied Research Competition (ARC) 2024
-                  <br>
                 </small>
               </div>
             </div>
           </div>
+
           <div class="row">
             <div class="timeline-entry">
               <div class="col-md-1">
@@ -1250,8 +1233,7 @@
                 <i class="fa fa-television">
                 </i>
                 <a class="title" href="slides/usenix24-defectsindepth.pdf">
-                  Defects-in-Depth: Analyzing the Integration of Effective Defenses against One-Day Exploits in Android
-                  Kernels
+                  Defects-in-Depth: Analyzing the Integration of Effective Defenses against One-Day Exploits in Android Kernels
                 </a>
                 <br>
                 <small>
@@ -1259,17 +1241,15 @@
                   <br>
                   USENIX Security Symposium 2024
                   <br>
-                  <span class="sbtn"><a
-                      href="https://www.usenix.org/conference/usenixsecurity24/presentation/maar-defects"><i
-                        class="fa fa-globe"></i>
+                  <span class="sbtn"><a href="https://www.usenix.org/conference/usenixsecurity24/presentation/maar-defects"><i class="fa fa-globe"></i>
                       Website</a></span>
-                  <span class="sbtn"><a href="https://www.youtube.com/watch?v=xb3WD0KJ03w"><i
-                        class="fa fa-television"></i>
+                  <span class="sbtn"><a href="https://www.youtube.com/watch?v=xb3WD0KJ03w"><i class="fa fa-television"></i>
                       Recording</a></span>
                 </small>
               </div>
             </div>
           </div>
+
           <div class="row">
             <div class="timeline-entry">
               <div class="col-md-1">
@@ -1278,8 +1258,7 @@
                 <i class="fa fa-television">
                 </i>
                 <a class="title" href="slides/usenix24-slubstick.pdf">
-                  SLUBStick: Arbitrary Memory Writes through Practical Software Cross-Cache Attacks within the Linux
-                  Kernel
+                  SLUBStick: Arbitrary Memory Writes through Practical Software Cross-Cache Attacks within the Linux Kernel
                 </a>
                 <br>
                 <small>
@@ -1287,17 +1266,15 @@
                   <br>
                   USENIX Security Symposium 2024
                   <br>
-                  <span class="sbtn"><a
-                      href="https://www.usenix.org/conference/usenixsecurity24/presentation/maar-slubstick"><i
-                        class="fa fa-globe"></i>
+                  <span class="sbtn"><a href="https://www.usenix.org/conference/usenixsecurity24/presentation/maar-slubstick"><i class="fa fa-globe"></i>
                       Website</a></span>
-                  <span class="sbtn"><a href="https://www.youtube.com/watch?v=dPyJZxY0N7w"><i
-                        class="fa fa-television"></i>
+                  <span class="sbtn"><a href="https://www.youtube.com/watch?v=dPyJZxY0N7w"><i class="fa fa-television"></i>
                       Recording</a></span>
                 </small>
               </div>
             </div>
           </div>
+
           <div class="row">
             <div class="timeline-entry">
               <div class="col-md-1">
@@ -1313,11 +1290,11 @@
                   <b>Lukas Maar</b>
                   <br>
                   ACM ASIA Conference on Computer and Communications Security (AsiaCCS) 2024
-                  <br>
                 </small>
               </div>
             </div>
           </div>
+
           <div class="row">
             <div class="timeline-date">
               <span id="talks2023" class="anchor">
@@ -1331,6 +1308,7 @@
               </div>
             </div>
           </div>
+
           <div class="row">
             <div class="timeline-entry">
               <div class="col-md-1">
@@ -1347,16 +1325,17 @@
                   <br>
                   Annual Computer Security Applications Conference (ACSAC) 2023
                   <br>
-                  <span class="sbtn"><a href="https://www.acsac.org/2023/program/final/s51.html"><i
-                        class="fa fa-globe"></i>
+                  <span class="sbtn"><a href="https://www.acsac.org/2023/program/final/s51.html"><i class="fa fa-globe"></i>
                       Website</a></span>
                 </small>
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </div>
+
 
     <div id="awards" class="row">
       <div class="col-md-1">
@@ -1372,11 +1351,13 @@
       <div class="col-md-1">
       </div>
     </div>
-    <div class="row">
+
+        <div class="row">
       <div class="col-md-1">
       </div>
       <div class="col-md-10">
         <div class="timeline">
+
           <div class="row">
             <div class="timeline-date">
               <span id="awards2025" class="anchor">
@@ -1390,6 +1371,7 @@
               </div>
             </div>
           </div>
+
           <div class="row">
             <div class="timeline-entry">
               <div class="col-md-1">
@@ -1412,9 +1394,15 @@
                 <a class="title" href="https://nvd.nist.gov/vuln/detail/CVE-2025-27387">
                   CVE-2025-27387</a>
                 <br>
+                <small>
+                  <span class="sbtn text-muted">
+                    Clone2Pwn: A Systematic Security Analysis of Data Migration Tools in the Android Ecosystem
+                  </span>
+                </small>
               </div>
             </div>
           </div>
+
           <div class="row">
             <div class="timeline-entry">
               <div class="col-md-1">
@@ -1423,17 +1411,17 @@
                 <i class="fa fa-bug">
                 </i>
                 <a class="title" href="https://nvd.nist.gov/vuln/detail/CVE-2025-21691">
-                  CVE-2025-21691
-                </a>
+                  CVE-2025-21691</a>
                 <br>
                 <small>
-                  <span class="sbtn" style="color:#6e6e6e;">
+                  <span class="sbtn text-muted">
                     Eviction Notice: Reviving and Advancing Page Cache Attacks
                   </span>
                 </small>
               </div>
             </div>
           </div>
+
           <div class="row">
             <div class="timeline-entry">
               <div class="col-md-1">
@@ -1441,19 +1429,18 @@
               <div class="col-md-11">
                 <i class="fa fa-trophy">
                 </i>
-                <a class="title"
-                  href="https://docs.google.com/document/d/1fynP2jWwrFP9wOQLFQIyFjmq0PDUaJW3e-x5I7yN7ZI/edit?usp=sharing">
-                  Pwnie Award Nominee for Most Underhyped Research
-                </a>
+                <a class="title" href="https://docs.google.com/document/d/1fynP2jWwrFP9wOQLFQIyFjmq0PDUaJW3e-x5I7yN7ZI/edit?usp=sharing">
+                  Pwnie Award Nominee for Most Underhyped Research</a>
                 <br>
                 <small>
-                  <span class="sbtn" style="color:#6e6e6e;">
+                  <span class="sbtn text-muted">
                     KernelSnitch: Side-Channel Attacks on Kernel Data Structures
                   </span>
                 </small>
               </div>
             </div>
           </div>
+
           <div class="row">
             <div class="timeline-entry">
               <div class="col-md-1">
@@ -1471,13 +1458,14 @@
                   CVE-2025-24193</a>
                 <br>
                 <small>
-                  <span class="sbtn" style="color:#6e6e6e;">
-                    ChoiceJacking: Compromising Mobile Devices through Malicious Chargers like a Decade ago 
+                  <span class="sbtn text-muted">
+                    ChoiceJacking: Compromising Mobile Devices through Malicious Chargers like a Decade ago
                   </span>
                 </small>
               </div>
             </div>
           </div>
+
           <div class="row">
             <div class="timeline-date">
               <span id="awards2024" class="anchor">
@@ -1491,6 +1479,7 @@
               </div>
             </div>
           </div>
+
           <div class="row">
             <div class="timeline-entry">
               <div class="col-md-1">
@@ -1499,18 +1488,17 @@
                 <i class="fa fa-trophy">
                 </i>
                 <a class="title">
-                  CSAW'24 Europe Applied Research Competition (ARC) Finalist
-                </a>
+                  CSAW'24 Europe Applied Research Competition (ARC) Finalist</a>
                 <br>
                 <small>
-                  <span class="sbtn" style="color:#6e6e6e;">
-                    SLUBStick: Arbitrary Memory Writes through Practical Software Cross-Cache Attacks within the Linux
-                    Kernel
+                  <span class="sbtn text-muted">
+                    SLUBStick: Arbitrary Memory Writes through Practical Software Cross-Cache Attacks within the Linux Kernel
                   </span>
                 </small>
               </div>
             </div>
           </div>
+
           <div class="row">
             <div class="timeline-date">
               <span id="awards2023" class="anchor">
@@ -1524,6 +1512,7 @@
               </div>
             </div>
           </div>
+
           <div class="row">
             <div class="timeline-entry">
               <div class="col-md-1">
@@ -1532,27 +1521,29 @@
                 <i class="fa fa-bug">
                 </i>
                 <a class="title" href="https://nvd.nist.gov/vuln/detail/CVE-2023-21387">
-                  CVE-2023-21387
-                </a>
+                  CVE-2023-21387</a>
                 <br>
                 <small>
-                  <span class="sbtn" style="color:#6e6e6e;">
-                    Manifest Problems: Analyzing Code Transparency for Android Application Bundles 
+                  <span class="sbtn text-muted">
+                    Manifest Problems: Analyzing Code Transparency for Android Application Bundles
                   </span>
                 </small>
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </div>
+
+
     <footer>
       <p>&copy; 2026 Lukas Maar.
         <small>
-          Last updated: 05.02.2026. Template by
+          Last updated: 10.04.2026. Template by
           <a class="title" href="https://andreaskogler.com/">Andreas Kogler</a> <span
-            style='font-size:15px;'>&#10230;</span> <a class="title" href="https://fabianrauscher.com/">Fabian
-            Rauscher</a> <span style='font-size:15px;'>&#10230;</span> <a class="title" href="#">Lukas Maar</a>
+            class="footer-arrow">&#10230;</span> <a class="title" href="https://fabianrauscher.com/">Fabian
+            Rauscher</a> <span class="footer-arrow">&#10230;</span> <a class="title" href="#">Lukas Maar</a>
         </small>
       </p>
     </footer>
@@ -1561,10 +1552,11 @@
 
 <script>
   function toggleBox(name) {
-    if (document.getElementById(name).style.display == "")
-      document.getElementById(name).style.display = "none";
-    else
-      document.getElementById(name).style.display = "";
+    var el = document.getElementById(name);
+    if (!el) return;
+
+    var isHidden = window.getComputedStyle(el).display === "none";
+    el.style.display = isHidden ? "block" : "none";
   }
 </script>
 

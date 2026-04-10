@@ -1,0 +1,398 @@
+/* Blog article page */
+body.article-page {
+    --article-page-bg: var(--bg-page);
+    --article-card-bg: var(--bg-card);
+    --article-ink: var(--ink);
+    --article-muted: #555;
+    --article-rule: var(--rule);
+    --article-code-bg: #eeeff3;
+    --article-code-ink: #27303a;
+    --article-code-border: #d5d9e0;
+    background-color: var(--article-page-bg);
+    color: var(--article-ink);
+}
+
+body.article-page .article-shell {
+    max-width: 1020px;
+    margin: 2.5rem auto 4rem;
+    padding: 0 1rem;
+}
+
+body.article-page .article-frame {
+    background: var(--article-card-bg);
+    border: 2px solid #000;
+    border-radius: 0;
+    padding: 2.5rem 1.6rem 2rem;
+}
+
+body.article-page .article-kicker {
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    font-weight: 700;
+    font-size: 0.75rem;
+    margin-bottom: 0.7rem;
+}
+
+body.article-page .article-title {
+    font-size: 1.65rem;
+    line-height: 1.15;
+    font-weight: 800;
+    margin-bottom: 0.6rem;
+}
+
+body.article-page .article-subtitle {
+    font-size: 1.45rem;
+    line-height: 1.2;
+    color: var(--article-muted);
+    margin-bottom: 1.4rem;
+}
+
+body.article-page .article-meta {
+    font-size: 0.88rem;
+    color: #2e2e2e;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--article-rule);
+    margin-bottom: 1.7rem;
+}
+
+body.article-page .article-meta a {
+    color: inherit;
+    text-decoration: underline;
+}
+
+body.article-page .article-frame h2 {
+    font-size: 1.25rem;
+    margin-top: 2.2rem;
+    margin-bottom: 0.9rem;
+    font-weight: 800;
+}
+
+body.article-page .article-frame h3 {
+    font-size: 1.05rem;
+    margin-top: 1.3rem;
+    margin-bottom: 0.6rem;
+    font-weight: 700;
+}
+
+body.article-page .article-frame p,
+body.article-page .article-frame li {
+    font-size: 0.92rem;
+    line-height: 1.6;
+}
+
+body.article-page .article-frame ul,
+body.article-page .article-frame ol {
+    padding-left: 1.25rem;
+}
+
+body.article-page .article-note {
+    border-left: 4px solid #111;
+    background: #efefef;
+    padding: 0.9rem 1rem;
+    margin: 1.1rem 0;
+    font-size: 0.88rem;
+}
+
+body.article-page pre {
+    background: var(--article-code-bg);
+    color: var(--article-code-ink);
+    border: 1px solid var(--article-code-border);
+    padding: 1rem;
+    border-radius: 10px;
+    overflow-x: auto;
+    margin: 1rem 0;
+}
+
+body.article-page pre.terminal-log {
+    background: linear-gradient(160deg, #20252f 0%, #292f39 100%);
+    border: 1px solid #49515e;
+    color: #d8dee8;
+    border-radius: 10px;
+}
+
+body.article-page pre.terminal-log code {
+    color: inherit;
+    white-space: pre;
+}
+
+body.article-page pre.terminal-log .term-info {
+    color: #ab8554;
+    font-weight: 700;
+}
+
+body.article-page pre.terminal-log .term-ok {
+    color: #58b478;
+    font-weight: 700;
+}
+
+body.article-page .article-formula {
+    background: #ececf1;
+    border: 1px solid #d6d8df;
+    border-radius: 10px;
+    padding: 0.8rem 1rem;
+    margin: 1rem 0;
+}
+
+body.article-page .article-formula code {
+    color: #1f2530;
+    font-size: 0.86rem;
+}
+
+body.article-page .article-formula > div {
+    line-height: 1.35;
+    white-space: nowrap;
+}
+
+body.article-page code {
+    font-family: Consolas, Monaco, "Courier New", monospace;
+    font-size: 0.88rem;
+}
+
+/* Keep inline code in headings at heading size (not body code size). */
+body.article-page .article-frame h1 code,
+body.article-page .article-frame h2 code,
+body.article-page .article-frame h3 code {
+    font-size: inherit;
+    line-height: inherit;
+}
+
+body.article-page :not(pre) > code {
+    color: #5f6368;
+}
+
+/* Keep inline code inside links in the same color as the link text. */
+body.article-page a code {
+    color: inherit;
+}
+
+body.article-page pre code {
+    line-height: 1.25;
+}
+
+body.article-page .caption {
+    font-size: 0.85rem;
+    color: var(--article-muted);
+    text-align: center;
+    margin-top: -0.3rem;
+    margin-bottom: 1.1rem;
+}
+
+body.article-page .article-figure {
+    text-align: center;
+    margin: 1rem 0 1.2rem;
+}
+
+body.article-page .article-figure-media {
+    width: var(--figure-width, 100%);
+    max-width: 100%;
+    height: auto;
+    display: inline-block;
+}
+
+body.article-page .article-video-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin: 1.25rem 0 1.5rem;
+}
+
+body.article-page .article-video-card {
+    margin: 0;
+}
+
+body.article-page .article-video {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    display: block;
+    border-radius: 0.5rem;
+    background: #000;
+    object-fit: contain;
+}
+
+body.article-page .article-video-card .caption {
+    margin-top: 0.1rem;
+}
+
+body.article-page .ref-list {
+    margin-top: 0.7rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--article-rule);
+}
+
+body.article-page .ref-list li {
+    margin-bottom: 0.55rem;
+    margin-left: 0;
+}
+
+body.article-page .back-link {
+    margin-top: 2rem;
+    font-size: 0.9rem;
+}
+
+body.article-page .toc ul {
+    margin: 0.25rem 0 0.25rem 1.25rem;
+}
+
+body.article-page .toc li {
+    margin: 0.15rem 0;
+}
+
+body.article-page .toc a {
+    text-decoration: none;
+}
+
+body.article-page .toc a:hover {
+    text-decoration: underline;
+}
+
+body.article-page .eval-table-wrap {
+    overflow-x: auto;
+    margin: 0.8rem 0 1.2rem;
+}
+
+body.article-page .eval-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+}
+
+body.article-page .eval-table th,
+body.article-page .eval-table td {
+    border: 1px solid #d5d9e0;
+    padding: 0.45rem 0.55rem;
+    vertical-align: top;
+}
+
+body.article-page .eval-table th {
+    background: #eeeff3;
+    font-weight: 700;
+}
+
+body.article-page .eval-table td {
+    background: #fafbfc;
+}
+
+@media (min-width: 768px) {
+    body.article-page .article-frame {
+        padding: 3rem 2.7rem 2.5rem;
+    }
+
+    body.article-page .article-title {
+        font-size: 1.85rem;
+    }
+
+    body.article-page .article-subtitle {
+        font-size: 1.65rem;
+    }
+}
+
+/* Prism theme for the light gray/purple code surface. */
+body.article-page pre code[class*="language-"] {
+    background: transparent;
+    color: var(--article-code-ink);
+    padding: 0;
+    text-shadow: none;
+}
+
+body.article-page pre code[class*="language-"] .token.comment,
+body.article-page pre code[class*="language-"] .token.prolog,
+body.article-page pre code[class*="language-"] .token.doctype,
+body.article-page pre code[class*="language-"] .token.cdata {
+    color: #8f8aa3;
+    font-style: italic;
+}
+
+body.article-page pre code[class*="language-"] .token.keyword {
+    color: #9f4dd1;
+}
+
+body.article-page pre code[class*="language-"] .token.c-int-type {
+    color: #8755d7;
+}
+
+body.article-page pre code[class*="language-"] .token.class-name,
+body.article-page pre code[class*="language-"] .token.kernel-attr,
+body.article-page pre code[class*="language-"] .token.builtin-type {
+    color: #4f83c9;
+}
+
+body.article-page pre code[class*="language-"] .token.function {
+    color: #b54896;
+}
+
+body.article-page pre code[class*="language-"] .token.kernel-fn {
+    color: #b54896;
+}
+
+body.article-page pre code[class*="language-"] .token.builtin {
+    color: #b54896;
+}
+
+body.article-page pre code[class*="language-"] .token.string,
+body.article-page pre code[class*="language-"] .token.char {
+    color: #3b9b62;
+}
+
+body.article-page pre code[class*="language-"] .token.number,
+body.article-page pre code[class*="language-"] .token.boolean,
+body.article-page pre code[class*="language-"] .token.constant {
+    color: #bf7a38;
+}
+
+body.article-page pre code[class*="language-"] .token.operator,
+body.article-page pre code[class*="language-"] .token.punctuation {
+    color: #73748a;
+}
+
+body.article-page pre code[class*="language-"] .token.property,
+body.article-page pre code[class*="language-"] .token.parameter,
+body.article-page pre code[class*="language-"] .token.variable,
+body.article-page pre code[class*="language-"] .token.symbol,
+body.article-page pre code[class*="language-"] .token.attr-name {
+    color: var(--article-code-ink);
+}
+
+body.article-page pre code[class*="language-"] .token.macro,
+body.article-page pre code[class*="language-"] .token.directive,
+body.article-page pre code[class*="language-"] .token.selector,
+body.article-page pre code[class*="language-"] .token.kernel-macro {
+    color: #c154ad;
+}
+
+/* Terminal-style shell highlighting for evaluation snippets. */
+body.article-page pre.terminal-log code[class*="language-"] {
+    color: #dbe2ff;
+}
+
+body.article-page pre.terminal-log code[class*="language-"] .token.comment {
+    color: #97a2d1;
+    font-style: italic;
+}
+
+body.article-page pre.terminal-log code[class*="language-"] .token.function {
+    color: #ffd48e;
+}
+
+body.article-page pre.terminal-log code[class*="language-"] .token.string {
+    color: #86e3a4;
+}
+
+body.article-page pre.terminal-log code[class*="language-"] .token.number,
+body.article-page pre.terminal-log code[class*="language-"] .token.constant {
+    color: #ffbf7c;
+}
+
+body.article-page pre.terminal-log code[class*="language-"] .token.operator,
+body.article-page pre.terminal-log code[class*="language-"] .token.punctuation {
+    color: #c8d1ff;
+}
+
+body.article-page pre.terminal-log code[class*="language-"] .token.term-ok {
+    color: #45c16b;
+    font-weight: 700;
+}
+
+body.article-page pre.terminal-log code[class*="language-"] .token.term-info {
+    color: #b78543;
+    font-weight: 700;
+}

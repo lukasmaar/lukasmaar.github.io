@@ -1,0 +1,38 @@
+:root {
+    --bg-page: rgb(235, 235, 235);
+    --bg-card: rgb(247, 247, 247);
+    --bg-white: #fff;
+    --ink: #171717;
+    --muted: #6e6e6e;
+    --rule: #5c5c5c;
+    --timeline-rail: #474747;
+    --brand-purple: #8c41ca;
+}
+
+/* Base */
+html {
+    scroll-behavior: smooth;
+    background-color: var(--bg-page);
+}
+
+body {
+    background: no-repeat center center fixed;
+    padding-top: 60px;
+    position: relative;
+}
+
+pre {
+    font-family: Consolas, monospace;
+}
+
+.topbar-item {
+    margin-right: 0.5cm;
+}
+
+.sbtn {
+    margin-left: 1em;
+}
+
+.navbar-custom {
+    background-color: var(--brand-purple);
+}
