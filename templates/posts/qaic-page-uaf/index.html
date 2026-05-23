@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="../../styles/base.css">
+  <link rel="stylesheet" href="../../styles/article.css">
+
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+
+  <style>
+    body.article-page .qaic-demo-figure {
+      width: min(700px, 100%);
+      max-width: 700px;
+      margin: 1.25rem auto 2.2rem;
+      text-align: center;
+    }
+
+    body.article-page .qaic-demo-figure .article-video {
+      aspect-ratio: 1104 / 784;
+      width: 100%;
+      height: auto;
+      border-radius: 0.5rem;
+      object-fit: contain;
+    }
+
+    body.article-page .qaic-demo-figure .caption {
+      margin-bottom: 0;
+    }
+  </style>
+
+  <title>Exploiting Qualcomm's QAIC Kernel Driver | Lukas Maar</title>
+
+</head>
+
+<body class="article-page">
+  {{TOPBAR}}
+
+  <main class="article-shell">
+    <article class="article-frame">
+      <div class="article-kicker">Security Blog</div>
+      <h1 class="article-title">Privilege Escalation via a Page Use-After-Free in Qualcomm's AI Accelerator Linux Kernel Driver</h1>
+      <p class="article-subtitle">Turning a stale QAIC page-table mapping into a <code>pipe_buffer</code>-backed physical read/write primitive.</p>
+
+      <div class="article-meta">
+        <strong>Lukas Maar</strong><br>
+        <span>Published: May 23, 2026</span>
+      </div>
+
+      <p>
+        This post is a shorter one because the resulting exploit primitive is very strong.
+        The vulnerability leaves behind a dangling page-table entry and therefore creates a page-level use-after-free scenario.
+        By reclaiming the freed physical page as a <code>pipe_buffer</code> slab page, that is, a page holding the kernel's pipe I/O buffer metadata, I can control the <code>pipe_buffer</code> objects stored there.
+        That gives me a physical arbitrary read/write primitive, which I use for privilege escalation on a Linux v6.18 kernel.
+      </p>
+
+      <p>
+        The bug lives in Qualcomm's Cloud AI Accelerator kernel driver, <a href="https://elixir.bootlin.com/linux/v6.18.21/source/drivers/accel/qaic">qaic</a>, which is present in mainline Linux.
+        I do not own the hardware because these hardware accelerators are expensive, so I virtualize the driver for exploit development.
+        That is sufficient here because the attack does not require hardware-specific internals.
+        I only need to map and unmap the driver's user-visible buffer object to trigger the bug.
+        In practice, the virtualization layer only stubs out hardware-dependent initialization and teardown.
+        This virtualization makes the vulnerability much easier to study in a controlled setup.
+      </p>
+
+      <figure class="article-video-card qaic-demo-figure">
+        <video class="article-video" autoplay muted loop playsinline controls preload="metadata">
+          <source src="poc.webm" type="video/webm">
+        </video>
+        <div class="caption">Figure 1: Proof-of-concept execution flow for the <code>qaic</code> page-level use after free.</div>
+      </figure>
+
+      <div class="article-note">
+        <strong>Disclosure timeline:</strong>
+        I reported this vulnerability to Qualcomm on April 8, 2026.
+        Qualcomm confirmed the privilege-escalation impact under the corresponding access requirements.
+        A <a href="https://lore.kernel.org/all/20260423204412.2861046-1-zachary.mckevitt@oss.qualcomm.com/">patch</a> (<a href="https://lore.kernel.org/all/20260430193858.1178641-1-zachary.mckevitt@oss.qualcomm.com/">v2</a>) landed on April 23, 2026, and I received a bug bounty on April 27, 2026.
+        I am publishing this post 30 days later, to give enough time for patch distribution.
+        The exploit code, QEMU test setup, and supporting patches are available at <a href="https://github.com/lukasmaar/qaic-page-uaf">qaic-page-uaf</a>.
+        I also want to thank the Qualcomm Product Security Team for the fast responses, constructive communication, and straightforward disclosure process throughout the report.
+      </div>
+
+      <div class="article-note">
+        <strong>AI assistance:</strong>
+        I found the vulnerability and developed the exploit myself.
+        Parts of the build scripts, test environment, and hardware virtualization were created with AI assistance, notably using Codex, and the text also received AI-assisted editing.
+        There is some irony in using AI tooling to help experiment with exploiting a kernel driver for an AI accelerator.
+      </div>
+
+      <h2 id="virt">Hardware Virtualization</h2>
+
+      <p>
+        Before going into the exploitation details, I want to describe the virtualization setup that made the experiments possible without having access to the actual accelerator hardware.
+        The relevant observation is that the bug does not require executing workloads on the device.
+        It only requires the driver paths that allocate a buffer object, expose an <code>mmap</code> offset, map the backing pages into user space, unmap the Virtual Memory Area (VMA), and later free the buffer object.
+        Those paths are mostly kernel-side and memory-management logic, not hardware execution logic.
+      </p>
+
+      <p>
+        For the experiments, I patched <code>qaic</code> with a <code>fake_online</code> module parameter (see <a href="https://github.com/lukasmaar/qaic-page-uaf">qaic-fake-online.patch</a>).
+        When this parameter is set, the driver skips PCI probing and instead registers a synthetic parent device with <code>root_device_register("qaic_fake")</code>.
+        It then creates a fake <code>qaic_device</code>, marks it as <code>QAIC_ONLINE</code>, gives it one synthetic Direct Buffer Channel (DBC), initializes the mutexes, Sleepable Read-Copy Update (SRCU) state, workqueues, waitqueues, and buffer-object lists that the normal driver paths expect, and finally registers the accel device through the existing <code>qaic_create_drm_device</code> path.
+      </p>
+
+      <p>
+        This is enough to get a user-visible <code>qaic</code> device node and to exercise the buffer-object lifecycle needed for the vulnerability.
+        The fake mode also avoids hardware-dependent cleanup in paths such as <code>qaic_postclose</code>, where the real driver would normally release users and DBC state through device-specific control paths.
+        In other words, the patch does not emulate the accelerator.
+        It only makes the driver look online enough for the allocation, mapping, unmapping, and freeing operations that matter for this bug.
+      </p>
+
+      <p>
+        With that setup, I could continue the experiments in a normal kernel test environment despite not owning the Qualcomm hardware.
+        That is also why this vulnerability was practical to analyze: the exploit primitive is produced by a mismatch between the driver's mapping code and the kernel's page-table teardown behavior, so the core experiment remains valid as long as the relevant <code>qaic</code> buffer-object and <code>mmap</code> paths are reachable.
+      </p>
+
+      <h2 id="bug">The Bug</h2>
+
+      <p>
+        Linux represents user-space mappings through <code>vm_area_struct</code> objects, where each VMA describes one contiguous virtual-address range together with its permissions and mapping behavior.
+        For ordinary memory, this is mostly generic memory-management bookkeeping.
+        Device mappings are more interesting because the VMA becomes the handoff point between generic memory-management code, page-table installation, and driver-managed backing pages.
+        That means the kernel side and the driver side have to align on the exact mapped range and on the lifetime of the underlying physical memory.
+        If those assumptions diverge, stale page-table reachability to freed physical pages can follow.
+        In <code>qaic</code>, that boundary is exposed through the driver's custom <code>mmap</code> path.
+      </p>
+
+      <p>
+        In <code>qaic</code>, the relevant code path is <code>qaic_gem_object_mmap</code>, which walks the buffer object's scatterlist and maps each entry into the user VMA.
+        The important observation is that this loop never verifies that the accumulated mapping range actually stays within <code>vma->vm_start</code> and <code>vma->vm_end</code>.
+      </p>
+
+      <pre><code class="language-c">static int qaic_gem_object_mmap(struct drm_gem_object *obj, struct vm_area_struct *vma)
+{
+    struct qaic_bo *bo = to_qaic_bo(obj);
+    unsigned long offset = 0;
+    struct scatterlist *sg;
+    int ret = 0;
+
+    if (drm_gem_is_imported(obj))
+        return -EINVAL;
+
+    for (sg = bo->sgt->sgl; sg; sg = sg_next(sg)) {
+        if (sg_page(sg)) {
+            ret = remap_pfn_range(vma, vma->vm_start + offset, page_to_pfn(sg_page(sg)),
+                          sg->length, vma->vm_page_prot);
+            if (ret)
+                goto out;
+            offset += sg->length;
+        }
+    }
+
+out:
+    return ret;
+}</code></pre>
+      <div class="caption">Listing 1: <code>qaic_gem_object_mmap</code> maps the scatterlist entries into the user VMA without checking the full resulting range.</div>
+
+      <p>
+        Listing 1 maps the pages referenced by the buffer object's scatterlist into user space.
+        The scatter-gather metadata is stored in an <code>sg_table</code> at <code>bo->sgt</code>, and <code>bo->sgt->sgl</code> is the head of the linked scatterlist entries that describe the allocated pages.
+        These entries may refer either to individual order-0 pages or to higher-order compound pages.
+      </p>
+
+      <p>
+        At that point, the obvious follow-up question is whether <code>remap_pfn_range</code> enforces that boundary for the driver.
+        The short answer is effectively no.
+        The function <code>remap_pfn_range_internal</code> which is internally called by <code>remap_pfn_range_notrack</code> computes <code>end = addr + PAGE_ALIGN(size)</code> from the requested size.
+        However, outside a special copy-on-write case, it does not check that this resulting <code>end</code> still lies within <code>vma->vm_end</code>.
+        In other words, for the common device-mapping case used here, the kernel largely trusts the driver to pass a sane range.
+        Crucially, this is not the case in this scenario.
+      </p>
+
+      <p>
+        Next, let's look at how <code>qaic</code> allocates the pages that later appear in the scatterlist.
+      </p>
+      
+      <pre><code class="language-c">static int create_sgt(struct qaic_device *qdev, struct sg_table **sgt_out, u64 size)
+{
+    struct scatterlist *sg;
+    struct sg_table *sgt;
+    struct page **pages;
+    int *pages_order;
+    int max_order;
+    int nr_pages;
+    int ret = 0;
+    int i, j, k;
+    int order;
+
+    [...]
+    nr_pages = DIV_ROUND_UP(size, PAGE_SIZE);
+    [...]
+
+    /*
+     * Allocate requested memory using alloc_pages. It is possible to allocate
+     * the requested memory in multiple chunks by calling alloc_pages
+     * multiple times. Use SG table to handle multiple allocated pages.
+     */
+    i = 0;
+    while (nr_pages > 0) {
+        order = min(get_order(nr_pages * PAGE_SIZE), max_order);
+        while (1) {
+            pages[i] = alloc_pages(GFP_KERNEL | GFP_HIGHUSER |
+                           __GFP_NOWARN | __GFP_ZERO |
+                           (order ? __GFP_NORETRY : __GFP_RETRY_MAYFAIL),
+                           order);
+            if (pages[i])
+                break;
+            if (!order--) {
+                ret = -ENOMEM;
+                goto free_partial_alloc;
+            }
+        }
+
+        max_order = order;
+        pages_order[i] = order;
+
+        nr_pages -= 1 << order;
+        [...]
+        i++;
+    }
+
+    [...]
+
+    /* Populate the SG table with the allocated memory pages */
+    sg = sgt->sgl;
+    for (k = 0; k < i; k++, sg = sg_next(sg)) {
+        [...]
+        sg_set_page(sg, pages[k], PAGE_SIZE << pages_order[k], 0);
+        [...]
+    }
+
+    [...]
+}</code></pre>
+      <div class="caption">Listing 2: <code>create_sgt</code> can build scatterlist entries that reference higher-order compound pages.</div>
+
+      <p>
+        As shown in Listing 2, <code>create_sgt</code> allocates pages with the <code>pages</code> array of different orders to match the requested page-aligned size.
+        It may allocate order-0 pages or higher-order compound pages and then insert them into the scatterlist as single entries whose <code>sg->length</code> spans multiple base pages.
+        Putting Listings 1 and 2 together with the missing boundary checks in <code>remap_pfn_range</code> gives the actual exploitable bug.
+      </p>
+
+      <pre><code class="language-c">#define TARGET_BO_MAPPING (PAGE_SIZE << 10)
+#define TARGET_BO_SIZE (TARGET_BO_MAPPING + (PAGE_SIZE << 3))
+#define DANGLING_ADDR 0xdeadbeef000
+
+int poc(void)
+{
+    int fd = open_qaic("/dev/accel/accel0");
+    uint32_t handle = qaic_create_bo(fd, TARGET_BO_SIZE);   // [1]
+    uint64_t mmap_offset = qaic_get_mmap_offset(fd, handle);
+    void *mapping = qaic_map_bo_addr(DANGLING_ADDR, fd,
+                                     TARGET_BO_MAPPING, mmap_offset); // [2]
+
+    /*
+     * This intentionally writes beyond the nominal VMA length to demonstrate
+     * that QAIC mapped more than userspace asked for.
+     */
+    memset(mapping, 0x41, TARGET_BO_SIZE);
+
+    /*
+     * Keep an adjacent mapping present to stabilize page-table teardown and
+     * avoid losing a higher-level page table page during unmap.
+     */
+    SYSCHK(mmap((void *)(DANGLING_ADDR + TARGET_BO_MAPPING + PAGE_SIZE),
+            PAGE_SIZE, PROT_READ | PROT_WRITE,
+            MAP_ANON | MAP_PRIVATE | MAP_FIXED, -1, 0)); // [5]
+
+    SYSCHK(munmap(mapping, TARGET_BO_MAPPING)); // [3]
+    qaic_free_bo(fd, handle); // [4]
+}</code></pre>
+      <div class="caption">Listing 3: Minimal proof-of-concept shape for creating a stale mapping past the requested VMA range.</div>
+
+      <p>
+        Listing 3 shows the essential proof-of-concept sequence to trigger the vulnerability.
+        At <code>[1]</code>, the PoC allocates a <code>qaic</code> buffer object of size <code>TARGET_BO_SIZE</code>.
+        At <code>[2]</code>, it maps only <code>TARGET_BO_MAPPING</code> bytes into user space, which is intentionally smaller than the backing buffer object.
+        Because <code>qaic_gem_object_mmap</code> does not bound the scatterlist mapping against the VMA, the driver can install page-table entries for backing pages beyond the requested mapping length.
+        At <code>[3]</code>, <code>munmap()</code> removes only the requested VMA range.
+        At <code>[4]</code>, <code>qaic_free_bo()</code> eventually reaches the driver's buffer-object teardown and frees the full scatterlist backing.
+        At that point, the mappings installed beyond the requested VMA range can outlive the buffer object they originally pointed to.
+        The result is inconsistent page-table state: user space still has translations to physical pages that the driver has already returned to the allocator.
+      </p>
+
+      <p>
+        At <code>[5]</code>, it places a small adjacent anonymous mapping after the target range before unmapping the original VMA.
+        This keeps the relevant upper-level page-table structures allocated during teardown, so the interesting leftover page-table entries (PTEs) are not lost as a side effect of freeing an otherwise empty page-table page.
+      </p>
+
+      <h2 id="exploit-path">Exploit Path</h2>
+
+      <p>
+        After the trigger, the stale mapping still points to physical pages that originally backed the <code>qaic</code> buffer object.
+        The driver has already returned those pages to the allocator, so the next step is to reclaim the same physical memory with an object whose metadata is useful to control.
+        Before continuing, let's recap the allocator details that matter here.
+        Typical Linux kernel heap allocations move through several layers that are relevant for exploitation: slab caches manage typed or size-classed objects, the per-CPU page lists (PCP) provide a fast path for recently freed pages of a given order, and the buddy allocator is the lower-level fallback.
+        A slab cache obtains one or more backing pages and splits that memory into object slots.
+        These backing pages are commonly called slab pages.
+        When the active slab state for a cache no longer has a suitable free slot, the allocator needs another slab page and can obtain one from PCP before falling back to buddy.
+        This is the scenario I want to create here: the freed <code>qaic</code> backing page should remain in PCP, and the next same-order slab allocation should reuse it as a slab page for the target cache.
+        For this exploit, I use <code>pipe_buffer</code> objects because they contain exactly the fields needed to redirect pipe I/O to attacker-chosen physical pages: a page pointer, an offset, and a length.
+      </p>
+
+      <p>
+        The exploit prepares many pipes before triggering the bug, then grows and fills them after freeing the <code>qaic</code> buffer object.
+        This causes the allocator to reuse the freed physical page range as a slab page containing <code>pipe_buffer</code> metadata.
+        The exploit deliberately uses an order-3 page range and reclaims it as an order-3 <code>pipe_buffer</code> slab page, keeping the reuse path same-order from PCP.
+        Since the stale user mapping still covers that physical memory, the exploit can read from and write to the reclaimed page directly.
+        It can then verify that the page contains plausible <code>pipe_buffer</code> objects, for example by checking stable-looking <code>ops</code> and <code>flags</code> fields.
+      </p>
+
+      <p>
+        Once the reclaimed page contains live <code>pipe_buffer</code> objects, the stale mapping becomes a way to control pipe metadata from user space.
+        The exploit first derives the <code>vmemmap</code> base from an existing <code>pipe_buffer->page</code> pointer.
+        With that base, it can translate a physical address into the corresponding <code>struct page</code> address.
+        Rewriting a controlled <code>pipe_buffer</code> to point at that page, with a chosen offset and length, turns normal pipe reads and writes into arbitrary physical memory reads and writes.
+      </p>
+
+      <p>
+        The privilege-escalation part then uses this physical read/write primitive directly.
+        First, it sanity-checks the primitive by reading physical address zero and validating the expected BIOS marker.
+        It then derives the randomized kernel virtual base from the leaked <code>pipe_buffer->ops</code> pointer, which points into <code>anon_pipe_buf_ops</code>.
+        From there, the exploit scans 2 MiB-aligned physical kernel-image candidates until it finds <code>init_task</code> by checking for the expected <code>swapper/</code> task name.
+      </p>
+
+      <p>
+        After locating the physical kernel image, the exploit reads <code>page_offset_base</code> and uses it to translate direct-map virtual addresses back to physical addresses.
+        It then walks the global task list starting from <code>init_task</code>, converts each task-list pointer through the direct map, and searches for the current process by its marker <code>comm</code> value.
+        Once it finds the current <code>task_struct</code>, it reads the credential pointer, translates the backing <code>cred</code> object to a physical address, verifies the expected UID/GID values, and zeroes the credential ID fields.
+        At that point the process has root credentials and can spawn a root shell.
+      </p>
+
+      <p>
+        I ran these experiments in QEMU with the fake-online <code>qaic</code> setup described above.
+        The working exploit was developed and tested on Linux v6.18 built with Fedora's kernel configuration.
+        This setup was useful because it kept the tested kernel close to a distribution-style configuration while still letting me iterate quickly in a controlled virtual environment.
+      </p>
+
+      <h2 id="conclusion">Conclusion</h2>
+
+      <p>
+        This bug is a good example of why driver <code>mmap</code> paths deserve careful boundary and lifetime checks.
+        The vulnerable code does not corrupt a kernel object directly.
+        Instead, it lets a driver install page-table entries outside the range that the VMA teardown later accounts for.
+        Once the backing buffer object is freed, those leftover translations become a page-level use after free.
+      </p>
+
+      <p>
+        The hardware-virtualization setup also made a practical difference.
+        Because the vulnerability sits in the buffer-object and mapping lifecycle, not in accelerator execution, a fake-online <code>qaic</code> instance was enough to keep experimenting without the physical device.
+        That made it possible to develop the trigger and then turn the stale physical mapping into a <code>pipe_buffer</code>-based physical read/write primitive.
+      </p>
+
+      <p>
+        In the end, the exploitation path is fairly direct: create a stale mapping, reclaim the freed page with useful kernel metadata, use that metadata to obtain physical memory access, and modify the current process credentials.
+        I open-sourced the full research setup, including the exploit, virtualization patch, and build scripts, at <a href="https://github.com/lukasmaar/qaic-page-uaf">qaic-page-uaf</a>.
+      </p>
+
+      <p>
+        If you find this work interesting, have questions, or notice technical inaccuracies, feel free to contact me at <a href="mailto:lukas.maar@tugraz.at">lukas.maar@tugraz.at</a>.
+      </p>
+
+    </article>
+  </main>
+  <script>window.Prism = window.Prism || {}; Prism.manual = true;</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script> 
+  <script>
+    Prism.languages.insertBefore('c', 'keyword', {
+      'kernel-attr': /\b(?:__user|__iomem|__init|__must_check|__maybe_unused|free_partial_alloc)\b/,
+      'builtin-type': /\b(?:vm_area_struct|vm_operations_struct|drm_gem_object|qaic_bo|scatterlist|mm_struct|pgd_t|pgprot_t|sg_table)\b/,
+      'c-int-type': /\b(?:u8|u16|u32|u64|s8|s16|s32|s64|__u8|__u16|__u32|__u64|__s8|__s16|__s32|__s64)\b/,
+      'kernel-macro': /\b(?:EINVAL|PAGE_SIZE|THIS_MODULE|NULL|GFP_KERNEL|GFP_HIGHUSER|__GFP_NOWARN|__GFP_ZERO|__GFP_NORETRY|__GFP_RETRY_MAYFAIL|ENOMEM|MAX_PAGE_ORDER|VM_IO|VM_PFNMAP|VM_DONTEXPAND|VM_DONTDUMP|PAGE_SHIFT|DIV_ROUND_UP|PROT_READ|PROT_WRITE|MAP_SHARED|MAP_FIXED|DRM_IOCTL_QAIC_MMAP_BO|DRM_IOCTL_GEM_CLOSE|DRM_IOCTL_QAIC_CREATE_BO|O_RDWR|TARGET_BO_SIZE|DANGLING_ADDR|TARGET_BO_MAPPING|MAP_ANON|MAP_PRIVATE)\b/,
+    });
+    Prism.highlightAll();
+  </script>
+</body>
+
+</html>

@@ -46,7 +46,7 @@
       <li class="nav-item dropdown topbar-item">
         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Blog</a>
         <div class="dropdown-menu" id="blog">
-          <a class="dropdown-item" href="index.html#blog2026">2026: 1</a>
+          <a class="dropdown-item" href="index.html#blog2026">2026: 2</a>
         </div>
       </li>
       <li class="nav-item dropdown topbar-item">
@@ -197,6 +197,32 @@
                 </b>
               </div>
               <div class="col-xs-11">
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="timeline-entry">
+              <div class="col-md-1">
+              </div>
+              <div class="col-md-11">
+                <i class="fa fa-edit">
+                </i>
+                <a class="title" href="posts/qaic-page-uaf/index.html">
+                  Privilege Escalation via a Page Use-After-Free in Qualcomm's AI Accelerator Linux Kernel Driver
+                </a>
+                <br>
+                <small>
+                  <b>Lukas Maar</b>
+                  <br>
+                  <span class="sbtn" onclick="toggleBox('info:QAICPageUAF')"><a href="#0"><i class="fa fa-info-circle"></i>
+                      Info</a></span>
+                  <span class="sbtn"><a href="https://github.com/lukasmaar/qaic-page-uaf"><i class="fa fa-github"></i>
+                      GitHub</a></span>
+                </small>
+                <div id="info:QAICPageUAF" class="infobox is-hidden">
+                  <ul><li><b>Bug class:</b> A memory mapping lifetime bug in Qualcomm's QAIC AI accelerator driver leaves stale page-table state behind.</li><li><b>Exploit path:</b> The stale mapping survives after the original physical backing memory is freed, creating a page-level use after free that I reclaim with <code>pipe_buffer</code> metadata and turn into local privilege escalation.</li><li><b>Virtualized research:</b> By virtualizing the relevant QAIC driver path in QEMU, I could continue kernel-exploitation experiments on Linux v6.18 without access to the accelerator hardware.</li></ul>
+                </div>
               </div>
             </div>
           </div>
@@ -1379,7 +1405,7 @@
               <div class="col-md-11">
                 <i class="fa fa-bug">
                 </i>
-                <a class="title">
+                <a class="title" href="https://nvd.nist.gov/vuln/detail/CVE-2025-15515">
                   CVE-2025-15515</a>,
                 <a class="title" href="https://nvd.nist.gov/vuln/detail/CVE-2025-21060">
                   CVE-2025-21060</a>,
@@ -1540,7 +1566,7 @@
     <footer>
       <p>&copy; 2026 Lukas Maar.
         <small>
-          Last updated: 10.04.2026. Template by
+          Last updated: 23.05.2026. Template by
           <a class="title" href="https://andreaskogler.com/">Andreas Kogler</a> <span
             class="footer-arrow">&#10230;</span> <a class="title" href="https://fabianrauscher.com/">Fabian
             Rauscher</a> <span class="footer-arrow">&#10230;</span> <a class="title" href="#">Lukas Maar</a>
