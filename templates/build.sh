@@ -151,6 +151,31 @@ copy_post_assets() {
   )
 }
 
+sync_legacy_papers_dir() {
+  local papers_dir="$ROOT_DIR/papers"
+  local -a legacy_papers=(
+    "usenix25-drivers.pdf"
+    "usenix25-tlbsidechannel.pdf"
+    "ndss25-kernelsnitch.pdf"
+    "usenix24-defectsindepth.pdf"
+    "usenix24-slubstick.pdf"
+    "asiaccs24-hekcfi.pdf"
+    "acsac23-dope.pdf"
+  )
+  local pdf_name
+
+  mkdir -p "$papers_dir"
+  find "$papers_dir" -maxdepth 1 -type l -name '*.pdf' -delete
+
+  for pdf_name in "${legacy_papers[@]}"; do
+    if [[ ! -f "$ROOT_DIR/publications/$pdf_name" ]]; then
+      echo "Build failed: missing legacy paper target publications/$pdf_name" >&2
+      exit 1
+    fi
+    ln -sfn "../publications/$pdf_name" "$papers_dir/$pdf_name"
+  done
+}
+
 check_topbar_placeholder() {
   local file="$1"
   if grep -q "{{TOPBAR}}" "$ROOT_DIR/$file"; then
@@ -307,6 +332,7 @@ render_publications_partial
 render_blog_partial
 compile_post_tex_pdfs
 copy_post_assets
+sync_legacy_papers_dir
 render_page "templates/index.html" "index.html" ""
 
 declare -a rendered_posts=()
@@ -348,4 +374,4 @@ for post_file in "${rendered_posts[@]}"; do
   check_last_updated_placeholder "$post_file"
 done
 
-echo "Build complete: index.html and posts/**/index.html"
+echo "Build complete"
