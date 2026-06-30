@@ -1,5 +1,13 @@
 [
   {
+    "year": 2026,
+    "title": "Kernel Security in the Wild",
+    "href": "slides/gi-kernel-security-in-the-wild.pdf",
+    "authors": "<b>Lukas Maar</b>",
+    "venue": "Gesellschaft der Informatik Dissertation Award",
+    "links": []
+  },
+  {
     "year": 2025,
     "title": "Kernel Security in the Wild",
     "href": "slides/kernel-security-in-the-wild.pdf",

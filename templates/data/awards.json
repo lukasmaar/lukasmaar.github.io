@@ -1,5 +1,15 @@
 [
   {
+    "year": 2026,
+    "icon": "fa-trophy",
+    "items": [
+      {
+        "label": "Gesellschaft der Informatik Dissertation Award Nominee"
+      }
+    ],
+    "note": "Kernel Security in the Wild"
+  },
+  {
     "year": 2025,
     "icon": "fa-bug",
     "items": [
