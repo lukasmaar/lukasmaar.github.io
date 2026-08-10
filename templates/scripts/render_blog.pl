@@ -78,6 +78,34 @@ for my $e (@$entries) {
   $html .= qq{                <br>\n};
   $html .= qq{                <small>\n};
   $html .= qq{                  $author_html\n};
+
+  my $badges = $e->{badges};
+  my @badge_chunks = ();
+  if (defined($badges) && ref($badges) eq 'HASH') {
+    my $artifacts = $badges->{artifacts};
+    my $cves = $badges->{cves};
+    my $awards = $badges->{awards};
+
+    if (defined($artifacts) && ref($artifacts) eq 'ARRAY' && scalar(@$artifacts) > 0) {
+      my $art = join(", ", map { esc($_ // '') } @$artifacts);
+      push @badge_chunks, qq{<i class="fa fa-certificate text-purple"></i> Artifacts evaluated: $art};
+    }
+    if (defined($cves) && ref($cves) eq 'ARRAY' && scalar(@$cves) > 0) {
+      my $cv = join(", ", map { esc($_ // '') } @$cves);
+      push @badge_chunks, qq{<i class="fa fa-bug text-black"></i> $cv};
+    }
+    if (defined($awards) && ref($awards) eq 'ARRAY' && scalar(@$awards) > 0) {
+      my $aw = join(", ", map { esc($_ // '') } @$awards);
+      push @badge_chunks, qq{<i class="fa fa-star text-gold"></i> $aw};
+    }
+  }
+  if (scalar(@badge_chunks) > 0) {
+    $html .= qq{                  <br>\n};
+    $html .= qq{                  <span class="text-muted">\n};
+    $html .= qq{                    } . join("&ensp;\n                    ", @badge_chunks) . qq{\n};
+    $html .= qq{                  </span>\n};
+  }
+
   $html .= qq{                  <br>\n};
   $html .= qq{                  <span class="sbtn" onclick="toggleBox('$info_id')"><a href="#0"><i class="fa fa-info-circle"></i>\n};
   $html .= qq{                      Info</a></span>\n};

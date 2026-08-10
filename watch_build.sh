@@ -9,9 +9,12 @@ if [[ ! -x "$BUILD_SCRIPT" ]]; then
   exit 1
 fi
 
-if ! command -v inotifywait >/dev/null 2>&1; then
-  echo "watch_build.sh requires inotifywait (inotify-tools)." >&2
-  echo "Install it, then re-run this script." >&2
+if command -v inotifywait >/dev/null 2>&1; then
+  WATCHER=inotifywait
+elif command -v fswatch >/dev/null 2>&1; then
+  WATCHER=fswatch
+else
+  echo "watch_build.sh requires inotifywait (Linux) or fswatch (macOS: brew install fswatch)." >&2
   exit 1
 fi
 
@@ -31,12 +34,24 @@ echo "Press Ctrl+C to stop."
 # First build immediately.
 run_build
 
-inotifywait -m -r \
-  -e close_write,create,delete,move \
-  --format '%w%f' \
-  --exclude '(/templates/partials/index/|/templates/posts/.*\.(pdf|svg|aux|log|out|toc)$)' \
-  "$ROOT_DIR/templates" "$ROOT_DIR/styles" "$ROOT_DIR/style.css" \
-| while read -r changed_path; do
+EXCLUDE_RE='(/templates/partials/index/|/templates/posts/.*\.(pdf|svg|aux|log|out|toc)$)'
+WATCH_PATHS=("$ROOT_DIR/templates" "$ROOT_DIR/styles" "$ROOT_DIR/style.css")
+
+if [[ "$WATCHER" == "inotifywait" ]]; then
+  watch_cmd() {
+    inotifywait -m -r \
+      -e close_write,create,delete,move \
+      --format '%w%f' \
+      --exclude "$EXCLUDE_RE" \
+      "${WATCH_PATHS[@]}"
+  }
+else
+  watch_cmd() {
+    fswatch -r -E --exclude "$EXCLUDE_RE" "${WATCH_PATHS[@]}"
+  }
+fi
+
+watch_cmd | while read -r changed_path; do
     echo
     echo "[$(date +'%H:%M:%S')] Change detected: $changed_path"
     run_build

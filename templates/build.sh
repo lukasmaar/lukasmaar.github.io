@@ -113,7 +113,6 @@ index_prefix_for_post() {
 render_posts() {
   local posts_dir="$ROOT_DIR/templates/posts"
   local src_rel src_dir src_name dst_rel old_dst post_rel prefix
-  local -n out_files=$1
 
   while IFS= read -r src_rel; do
     src_rel="${src_rel#./}"
@@ -131,7 +130,7 @@ render_posts() {
     if [[ "$old_dst" != "$dst_rel" && -f "$ROOT_DIR/$old_dst" ]]; then
       rm -f "$ROOT_DIR/$old_dst"
     fi
-    out_files+=("$dst_rel")
+    rendered_posts+=("$dst_rel")
   done < <(cd "$posts_dir" && find . -type f -name '*.html' ! -name 'template.html' | sort)
 }
 
@@ -215,8 +214,10 @@ compute_counts() {
       /<footer>/                    { section="";       year=""; next }
 
       {
-        if (match($0, /id="(blog|publications|talks|awards)([0-9]{4})"/, m) && section == m[1]) {
-          year = m[2]
+        if (match($0, /id="(blog|publications|talks|awards)[0-9][0-9][0-9][0-9]"/)) {
+          s = substr($0, RSTART + 4, RLENGTH - 5)
+          sec = substr(s, 1, length(s) - 4)
+          if (section == sec) year = substr(s, length(s) - 3)
         }
       }
 
@@ -344,7 +345,7 @@ sync_legacy_papers_dir
 render_page "templates/index.html" "index.html" ""
 
 declare -a rendered_posts=()
-render_posts rendered_posts
+render_posts
 
 expand_includes "index.html"
 for post_file in "${rendered_posts[@]}"; do
