@@ -10,6 +10,11 @@
       "id": "info:QAICPageUAF",
       "class": "infobox is-hidden",
       "html": "<ul><li><b>Bug class:</b> A memory mapping lifetime bug in Qualcomm's QAIC AI accelerator driver leaves stale page-table state behind.</li><li><b>Exploit path:</b> The stale mapping survives after the original physical backing memory is freed, creating a page-level use after free that I reclaim with <code>pipe_buffer</code> metadata and turn into local privilege escalation.</li><li><b>Virtualized research:</b> By virtualizing the relevant QAIC driver path in QEMU, I could continue kernel-exploitation experiments on Linux v6.18 without access to the accelerator hardware.</li></ul>"
+    },
+    "badges": {
+      "cves": [
+        "CVE-2026-57551"
+      ]
     }
   },
   {

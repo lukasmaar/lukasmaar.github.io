@@ -4,6 +4,25 @@
     "icon": "fa-trophy",
     "items": [
       {
+        "label": "Pwnie Award Nominee for Best Mobile Bug",
+        "href": "https://risky.biz/risky-bulletin-pwnie-awards-2026-winners/"
+      }
+    ],
+    "note": "ChoiceJacking: Compromising Mobile Devices through Malicious Chargers like a Decade ago"
+  },
+  {
+    "year": 2026,
+    "icon": "fa-bug",
+    "items": [
+      {"label": "CVE-2026-57551", "href": ""}
+    ],
+    "note": "Privilege Escalation via a Page Use-After-Free in Qualcomm's AI Accelerator Linux Kernel Driver"
+  },
+  {
+    "year": 2026,
+    "icon": "fa-trophy",
+    "items": [
+      {
         "label": "Gesellschaft der Informatik Dissertation Award Nominee", "href": "https://www.dagstuhl.de/de/seminars/seminar-calendar/seminar-details/26205"
       }
     ],

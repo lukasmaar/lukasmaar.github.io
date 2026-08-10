@@ -2,6 +2,52 @@
   {
     "year": 2026,
     "href": "#",
+    "title": "Fence2Pwn: KFENCE-Enabled Kernel Exploitation Bypassing Slab Hardening and Memory Tagging",
+    "authors": "Ernesto Martínez García, <b>Lukas Maar</b>, Martin Unterguggenberger, Stefan Mangard",
+    "venue": "USENIX Security Symposium 2026",
+    "badges": {
+      "artifacts": [
+        "Available"
+      ]
+    },
+    "actions": [
+      {
+        "kind": "toggle",
+        "target_id": "info:Fence2Pwn",
+        "href": "#0",
+        "icon": "fa-info-circle",
+        "label": "Info"
+      },
+      {
+        "kind": "toggle",
+        "target_id": "bibtex:Fence2Pwn",
+        "href": "#0",
+        "icon": "fa-quote-left",
+        "label": "BibTex"
+      },
+      {
+        "kind": "link",
+        "target_id": null,
+        "href": "#",
+        "icon": "fa-github",
+        "label": "GitHub"
+      }
+    ],
+    "info": {
+      "id": "info:Fence2Pwn",
+      "class": "infobox is-hidden",
+      "html": ""
+    },
+    "bibtex": {
+      "id": "bibtex:Fence2Pwn",
+      "class": "box is-hidden",
+      "text": "@inproceedings{Garcia2026Fence2Pwn,\n  author = {Ernesto Martinez Garcia and Lukas Maar and Martin Unterguggenberger and Stefan Mangard},\n  booktitle = {{USENIX Security}},\n  title = {{Fence2Pwn: KFENCE-Enabled Kernel Exploitation Bypassing Slab Hardening and Memory Tagging}},\n  year = {2026}\n}"
+    }
+
+  },
+  {
+    "year": 2026,
+    "href": "#",
     "title": "Clone2Pwn: A Systematic Security Analysis of Data Migration Tools in the Android Ecosystem",
     "authors": "Florian Draschbacher, <b>Lukas Maar</b>, Lorenz Schumm, Rene Denifl, Lukas Treffner, Stefan Mangard",
     "venue": "European Symposium on Research in Computer Security (ESORICS) 2026",
@@ -301,7 +347,9 @@
         "CVE-2025-24193",
         "CVE-2024-54096"
       ],
-      "awards": []
+      "awards": [
+        "Pwnie Award Nominee"
+      ]
     },
     "actions": [
       {
