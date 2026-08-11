@@ -98,6 +98,11 @@ for my $e (@$entries) {
       my $aw = join(", ", map { esc($_ // '') } @$awards);
       push @badge_chunks, qq{<i class="fa fa-star text-gold"></i> $aw};
     }
+    my $applied = $badges->{applied};
+    if (defined($applied) && ref($applied) eq 'ARRAY' && scalar(@$applied) > 0) {
+      my $ap = join(", ", map { esc($_ // '') } @$applied);
+      push @badge_chunks, qq{<i class="fa fa-crosshairs text-black"></i> Applied: $ap};
+    }
   }
   if (scalar(@badge_chunks) > 0) {
     $html .= qq{                  <br>\n};
@@ -111,6 +116,18 @@ for my $e (@$entries) {
   $html .= qq{                      Info</a></span>\n};
   $html .= qq{                  <span class="sbtn"><a href="$github"><i class="fa fa-github"></i>\n};
   $html .= qq{                      GitHub</a></span>\n};
+
+  my $actions = $e->{actions};
+  if (defined($actions) && ref($actions) eq 'ARRAY') {
+    for my $a (@$actions) {
+      my $ahref = esc($a->{href} // '#');
+      my $icon = esc($a->{icon} // 'fa-link');
+      my $label = esc($a->{label} // 'Link');
+      $html .= qq{                  <span class="sbtn"><a href="$ahref"><i class="fa $icon"></i>\n};
+      $html .= qq{                      $label</a></span>\n};
+    }
+  }
+
   $html .= qq{                </small>\n};
   $html .= qq{                <div id="$info_id" class="infobox is-hidden">\n};
   $html .= qq{                  $info_html\n};

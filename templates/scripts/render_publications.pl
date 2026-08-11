@@ -94,6 +94,11 @@ for my $e (@$entries) {
       my $aw = join(", ", map { esc($_ // '') } @$awards);
       push @badge_chunks, qq{<i class="fa fa-star text-gold"></i> $aw};
     }
+    my $applied = $badges->{applied};
+    if (defined($applied) && ref($applied) eq 'ARRAY' && scalar(@$applied) > 0) {
+      my $ap = join(", ", map { esc($_ // '') } @$applied);
+      push @badge_chunks, qq{<i class="fa fa-crosshairs text-black"></i> Applied: $ap};
+    }
   }
 
   if (scalar(@badge_chunks) > 0) {
