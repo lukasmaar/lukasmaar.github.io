@@ -43,7 +43,6 @@
       "class": "box is-hidden",
       "text": "@inproceedings{Garcia2026Fence2Pwn,\n  author = {Ernesto Martinez Garcia and Lukas Maar and Martin Unterguggenberger and Stefan Mangard},\n  booktitle = {{USENIX Security}},\n  title = {{Fence2Pwn: KFENCE-Enabled Kernel Exploitation Bypassing Slab Hardening and Memory Tagging}},\n  year = {2026}\n}"
     }
-
   },
   {
     "year": 2026,
@@ -445,6 +444,9 @@
       "cves": [],
       "awards": [
         "Pwnie Award Nominee"
+      ],
+      "applied": [
+        "First Android 17 root (IonStack)"
       ]
     },
     "actions": [
@@ -489,6 +491,13 @@
         "href": "slides/nullcon25-sidechannels.pdf",
         "icon": "fa-user-secret",
         "label": "Nullcon Berlin"
+      },
+      {
+        "kind": "link",
+        "target_id": null,
+        "href": "https://nebusec.ai/research/ionstack-part-3/",
+        "icon": "fa-external-link",
+        "label": "IonStack"
       }
     ],
     "info": {

@@ -28,6 +28,18 @@
       "id": "info:HeapKASLRLeak",
       "class": "infobox is-hidden",
       "html": "<ul><li><b>Portable Core Leak:</b> KernelSnitch is a software-only timing side channel that leaks <code>mm_struct</code>-backed page locations without relying on a memory-safety bug, with its POC having a near-100% success rate.</li><li><b>Practical pivot:</b> Combined with cross-cache reuse, this core yields practical <code>msg_msg</code>/<code>pipe_buffer</code> heap KASLR leaks: above 98% on desktop kernels and KernelCTF instances, and practical on the Android kernel.</li><li><b>Security implication:</b> This leakage class remains exploitable under MTE because it avoids invalid tagged accesses, and the core leak can also recover the tag of tagged kernel <code>mm_struct</code> addresses.</li></ul>"
-    }
+    },
+    "badges": {
+      "applied": [
+        "First Android 17 root (IonStack)"
+      ]
+    },
+    "actions": [
+      {
+        "href": "https://nebusec.ai/research/ionstack-part-3/",
+        "icon": "fa-external-link",
+        "label": "IonStack"
+      }
+    ]
   }
 ]

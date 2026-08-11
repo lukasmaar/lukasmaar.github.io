@@ -249,10 +249,16 @@
                 <small>
                   <b>Lukas Maar</b>
                   <br>
+                  <span class="text-muted">
+                    <i class="fa fa-crosshairs text-black"></i> Applied: First Android 17 root (IonStack)
+                  </span>
+                  <br>
                   <span class="sbtn" onclick="toggleBox('info:HeapKASLRLeak')"><a href="#0"><i class="fa fa-info-circle"></i>
                       Info</a></span>
                   <span class="sbtn"><a href="https://github.com/lukasmaar/kernelsnitch"><i class="fa fa-github"></i>
                       GitHub</a></span>
+                  <span class="sbtn"><a href="https://nebusec.ai/research/ionstack-part-3/"><i class="fa fa-external-link"></i>
+                      IonStack</a></span>
                 </small>
                 <div id="info:HeapKASLRLeak" class="infobox is-hidden">
                   <ul><li><b>Portable Core Leak:</b> KernelSnitch is a software-only timing side channel that leaks <code>mm_struct</code>-backed page locations without relying on a memory-safety bug, with its POC having a near-100% success rate.</li><li><b>Practical pivot:</b> Combined with cross-cache reuse, this core yields practical <code>msg_msg</code>/<code>pipe_buffer</code> heap KASLR leaks: above 98% on desktop kernels and KernelCTF instances, and practical on the Android kernel.</li><li><b>Security implication:</b> This leakage class remains exploitable under MTE because it avoids invalid tagged accesses, and the core leak can also recover the tag of tagged kernel <code>mm_struct</code> addresses.</li></ul>
@@ -686,7 +692,8 @@
                   <br>
                   <span class="text-muted">
                     <i class="fa fa-certificate text-purple"></i> Artifacts evaluated: Available, Functional, Reproduced&ensp;
-                    <i class="fa fa-star text-gold"></i> Pwnie Award Nominee
+                    <i class="fa fa-star text-gold"></i> Pwnie Award Nominee&ensp;
+                    <i class="fa fa-crosshairs text-black"></i> Applied: First Android 17 root (IonStack)
                   </span>
                   <br>
                   <span class="sbtn" onclick="toggleBox('info:KernelSnitch')"><a href="#0"><i class="fa fa-info-circle"></i>
@@ -701,6 +708,8 @@
                       Black Hat Asia</a></span>
                   <span class="sbtn"><a href="slides/nullcon25-sidechannels.pdf"><i class="fa fa-user-secret"></i>
                       Nullcon Berlin</a></span>
+                  <span class="sbtn"><a href="https://nebusec.ai/research/ionstack-part-3/"><i class="fa fa-external-link"></i>
+                      IonStack</a></span>
                 </small>
                 <div id="info:KernelSnitch" class="infobox is-hidden">
                   <div> <img src="images/KernelSnitch.svg" alt="image:KernelSnitch" width="114px" class="thumb-left" /> </div> In this paper, we introduce KernelSnitch, a novel hardware-agnostic side-channel attack that exploits timing variations in kernel data structures like hash tables and trees to leak sensitive information. We demonstrate leakage amplification approaches to make this side channel exploitable from user space. Through a kernel heap pointer leak, covert channel and activity monitoring, we demonstrate practical attacks.
@@ -1726,7 +1735,7 @@
     <footer>
       <p>&copy; 2026 Lukas Maar.
         <small>
-          Last updated: 10.08.2026. Template by
+          Last updated: 11.08.2026. Template by
           <a class="title" href="https://andreaskogler.com/">Andreas Kogler</a> <span
             class="footer-arrow">&#10230;</span> <a class="title" href="https://fabianrauscher.com/">Fabian
             Rauscher</a> <span class="footer-arrow">&#10230;</span> <a class="title" href="#">Lukas Maar</a>
