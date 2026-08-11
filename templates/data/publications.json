@@ -1,48 +1,18 @@
 [
   {
     "year": 2026,
-    "href": "#",
+    "href": "https://ls.ecomaikgolf.com/papers/fence2pwn-usenix.pdf",
     "title": "Fence2Pwn: KFENCE-Enabled Kernel Exploitation Bypassing Slab Hardening and Memory Tagging",
     "authors": "Ernesto Martínez García, <b>Lukas Maar</b>, Martin Unterguggenberger, Stefan Mangard",
     "venue": "USENIX Security Symposium 2026",
+    "id": "Fence2Pwn",
     "badges": {
       "artifacts": [
         "Available"
       ]
     },
-    "actions": [
-      {
-        "kind": "toggle",
-        "target_id": "info:Fence2Pwn",
-        "href": "#0",
-        "icon": "fa-info-circle",
-        "label": "Info"
-      },
-      {
-        "kind": "toggle",
-        "target_id": "bibtex:Fence2Pwn",
-        "href": "#0",
-        "icon": "fa-quote-left",
-        "label": "BibTex"
-      },
-      {
-        "kind": "link",
-        "target_id": null,
-        "href": "#",
-        "icon": "fa-github",
-        "label": "GitHub"
-      }
-    ],
-    "info": {
-      "id": "info:Fence2Pwn",
-      "class": "infobox is-hidden",
-      "html": ""
-    },
-    "bibtex": {
-      "id": "bibtex:Fence2Pwn",
-      "class": "box is-hidden",
-      "text": "@inproceedings{Garcia2026Fence2Pwn,\n  author = {Ernesto Martinez Garcia and Lukas Maar and Martin Unterguggenberger and Stefan Mangard},\n  booktitle = {{USENIX Security}},\n  title = {{Fence2Pwn: KFENCE-Enabled Kernel Exploitation Bypassing Slab Hardening and Memory Tagging}},\n  year = {2026}\n}"
-    }
+    "bibtex": "@inproceedings{Garcia2026Fence2Pwn,\n  author = {Ernesto Martinez Garcia and Lukas Maar and Martin Unterguggenberger and Stefan Mangard},\n  booktitle = {{USENIX Security}},\n  title = {{Fence2Pwn: KFENCE-Enabled Kernel Exploitation Bypassing Slab Hardening and Memory Tagging}},\n  year = {2026}\n}",
+    "info": "In this paper, we present Fence2Pwn, which abuses Linux's memory-safety detector, KFENCE, to bypass state-of-the-art slab defenses. It uses a timing side channel to detect KFENCE fallback allocations and exploits their exemption from slab segregation and memory tagging to turn a UAF into cross-type, cross-size object overlay on production kernels."
   },
   {
     "year": 2026,
@@ -50,44 +20,13 @@
     "title": "Clone2Pwn: A Systematic Security Analysis of Data Migration Tools in the Android Ecosystem",
     "authors": "Florian Draschbacher, <b>Lukas Maar</b>, Lorenz Schumm, Rene Denifl, Lukas Treffner, Stefan Mangard",
     "venue": "European Symposium on Research in Computer Security (ESORICS) 2026",
+    "id": "Clone2Pwn",
     "badges": {
       "cves": [
         "CVE-2025-15515, CVE-2025-21060, CVE-2025-21061, CVE-2025-21062, CVE-2025-21064, CVE-2025-21078, CVE-2025-27387"
       ]
     },
-    "actions": [
-      {
-        "kind": "toggle",
-        "target_id": "info:Clone2Pwn",
-        "href": "#0",
-        "icon": "fa-info-circle",
-        "label": "Info"
-      },
-      {
-        "kind": "toggle",
-        "target_id": "bibtex:Clone2Pwn",
-        "href": "#0",
-        "icon": "fa-quote-left",
-        "label": "BibTex"
-      },
-      {
-        "kind": "link",
-        "target_id": null,
-        "href": "#",
-        "icon": "fa-github",
-        "label": "GitHub"
-      }
-    ],
-    "info": {
-      "id": "info:Clone2Pwn",
-      "class": "infobox is-hidden",
-      "html": ""
-    },
-    "bibtex": {
-      "id": "bibtex:Clone2Pwn",
-      "class": "box is-hidden",
-      "text": "@inproceedings{Draschbacher2026Clone2Pwn,\n  author = {Florian Draschbacher and Lukas Maar and Lorenz Schumm and Rene Denifl and Lukas Treffner and Stefan Mangard},\n  booktitle = {{ESORICS}},\n  title = {{Clone2Pwn: A Systematic Security Analysis of Data Migration Tools in the Android Ecosystem}},\n  year = {2026}\n}"
-    }
+    "bibtex": "@inproceedings{Draschbacher2026Clone2Pwn,\n  author = {Florian Draschbacher and Lukas Maar and Lorenz Schumm and Rene Denifl and Lukas Treffner and Stefan Mangard},\n  booktitle = {{ESORICS}},\n  title = {{Clone2Pwn: A Systematic Security Analysis of Data Migration Tools in the Android Ecosystem}},\n  year = {2026}\n}"
   },
   {
     "year": 2026,
@@ -95,6 +34,7 @@
     "title": "Eviction Notice: Reviving and Advancing Page Cache Attacks",
     "authors": "Sudheendra Raghav Neela, Jonas Juffinger, <b>Lukas Maar</b>, Daniel Gruss",
     "venue": "Network and Distributed System Security (NDSS) 2026",
+    "id": "EvictionNotice",
     "badges": {
       "artifacts": [
         "Available",
@@ -103,49 +43,14 @@
       ],
       "cves": [
         "CVE-2025-21691"
-      ],
-      "awards": []
+      ]
     },
-    "actions": [
-      {
-        "kind": "toggle",
-        "target_id": "info:EvictionNotive",
-        "href": "#0",
-        "icon": "fa-info-circle",
-        "label": "Info"
-      },
-      {
-        "kind": "toggle",
-        "target_id": "bibtex:EvictionNotive",
-        "href": "#0",
-        "icon": "fa-quote-left",
-        "label": "BibTex"
-      },
-      {
-        "kind": "link",
-        "target_id": null,
-        "href": "https://github.com/isec-tugraz/Eviction-Notice",
-        "icon": "fa-github",
-        "label": "GitHub"
-      },
-      {
-        "kind": "link",
-        "target_id": null,
-        "href": "https://zenodo.org/records/17915256",
-        "icon": "fa-code",
-        "label": "Zenodo"
-      }
-    ],
-    "info": {
-      "id": "info:EvictionNotive",
-      "class": "infobox is-hidden",
-      "html": "In this paper, we revive page cache attacks and provide a systematic classification of primitives which interact with the page cache. This helps us advance page cache attacks, including speeding up previously known mechanisms by six orders of magnitude."
+    "links": {
+      "github": "https://github.com/isec-tugraz/Eviction-Notice",
+      "zenodo": "https://zenodo.org/records/17915256"
     },
-    "bibtex": {
-      "id": "bibtex:EvictionNotive",
-      "class": "box is-hidden",
-      "text": "@inproceedings{Neela2026EvictionNotive,\n  author = {Sudheendra Raghav Neela and Jonas Juffinger and Lukas Maar and Daniel Gruss},\n  booktitle = {{NDSS}},\n  title = {{Eviction Notice: Reviving and Advancing Page Cache Attacks}},\n  year = {2026}\n}"
-    }
+    "info": "In this paper, we revive page cache attacks and provide a systematic classification of primitives which interact with the page cache. This helps us advance page cache attacks, including speeding up previously known mechanisms by six orders of magnitude.",
+    "bibtex": "@inproceedings{Neela2026EvictionNotice,\n  author = {Sudheendra Raghav Neela and Jonas Juffinger and Lukas Maar and Daniel Gruss},\n  booktitle = {{NDSS}},\n  title = {{Eviction Notice: Reviving and Advancing Page Cache Attacks}},\n  year = {2026}\n}"
   },
   {
     "year": 2025,
@@ -153,46 +58,17 @@
     "title": "Kernel Security in the Wild",
     "authors": "<b>Lukas Maar</b>",
     "venue": "PhD Thesis",
+    "id": "PhDThesis",
     "badges": {
-      "artifacts": [],
-      "cves": [],
       "awards": [
         "Gesellschaft der Informatik Dissertation Award Nominee"
       ]
     },
-    "actions": [
-      {
-        "kind": "toggle",
-        "target_id": "info:PhDThesis",
-        "href": "#0",
-        "icon": "fa-info-circle",
-        "label": "Info"
-      },
-      {
-        "kind": "toggle",
-        "target_id": "bibtex:PhDThesis",
-        "href": "#0",
-        "icon": "fa-quote-left",
-        "label": "BibTex"
-      },
-      {
-        "kind": "link",
-        "target_id": null,
-        "href": "slides/kernel-security-in-the-wild.pdf",
-        "icon": "fa-slideshare",
-        "label": "Slides"
-      }
-    ],
-    "info": {
-      "id": "info:PhDThesis",
-      "class": "infobox is-hidden-overflow",
-      "html": "<div> <img src=\"images/kernel-security-in-the-wild.jpg\" alt=\"image:thesis\" width=\"820px\" class=\"thumb-left-responsive\" /> </div>"
+    "links": {
+      "slides": "slides/kernel-security-in-the-wild.pdf"
     },
-    "bibtex": {
-      "id": "bibtex:PhDThesis",
-      "class": "box is-hidden",
-      "text": "@phdthesis{Maar2025KernelSecurityInTheWild,\n  author = {Lukas Maar},\n  title = {{Kernel Security in the Wild}},\n  year = {2025},\n  school = {Graz University of Technology},\n  type = {PhD thesis}\n}"
-    }
+    "info": "<div> <img src=\"images/kernel-security-in-the-wild.jpg\" alt=\"image:thesis\" width=\"820px\" class=\"thumb-left-responsive\" /> </div>",
+    "bibtex": "@phdthesis{Maar2025KernelSecurityInTheWild,\n  author = {Lukas Maar},\n  title = {{Kernel Security in the Wild}},\n  year = {2025},\n  school = {Graz University of Technology},\n  type = {PhD thesis}\n}"
   },
   {
     "year": 2025,
@@ -200,51 +76,13 @@
     "title": "The Doom of Device Drivers: Your Android Device (Most Likely) has N-Day Kernel Vulnerabilities",
     "authors": "<b>Lukas Maar</b>, Florian Draschbacher, Lorenz Schumm, Ernesto Martínez García, Stefan Mangard",
     "venue": "USENIX Security Symposium 2025",
-    "badges": {
-      "artifacts": [],
-      "cves": [],
-      "awards": []
+    "id": "DeviceDrivers",
+    "links": {
+      "slides": "slides/usenix25-drivers.pdf",
+      "poster": "posters/usenix25-drivers.pdf"
     },
-    "actions": [
-      {
-        "kind": "toggle",
-        "target_id": "info:DeviceDrivers",
-        "href": "#0",
-        "icon": "fa-info-circle",
-        "label": "Info"
-      },
-      {
-        "kind": "toggle",
-        "target_id": "bibtex:DeviceDrivers",
-        "href": "#0",
-        "icon": "fa-quote-left",
-        "label": "BibTex"
-      },
-      {
-        "kind": "link",
-        "target_id": null,
-        "href": "slides/usenix25-drivers.pdf",
-        "icon": "fa-slideshare",
-        "label": "Slides"
-      },
-      {
-        "kind": "link",
-        "target_id": null,
-        "href": "posters/usenix25-drivers.pdf",
-        "icon": "fa-image",
-        "label": "Poster"
-      }
-    ],
-    "info": {
-      "id": "info:DeviceDrivers",
-      "class": "infobox is-hidden-overflow",
-      "html": "<div> <img src=\"images/doom.svg\" alt=\"image:drivers\" width=\"145px\" class=\"thumb-left-small\" /> </div> In this paper, we examine the security of Android devices against n-day exploitation. First, we identify kernel drivers accessible to untrusted apps, revealing a broader-than-expected kernel attack surface. Using public sources like git history, we then identify n-day vulnerabilities in these drivers. Finally, we perform a patch analysis that shows many remain unpatched for extended periods. This enables malicious actors to exploit n-days instead of relying on costly zero-days."
-    },
-    "bibtex": {
-      "id": "bibtex:DeviceDrivers",
-      "class": "box is-hidden",
-      "text": "@inproceedings{Maar2025DeviceDrivers,\n  author = {Lukas Maar and Florian Draschbacher and Lorenz Schumm and Ernesto Martinez Garcia and Stefan Mangard},\n  booktitle = {{USENIX Security}},\n  title = {{The Doom of Device Drivers: Your Android Device (Most Likely) has N-Day Kernel Vulnerabilities}},\n  year = {2025}\n}"
-    }
+    "info": "<div> <img src=\"images/doom.svg\" alt=\"image:drivers\" width=\"145px\" class=\"thumb-left-small\" /> </div> In this paper, we examine the security of Android devices against n-day exploitation. First, we identify kernel drivers accessible to untrusted apps, revealing a broader-than-expected kernel attack surface. Using public sources like git history, we then identify n-day vulnerabilities in these drivers. Finally, we perform a patch analysis that shows many remain unpatched for extended periods. This enables malicious actors to exploit n-days instead of relying on costly zero-days.",
+    "bibtex": "@inproceedings{Maar2025DeviceDrivers,\n  author = {Lukas Maar and Florian Draschbacher and Lorenz Schumm and Ernesto Martinez Garcia and Stefan Mangard},\n  booktitle = {{USENIX Security}},\n  title = {{The Doom of Device Drivers: Your Android Device (Most Likely) has N-Day Kernel Vulnerabilities}},\n  year = {2025}\n}"
   },
   {
     "year": 2025,
@@ -252,83 +90,34 @@
     "title": "When Good Kernel Defenses Go Bad: Reliable and Stable Kernel Exploits via Defense-Amplified TLB Side-Channel Leaks",
     "authors": "<b>Lukas Maar</b>, Lukas Giner, Daniel Gruss, Stefan Mangard",
     "venue": "USENIX Security Symposium 2025",
+    "id": "LocationDisclosures",
     "badges": {
       "artifacts": [
         "Available",
         "Functional",
         "Reproduced"
-      ],
-      "cves": [],
-      "awards": []
+      ]
     },
-    "actions": [
+    "links": {
+      "github": "https://github.com/isec-tugraz/TLBSideChannel",
+      "zenodo": "https://zenodo.org/records/15105521",
+      "slides": "slides/usenix25-tlbsidechannel.pdf",
+      "poster": "posters/usenix25-tlbsidechannel.pdf"
+    },
+    "extra_links": [
       {
-        "kind": "toggle",
-        "target_id": "info:LocationDisclosures",
-        "href": "#0",
-        "icon": "fa-info-circle",
-        "label": "Info"
-      },
-      {
-        "kind": "toggle",
-        "target_id": "bibtex:LocationDisclosures",
-        "href": "#0",
-        "icon": "fa-quote-left",
-        "label": "BibTex"
-      },
-      {
-        "kind": "link",
-        "target_id": null,
-        "href": "https://github.com/isec-tugraz/TLBSideChannel",
-        "icon": "fa-github",
-        "label": "GitHub"
-      },
-      {
-        "kind": "link",
-        "target_id": null,
-        "href": "https://zenodo.org/records/15105521",
-        "icon": "fa-code",
-        "label": "Zenodo"
-      },
-      {
-        "kind": "link",
-        "target_id": null,
-        "href": "slides/usenix25-tlbsidechannel.pdf",
-        "icon": "fa-slideshare",
-        "label": "Slides"
-      },
-      {
-        "kind": "link",
-        "target_id": null,
-        "href": "posters/usenix25-tlbsidechannel.pdf",
-        "icon": "fa-image",
-        "label": "Poster"
-      },
-      {
-        "kind": "link",
-        "target_id": null,
+        "label": "Black Hat USA",
         "href": "slides/bhus25-tlbsidechannel.pdf",
-        "icon": "fa-user-secret",
-        "label": "Black Hat USA"
+        "icon": "fa-user-secret"
       },
       {
-        "kind": "link",
-        "target_id": null,
+        "label": "Nullcon Berlin",
         "href": "slides/nullcon25-sidechannels.pdf",
-        "icon": "fa-user-secret",
-        "label": "Nullcon Berlin"
+        "icon": "fa-user-secret"
       }
     ],
-    "info": {
-      "id": "info:LocationDisclosures",
-      "class": "infobox is-hidden",
-      "html": "<div> <img src=\"images/tlb-side-channel.svg\" alt=\"image:tlb-side-channel\" width=\"217px\" class=\"thumb-left-top\" /> </div> In this paper, we show how side-channel leakage in kernel defenses can expose the locations of security-critical kernel objects, enabling reliable kernel exploitation. We show that fine-graining the object's memory mapping by enabling any of three defenses exposes exploitable TLB contention patterns observable via a side channel. Combined with kernel allocator massaging, this allows location disclosure attacks, revealing the locations of kernel heap objects, page tables and stacks."
-    },
-    "bibtex": {
-      "id": "bibtex:LocationDisclosures",
-      "class": "box is-hidden",
-      "text": "@inproceedings{Maar2025LocationDisclosures,\n  author = {Lukas Maar and Lukas Giner and Daniel Gruss and Stefan Mangard},\n  booktitle = {{USENIX Security}},\n  title = {{When Good Kernel Defenses Go Bad: Reliable and Stable Kernel Exploits via Defense-Amplified TLB Side-Channel Leaks}},\n  year = {2025}\n}"
-    }
+    "info": "<div> <img src=\"images/tlb-side-channel.svg\" alt=\"image:tlb-side-channel\" width=\"217px\" class=\"thumb-left-top\" /> </div> In this paper, we show how side-channel leakage in kernel defenses can expose the locations of security-critical kernel objects, enabling reliable kernel exploitation. We show that fine-graining the object's memory mapping by enabling any of three defenses exposes exploitable TLB contention patterns observable via a side channel. Combined with kernel allocator massaging, this allows location disclosure attacks, revealing the locations of kernel heap objects, page tables and stacks.",
+    "bibtex": "@inproceedings{Maar2025LocationDisclosures,\n  author = {Lukas Maar and Lukas Giner and Daniel Gruss and Stefan Mangard},\n  booktitle = {{USENIX Security}},\n  title = {{When Good Kernel Defenses Go Bad: Reliable and Stable Kernel Exploits via Defense-Amplified TLB Side-Channel Leaks}},\n  year = {2025}\n}"
   },
   {
     "year": 2025,
@@ -336,6 +125,7 @@
     "title": "ChoiceJacking: Compromising Mobile Devices through Malicious Chargers like a Decade ago",
     "authors": "Florian Draschbacher, <b>Lukas Maar</b>, Mathias Oberhuber, Stefan Mangard",
     "venue": "USENIX Security Symposium 2025",
+    "id": "ChoiceJacking",
     "badges": {
       "artifacts": [
         "Available"
@@ -350,46 +140,18 @@
         "Pwnie Award Nominee"
       ]
     },
-    "actions": [
+    "links": {
+      "zenodo": "https://zenodo.org/records/14726532"
+    },
+    "extra_links": [
       {
-        "kind": "toggle",
-        "target_id": "info:ChoiceJacking",
-        "href": "#0",
-        "icon": "fa-info-circle",
-        "label": "Info"
-      },
-      {
-        "kind": "toggle",
-        "target_id": "bibtex:ChoiceJacking",
-        "href": "#0",
-        "icon": "fa-quote-left",
-        "label": "BibTex"
-      },
-      {
-        "kind": "link",
-        "target_id": null,
-        "href": "https://zenodo.org/records/14726532",
-        "icon": "fa-code",
-        "label": "Zenodo"
-      },
-      {
-        "kind": "link",
-        "target_id": null,
+        "label": "Black Hat Asia",
         "href": "slides/bhasia25-choicejacking.pdf",
-        "icon": "fa-user-secret",
-        "label": "Black Hat Asia"
+        "icon": "fa-user-secret"
       }
     ],
-    "info": {
-      "id": "info:ChoiceJacking",
-      "class": "infobox is-hidden",
-      "html": "In this paper, we introduce ChoiceJacking, a novel USB-based attack exploiting the flawed assumption that attackers cannot inject input events during data connection establishment. Our platform-agnostic attack enables a malicious charger to spoof user input, enabling data transfer on Android and iOS. Testing across devices from 8 vendors reveals critical USB security flaws, allowing sensitive file access, even from locked devices in some cases."
-    },
-    "bibtex": {
-      "id": "bibtex:ChoiceJacking",
-      "class": "box is-hidden",
-      "text": "@inproceedings{Draschbacher2025ChoiceJacking,\n  author = {Florian Draschbacher and Lukas Maar and Mathias Oberhuber and Stefan Mangard},\n  booktitle = {{USENIX Security}},\n  title = {{ChoiceJacking: Compromising Mobile Devices through Malicious Chargers like a Decade ago}},\n  year = {2025}\n}"
-    }
+    "info": "In this paper, we introduce ChoiceJacking, a novel USB-based attack exploiting the flawed assumption that attackers cannot inject input events during data connection establishment. Our platform-agnostic attack enables a malicious charger to spoof user input, enabling data transfer on Android and iOS. Testing across devices from 8 vendors reveals critical USB security flaws, allowing sensitive file access, even from locked devices in some cases.",
+    "bibtex": "@inproceedings{Draschbacher2025ChoiceJacking,\n  author = {Florian Draschbacher and Lukas Maar and Mathias Oberhuber and Stefan Mangard},\n  booktitle = {{USENIX Security}},\n  title = {{ChoiceJacking: Compromising Mobile Devices through Malicious Chargers like a Decade ago}},\n  year = {2025}\n}"
   },
   {
     "year": 2025,
@@ -397,37 +159,9 @@
     "title": "Cryptographic Least Privilege Enforcement for Scalable Memory Isolation",
     "authors": "Martin Unterguggenberger, David Schrammel, <b>Lukas Maar</b>, Lukas Lamster, Vedad Hadzic, Stefan\n                  Mangard",
     "venue": "IEEE International Symposium on Hardware Oriented Security and Trust (HOST) 2025",
-    "badges": {
-      "artifacts": [],
-      "cves": [],
-      "awards": []
-    },
-    "actions": [
-      {
-        "kind": "toggle",
-        "target_id": "info:CLPE",
-        "href": "#0",
-        "icon": "fa-info-circle",
-        "label": "Info"
-      },
-      {
-        "kind": "toggle",
-        "target_id": "bibtex:CLPE",
-        "href": "#0",
-        "icon": "fa-quote-left",
-        "label": "BibTex"
-      }
-    ],
-    "info": {
-      "id": "info:CLPE",
-      "class": "infobox is-hidden",
-      "html": "In this paper, we present Cryptographic Least Privilege Enforcement (CLPE), a lightweight ISA extension using Message Authentication Codes (MACs) to enforce fine-grained memory isolation in C/C++ systems. CLPE enhances security with minimal performance overhead while maintaining compatibility with legacy software."
-    },
-    "bibtex": {
-      "id": "bibtex:CLPE",
-      "class": "box is-hidden",
-      "text": "@inproceedings{Unterguggenberger2025CLPE,\n  author = {Martin Unterguggenberger and David Schrammel and Lukas Maar and Lukas Lamster and Vedad Hadzic and Stefan Mangard},\n  booktitle = {{HOST}},\n  title = {{Cryptographic Least Privilege Enforcement for Scalable Memory Isolation}},\n  year = {2025}\n}"
-    }
+    "id": "CLPE",
+    "info": "In this paper, we present Cryptographic Least Privilege Enforcement (CLPE), a lightweight ISA extension using Message Authentication Codes (MACs) to enforce fine-grained memory isolation in C/C++ systems. CLPE enhances security with minimal performance overhead while maintaining compatibility with legacy software.",
+    "bibtex": "@inproceedings{Unterguggenberger2025CLPE,\n  author = {Martin Unterguggenberger and David Schrammel and Lukas Maar and Lukas Lamster and Vedad Hadzic and Stefan Mangard},\n  booktitle = {{HOST}},\n  title = {{Cryptographic Least Privilege Enforcement for Scalable Memory Isolation}},\n  year = {2025}\n}"
   },
   {
     "year": 2025,
@@ -435,81 +169,35 @@
     "title": "KernelSnitch: Side-Channel Attacks on Kernel Data Structures",
     "authors": "<b>Lukas Maar</b>, Jonas Juffinger, Thomas Steinbauer, Daniel Gruss, Stefan Mangard",
     "venue": "Network and Distributed System Security (NDSS) 2025",
+    "id": "KernelSnitch",
     "badges": {
       "artifacts": [
         "Available",
         "Functional",
         "Reproduced"
       ],
-      "cves": [],
       "awards": [
         "Pwnie Award Nominee"
-      ],
-      "applied": [
-        "First Android 17 root (IonStack)"
       ]
     },
-    "actions": [
+    "links": {
+      "github": "https://github.com/isec-tugraz/KernelSnitch",
+      "slides": "slides/ndss25-kernelsnitch.pdf"
+    },
+    "extra_links": [
       {
-        "kind": "toggle",
-        "target_id": "info:KernelSnitch",
-        "href": "#0",
-        "icon": "fa-info-circle",
-        "label": "Info"
-      },
-      {
-        "kind": "toggle",
-        "target_id": "bibtex:KernelSnitch",
-        "href": "#0",
-        "icon": "fa-quote-left",
-        "label": "BibTex"
-      },
-      {
-        "kind": "link",
-        "target_id": null,
-        "href": "https://github.com/isec-tugraz/KernelSnitch",
-        "icon": "fa-github",
-        "label": "GitHub"
-      },
-      {
-        "kind": "link",
-        "target_id": null,
-        "href": "slides/ndss25-kernelsnitch.pdf",
-        "icon": "fa-slideshare",
-        "label": "Slides"
-      },
-      {
-        "kind": "link",
-        "target_id": null,
+        "label": "Black Hat Asia",
         "href": "slides/bhasia25-kernelsnitch.pdf",
-        "icon": "fa-user-secret",
-        "label": "Black Hat Asia"
+        "icon": "fa-user-secret"
       },
       {
-        "kind": "link",
-        "target_id": null,
+        "label": "Nullcon Berlin",
         "href": "slides/nullcon25-sidechannels.pdf",
-        "icon": "fa-user-secret",
-        "label": "Nullcon Berlin"
-      },
-      {
-        "kind": "link",
-        "target_id": null,
-        "href": "https://nebusec.ai/research/ionstack-part-3/",
-        "icon": "fa-external-link",
-        "label": "IonStack"
+        "icon": "fa-user-secret"
       }
     ],
-    "info": {
-      "id": "info:KernelSnitch",
-      "class": "infobox is-hidden",
-      "html": "<div> <img src=\"images/KernelSnitch.svg\" alt=\"image:KernelSnitch\" width=\"114px\" class=\"thumb-left\" /> </div> In this paper, we introduce KernelSnitch, a novel hardware-agnostic side-channel attack that exploits timing variations in kernel data structures like hash tables and trees to leak sensitive information. We demonstrate leakage amplification approaches to make this side channel exploitable from user space. Through a kernel heap pointer leak, covert channel and activity monitoring, we demonstrate practical attacks."
-    },
-    "bibtex": {
-      "id": "bibtex:KernelSnitch",
-      "class": "box is-hidden",
-      "text": "@inproceedings{Maar2025KernelSnitch,\n  author = {Lukas Maar and Jonas Juffinger and Thomas Steinbauer and Daniel Gruss and Stefan Mangard},\n  booktitle = {{NDSS}},\n  title = {{KernelSnitch: Side-Channel Attacks on Kernel Data Structures}},\n  year = {2025}\n}"
-    }
+    "info": "<div> <img src=\"images/KernelSnitch.svg\" alt=\"image:KernelSnitch\" width=\"114px\" class=\"thumb-left\" /> </div> In this paper, we introduce KernelSnitch, a novel hardware-agnostic side-channel attack that exploits timing variations in kernel data structures like hash tables and trees to leak sensitive information. We demonstrate leakage amplification approaches to make this side channel exploitable from user space. Through a kernel heap pointer leak, covert channel and activity monitoring, we demonstrate practical attacks.",
+    "bibtex": "@inproceedings{Maar2025KernelSnitch,\n  author = {Lukas Maar and Jonas Juffinger and Thomas Steinbauer and Daniel Gruss and Stefan Mangard},\n  booktitle = {{NDSS}},\n  title = {{KernelSnitch: Side-Channel Attacks on Kernel Data Structures}},\n  year = {2025}\n}"
   },
   {
     "year": 2025,
@@ -517,37 +205,9 @@
     "title": "Power-Related Side-Channel Attacks using the Android Sensor Framework",
     "authors": "Mathias Oberhuber, Martin Unterguggenberger, <b>Lukas Maar</b>, Andreas Kogler, Stefan Mangard",
     "venue": "Network and Distributed System Security (NDSS) 2025",
-    "badges": {
-      "artifacts": [],
-      "cves": [],
-      "awards": []
-    },
-    "actions": [
-      {
-        "kind": "toggle",
-        "target_id": "info:PowerAndroidSensor",
-        "href": "#0",
-        "icon": "fa-info-circle",
-        "label": "Info"
-      },
-      {
-        "kind": "toggle",
-        "target_id": "bibtex:PowerAndroidSensor",
-        "href": "#0",
-        "icon": "fa-quote-left",
-        "label": "BibTex"
-      }
-    ],
-    "info": {
-      "id": "info:PowerAndroidSensor",
-      "class": "infobox is-hidden",
-      "html": "In this paper, we uncover novel power-related side channels in Android devices by analyzing unprivileged sensors. Through extensive evaluations and case studies, we demonstrate attacks such as pixel stealing and AES key leakage."
-    },
-    "bibtex": {
-      "id": "bibtex:PowerAndroidSensor",
-      "class": "box is-hidden",
-      "text": "@inproceedings{Oberhuber2025PowerAndroidSensor,\n  author = {Mathias Oberhuber and Martin Unterguggenberger and Lukas Maar and Andreas Kogler and Stefan Mangard},\n  booktitle = {{NDSS}},\n  title = {{Power-Related Side-Channel Attacks using the Android Sensor Framework}},\n  year = {2025}\n}"
-    }
+    "id": "PowerAndroidSensor",
+    "info": "In this paper, we uncover novel power-related side channels in Android devices by analyzing unprivileged sensors. Through extensive evaluations and case studies, we demonstrate attacks such as pixel stealing and AES key leakage.",
+    "bibtex": "@inproceedings{Oberhuber2025PowerAndroidSensor,\n  author = {Mathias Oberhuber and Martin Unterguggenberger and Lukas Maar and Andreas Kogler and Stefan Mangard},\n  booktitle = {{NDSS}},\n  title = {{Power-Related Side-Channel Attacks using the Android Sensor Framework}},\n  year = {2025}\n}"
   },
   {
     "year": 2024,
@@ -555,6 +215,7 @@
     "title": "Manifest Problems: Analyzing Code Transparency for Android Application Bundles",
     "authors": "Florian Draschbacher, <b>Lukas Maar</b>",
     "venue": "Annual Computer Security Applications Conference (ACSAC) 2024",
+    "id": "ManifestProblems",
     "badges": {
       "artifacts": [
         "Available",
@@ -563,42 +224,13 @@
       ],
       "cves": [
         "CVE-2023-21387"
-      ],
-      "awards": []
+      ]
     },
-    "actions": [
-      {
-        "kind": "toggle",
-        "target_id": "info:ManifestProblems",
-        "href": "#0",
-        "icon": "fa-info-circle",
-        "label": "Info"
-      },
-      {
-        "kind": "toggle",
-        "target_id": "bibtex:ManifestProblems",
-        "href": "#0",
-        "icon": "fa-quote-left",
-        "label": "BibTex"
-      },
-      {
-        "kind": "link",
-        "target_id": null,
-        "href": "https://github.com/asit-fdraschbacher/artifacts_manifest_problems",
-        "icon": "fa-github",
-        "label": "GitHub"
-      }
-    ],
-    "info": {
-      "id": "info:ManifestProblems",
-      "class": "infobox is-hidden",
-      "html": "In this paper, we present the first security analysis of Code Transparency for Android Application Bundles (AAB). Our analysis uncovers significant shortcomings in Code Transparency, leaving developers unprotected against supply chain attacks enabled by AAB."
+    "links": {
+      "github": "https://github.com/asit-fdraschbacher/artifacts_manifest_problems"
     },
-    "bibtex": {
-      "id": "bibtex:ManifestProblems",
-      "class": "box is-hidden",
-      "text": "@inproceedings{Draschbacher2024ManifestProblems,\n  author = {Florian Draschbacher and Lukas Maar},\n  booktitle = {{ACSAC}},\n  title = {{Manifest Problems: Analyzing Code Transparency for Android Application Bundles}},\n  year = {2024}\n}"
-    }
+    "info": "In this paper, we present the first security analysis of Code Transparency for Android Application Bundles (AAB). Our analysis uncovers significant shortcomings in Code Transparency, leaving developers unprotected against supply chain attacks enabled by AAB.",
+    "bibtex": "@inproceedings{Draschbacher2024ManifestProblems,\n  author = {Florian Draschbacher and Lukas Maar},\n  booktitle = {{ACSAC}},\n  title = {{Manifest Problems: Analyzing Code Transparency for Android Application Bundles}},\n  year = {2024}\n}"
   },
   {
     "year": 2024,
@@ -606,55 +238,20 @@
     "title": "Defects-in-Depth: Analyzing the Integration of Effective Defenses against One-Day Exploits in Android Kernels",
     "authors": "<b>Lukas Maar</b>, Florian Draschbacher, Lukas Lamster, Stefan Mangard",
     "venue": "USENIX Security Symposium 2024",
+    "id": "DefectsInDepth",
     "badges": {
       "artifacts": [
         "Available",
         "Functional",
         "Reproduced"
-      ],
-      "cves": [],
-      "awards": []
+      ]
     },
-    "actions": [
-      {
-        "kind": "toggle",
-        "target_id": "info:DefectsInDepth",
-        "href": "#0",
-        "icon": "fa-info-circle",
-        "label": "Info"
-      },
-      {
-        "kind": "toggle",
-        "target_id": "bibtex:DefectsInDepth",
-        "href": "#0",
-        "icon": "fa-quote-left",
-        "label": "BibTex"
-      },
-      {
-        "kind": "link",
-        "target_id": null,
-        "href": "https://github.com/isec-tugraz/DefectsInDepth",
-        "icon": "fa-github",
-        "label": "GitHub"
-      },
-      {
-        "kind": "link",
-        "target_id": null,
-        "href": "slides/usenix24-defectsindepth.pdf",
-        "icon": "fa-slideshare",
-        "label": "Slides"
-      }
-    ],
-    "info": {
-      "id": "info:DefectsInDepth",
-      "class": "infobox is-hidden",
-      "html": "<div> <img src=\"images/DefectsInDepth.svg\" alt=\"image:DefectsInDepth\" width=\"132px\" class=\"thumb-left\" /> </div> In this paper, we present Defects-in-Depth, a two-fold analysis of the security of downstreamed Android kernels from the top device vendors. Initially, we analyze one-day exploits and kernel defense-in-depth mechanisms, allowing us to quantify the level of security that can be reached with these defenses. We then analyze the effectiveness and inclusion of the defenses in downstreamed Android kernels and found that the level of security that is actually reached is severely lacking."
+    "links": {
+      "github": "https://github.com/isec-tugraz/DefectsInDepth",
+      "slides": "slides/usenix24-defectsindepth.pdf"
     },
-    "bibtex": {
-      "id": "bibtex:DefectsInDepth",
-      "class": "box is-hidden",
-      "text": "@inproceedings{Maar2024DefectsInDepth,\n  author = {Lukas Maar and Florian Draschbacher and Lukas Lamster and Stefan Mangard},\n  booktitle = {{USENIX Security}},\n  title = {{Defects-in-Depth: Analyzing the Integration of Effective Defenses against One-Day Exploits in Android Kernels}},\n  year = {2024}\n}"
-    }
+    "info": "<div> <img src=\"images/DefectsInDepth.svg\" alt=\"image:DefectsInDepth\" width=\"132px\" class=\"thumb-left\" /> </div> In this paper, we present Defects-in-Depth, a two-fold analysis of the security of downstreamed Android kernels from the top device vendors. Initially, we analyze one-day exploits and kernel defense-in-depth mechanisms, allowing us to quantify the level of security that can be reached with these defenses. We then analyze the effectiveness and inclusion of the defenses in downstreamed Android kernels and found that the level of security that is actually reached is severely lacking.",
+    "bibtex": "@inproceedings{Maar2024DefectsInDepth,\n  author = {Lukas Maar and Florian Draschbacher and Lukas Lamster and Stefan Mangard},\n  booktitle = {{USENIX Security}},\n  title = {{Defects-in-Depth: Analyzing the Integration of Effective Defenses against One-Day Exploits in Android Kernels}},\n  year = {2024}\n}"
   },
   {
     "year": 2024,
@@ -662,64 +259,24 @@
     "title": "SLUBStick: Arbitrary Memory Writes through Practical Software Cross-Cache Attacks within the Linux Kernel",
     "authors": "<b>Lukas Maar</b>, Stefan Gast, Martin Unterguggenberger, Mathias Oberhuber, Stefan Mangard",
     "venue": "USENIX Security Symposium 2024",
+    "id": "SLUBStick",
     "badges": {
       "artifacts": [
         "Available",
         "Functional",
         "Reproduced"
       ],
-      "cves": [],
       "awards": [
         "CSAW'24 Europe Applied Research Competition (ARC) Finalist"
       ]
     },
-    "actions": [
-      {
-        "kind": "toggle",
-        "target_id": "info:SLUBStick",
-        "href": "#0",
-        "icon": "fa-info-circle",
-        "label": "Info"
-      },
-      {
-        "kind": "toggle",
-        "target_id": "bibtex:SLUBStick",
-        "href": "#0",
-        "icon": "fa-quote-left",
-        "label": "BibTex"
-      },
-      {
-        "kind": "link",
-        "target_id": null,
-        "href": "posters/csaw24-slubstick.pdf",
-        "icon": "fa-image",
-        "label": "Poster"
-      },
-      {
-        "kind": "link",
-        "target_id": null,
-        "href": "https://github.com/isec-tugraz/SLUBStick",
-        "icon": "fa-github",
-        "label": "GitHub"
-      },
-      {
-        "kind": "link",
-        "target_id": null,
-        "href": "slides/usenix24-slubstick.pdf",
-        "icon": "fa-slideshare",
-        "label": "Slides"
-      }
-    ],
-    "info": {
-      "id": "info:SLUBStick",
-      "class": "infobox is-hidden",
-      "html": "<div> <img src=\"images/SLUBStick.svg\" alt=\"image:SLUBStick\" width=\"250px\" class=\"thumb-left\" /> </div> In this paper, we present SLUBStick, which provides a practical solution for converting a kernel heap vulnerability into a physical arbitrary r/w primitive with state-of-the-art kernel defenses enabled. Initially, SLUBStick exploits a timing side-channel on the SLUB allocator to reliably perform cross-cache reuse. SLUBStick then exploits code patterns in the kernel to convert a limited write (due to a heap vulnerability) into a page-manipulation primitive, enabling the physical arbitrary r/w primitive."
+    "links": {
+      "poster": "posters/csaw24-slubstick.pdf",
+      "github": "https://github.com/isec-tugraz/SLUBStick",
+      "slides": "slides/usenix24-slubstick.pdf"
     },
-    "bibtex": {
-      "id": "bibtex:SLUBStick",
-      "class": "box is-hidden",
-      "text": "@inproceedings{Maar2024SLUBStick,\n  author = {Lukas Maar and Stefan Gast and Martin Unterguggenberger and Mathias Oberhuber and Stefan Mangard},\n  booktitle = {{USENIX Security}},\n  title = {{SLUBStick: Arbitrary Memory Writes through Practical Software Cross-Cache Attacks within the Linux Kernel}},\n  year = {2024}\n}"
-    }
+    "info": "<div> <img src=\"images/SLUBStick.svg\" alt=\"image:SLUBStick\" width=\"250px\" class=\"thumb-left\" /> </div> In this paper, we present SLUBStick, which provides a practical solution for converting a kernel heap vulnerability into a physical arbitrary r/w primitive with state-of-the-art kernel defenses enabled. Initially, SLUBStick exploits a timing side-channel on the SLUB allocator to reliably perform cross-cache reuse. SLUBStick then exploits code patterns in the kernel to convert a limited write (due to a heap vulnerability) into a page-manipulation primitive, enabling the physical arbitrary r/w primitive.",
+    "bibtex": "@inproceedings{Maar2024SLUBStick,\n  author = {Lukas Maar and Stefan Gast and Martin Unterguggenberger and Mathias Oberhuber and Stefan Mangard},\n  booktitle = {{USENIX Security}},\n  title = {{SLUBStick: Arbitrary Memory Writes through Practical Software Cross-Cache Attacks within the Linux Kernel}},\n  year = {2024}\n}"
   },
   {
     "year": 2024,
@@ -727,44 +284,12 @@
     "title": "Beyond the Edges of Kernel Control-Flow Hijacking Protection with HEK-CFI",
     "authors": "<b>Lukas Maar</b>, Pascal Nasahl, Stefan Mangard",
     "venue": "ACM ASIA Conference on Computer and Communications Security (AsiaCCS) 2024",
-    "badges": {
-      "artifacts": [],
-      "cves": [],
-      "awards": []
+    "id": "HEKCFI",
+    "links": {
+      "slides": "slides/asiaccs24-hekcfi.pdf"
     },
-    "actions": [
-      {
-        "kind": "toggle",
-        "target_id": "info:HEKCFI",
-        "href": "#0",
-        "icon": "fa-info-circle",
-        "label": "Info"
-      },
-      {
-        "kind": "toggle",
-        "target_id": "bibtex:HEKCFI",
-        "href": "#0",
-        "icon": "fa-quote-left",
-        "label": "BibTex"
-      },
-      {
-        "kind": "link",
-        "target_id": null,
-        "href": "slides/asiaccs24-hekcfi.pdf",
-        "icon": "fa-slideshare",
-        "label": "Slides"
-      }
-    ],
-    "info": {
-      "id": "info:HEKCFI",
-      "class": "infobox is-hidden-overflow",
-      "html": "<div> <img src=\"images/hek-cfi.svg\" alt=\"image:HEK-CFI\" width=\"145px\" class=\"thumb-left\" /> </div> In this paper, we present HEK-CFI, a novel approach leveraging Intel CET to protect control-flow data during system events, function pointers, operation table pointers, and return addresses. We implement and evaluate a HEK-CFI proof-of-concept, demonstrating reasonable performance overhead while providing superior protection compared to other kernel CFI schemes."
-    },
-    "bibtex": {
-      "id": "bibtex:HEKCFI",
-      "class": "box is-hidden",
-      "text": "@inproceedings{Maar2024HEKCFI,\n  author = {Lukas Maar and Pascal Nasahl and Stefan Mangard},\n  booktitle = {{AsiaCCS}},\n  title = {{Beyond the Edges of Kernel Control-Flow Hijacking Protection with HEK-CFI}},\n  year = {2024}\n}"
-    }
+    "info": "<div> <img src=\"images/hek-cfi.svg\" alt=\"image:HEK-CFI\" width=\"145px\" class=\"thumb-left\" /> </div> In this paper, we present HEK-CFI, a novel approach leveraging Intel CET to protect control-flow data during system events, function pointers, operation table pointers, and return addresses. We implement and evaluate a HEK-CFI proof-of-concept, demonstrating reasonable performance overhead while providing superior protection compared to other kernel CFI schemes.",
+    "bibtex": "@inproceedings{Maar2024HEKCFI,\n  author = {Lukas Maar and Pascal Nasahl and Stefan Mangard},\n  booktitle = {{AsiaCCS}},\n  title = {{Beyond the Edges of Kernel Control-Flow Hijacking Protection with HEK-CFI}},\n  year = {2024}\n}"
   },
   {
     "year": 2024,
@@ -772,37 +297,9 @@
     "title": "Remote Scheduler Contention Attacks",
     "authors": "Stefan Gast, Jonas Juffinger, <b>Lukas Maar</b>, Christoph Royer, Andreas Kogler, Daniel Gruss",
     "venue": "Financial Cryptography (FC) 2024",
-    "badges": {
-      "artifacts": [],
-      "cves": [],
-      "awards": []
-    },
-    "actions": [
-      {
-        "kind": "toggle",
-        "target_id": "info:JavaSQUIP",
-        "href": "#0",
-        "icon": "fa-info-circle",
-        "label": "Info"
-      },
-      {
-        "kind": "toggle",
-        "target_id": "bibtex:JavaSQUIP",
-        "href": "#0",
-        "icon": "fa-quote-left",
-        "label": "BibTex"
-      }
-    ],
-    "info": {
-      "id": "info:JavaSQUIP",
-      "class": "infobox is-hidden",
-      "html": "In this paper, we present scheduler contention on AMD Zen 3 and Zen 4, demonstrating an inter-keystroke timing and a JavaScript covert-channel attack."
-    },
-    "bibtex": {
-      "id": "bibtex:JavaSQUIP",
-      "class": "box is-hidden",
-      "text": "@inproceedings{Gast2024Remote,\n  author = {Stefan Gast and Jonas Juffinger and Lukas Maar and Christoph Royer and Andreas Kogler and Daniel Gruss},\n  booktitle = {{FC}},\n  title = {{Remote Scheduler Contention Attacks}},\n  year = {2024}\n}"
-    }
+    "id": "JavaSQUIP",
+    "info": "In this paper, we present scheduler contention on AMD Zen 3 and Zen 4, demonstrating an inter-keystroke timing and a JavaScript covert-channel attack.",
+    "bibtex": "@inproceedings{Gast2024Remote,\n  author = {Stefan Gast and Jonas Juffinger and Lukas Maar and Christoph Royer and Andreas Kogler and Daniel Gruss},\n  booktitle = {{FC}},\n  title = {{Remote Scheduler Contention Attacks}},\n  year = {2024}\n}"
   },
   {
     "year": 2023,
@@ -810,52 +307,17 @@
     "title": "DOPE: DOmain Protection Enforcement with PKS",
     "authors": "<b>Lukas Maar</b>, Martin Schwarzl, Fabian Rauscher, Daniel Gruss, Stefan Mangard",
     "venue": "Annual Computer Security Applications Conference (ACSAC) 2023",
+    "id": "DOPE",
     "badges": {
       "artifacts": [
         "Functional"
-      ],
-      "cves": [],
-      "awards": []
+      ]
     },
-    "actions": [
-      {
-        "kind": "toggle",
-        "target_id": "info:DOPE",
-        "href": "#0",
-        "icon": "fa-info-circle",
-        "label": "Info"
-      },
-      {
-        "kind": "toggle",
-        "target_id": "bibtex:DOPE",
-        "href": "#0",
-        "icon": "fa-quote-left",
-        "label": "BibTex"
-      },
-      {
-        "kind": "link",
-        "target_id": null,
-        "href": "https://extgit.iaik.tugraz.at/sesys/dope",
-        "icon": "fa-github",
-        "label": "GitHub"
-      },
-      {
-        "kind": "link",
-        "target_id": null,
-        "href": "slides/acsac23-dope.pdf",
-        "icon": "fa-slideshare",
-        "label": "Slides"
-      }
-    ],
-    "info": {
-      "id": "info:DOPE",
-      "class": "infobox is-hidden-overflow",
-      "html": "<div> <img src=\"images/dope.svg\" alt=\"image:DOPE\" width=\"145px\" class=\"thumb-left\" /> </div> In this paper, we present DOPE, a novel approach leveraging Intel PKS to protect sensitive data from data-oriented attacks. We implement and evaluate a DOPE proof-of-concept, demonstrating reasonable performance overhead while providing superior protection compared to other kernel data protection schemes."
+    "links": {
+      "github": "https://extgit.iaik.tugraz.at/sesys/dope",
+      "slides": "slides/acsac23-dope.pdf"
     },
-    "bibtex": {
-      "id": "bibtex:DOPE",
-      "class": "box is-hidden",
-      "text": "@inproceedings{Maar2023DOPE,\n  author = {Lukas Maar and Martin Schwarzl and Fabian Rauscher and Daniel Gruss and Stefan Mangard},\n  booktitle = {{ACSAC}},\n  title = {{DOPE: DOmain Protection Enforcement with PKS}},\n  year = {2023}\n}"
-    }
+    "info": "<div> <img src=\"images/dope.svg\" alt=\"image:DOPE\" width=\"145px\" class=\"thumb-left\" /> </div> In this paper, we present DOPE, a novel approach leveraging Intel PKS to protect sensitive data from data-oriented attacks. We implement and evaluate a DOPE proof-of-concept, demonstrating reasonable performance overhead while providing superior protection compared to other kernel data protection schemes.",
+    "bibtex": "@inproceedings{Maar2023DOPE,\n  author = {Lukas Maar and Martin Schwarzl and Fabian Rauscher and Daniel Gruss and Stefan Mangard},\n  booktitle = {{ACSAC}},\n  title = {{DOPE: DOmain Protection Enforcement with PKS}},\n  year = {2023}\n}"
   }
 ]

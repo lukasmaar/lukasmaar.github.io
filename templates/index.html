@@ -205,6 +205,26 @@
       </p>
     </footer>
   </div>
+
+  <div class="modal fade" id="bibtexModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">BibTeX</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <pre id="bibtexModalContent" class="pre-wrap"></pre>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" onclick="copyBibtex(this)">Copy</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 
 <script>
@@ -214,6 +234,22 @@
 
     var isHidden = window.getComputedStyle(el).display === "none";
     el.style.display = isHidden ? "block" : "none";
+  }
+
+  function showBibtex(id) {
+    var src = document.getElementById(id);
+    if (!src) return;
+    document.getElementById('bibtexModalContent').textContent = src.textContent.replace(/^\n+|\n+$/g, '');
+    $('#bibtexModal').modal('show');
+  }
+
+  function copyBibtex(btn) {
+    var text = document.getElementById('bibtexModalContent').textContent;
+    navigator.clipboard.writeText(text).then(function () {
+      var old = btn.textContent;
+      btn.textContent = 'Copied!';
+      setTimeout(function () { btn.textContent = old; }, 1200);
+    });
   }
 </script>
 

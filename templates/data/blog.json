@@ -15,7 +15,14 @@
       "cves": [
         "CVE-2026-57551"
       ]
-    }
+    },
+    "actions": [
+      {
+        "href": "https://lore.kernel.org/all/20260430193858.1178641-1-zachary.mckevitt@oss.qualcomm.com/",
+        "icon": "fa-code-fork",
+        "label": "Patch"
+      }
+    ]
   },
   {
     "year": 2026,
@@ -31,7 +38,7 @@
     },
     "badges": {
       "applied": [
-        "First Android 17 root (IonStack)"
+        "Android 17 root (IonStack)"
       ]
     },
     "actions": [
