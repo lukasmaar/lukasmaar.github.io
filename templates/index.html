@@ -18,6 +18,18 @@
   <!-- Google indexing -->
   <meta name="google-site-verification" content="E5UvMoMvf70F4qryQh3Jai_sonvfM7zp4btOn06tgm0" />
 
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+
+  <!-- SEO / social preview -->
+  <meta name="description" content="Lukas Maar — Security Researcher at Calif and Senior Security Researcher at ISEC, TU Graz. Linux and Android kernel exploitation, defenses, and side channels.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Lukas Maar">
+  <meta property="og:description" content="Security Researcher at Calif and Senior Security Researcher at ISEC, TU Graz. Linux and Android kernel exploitation, defenses, and side channels.">
+  <meta property="og:url" content="https://lukasmaar.github.io/">
+  <meta property="og:image" content="https://lukasmaar.github.io/images/profile.jpg">
+  <meta name="twitter:card" content="summary">
+
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
@@ -44,7 +56,7 @@
       <div class="col-md-10">
         <br>
         <h3><i class="fa fa-user"></i>
-          About Me:
+          About Me
         </h3>
       </div>
       <div class="col-md-1"></div>
@@ -58,68 +70,56 @@
         <!-- Image -->
         <div class="row">
           <div class="col-xs-12">
-            <img src="images/profile.jpg" alt="" class="img-fluid rounded-circle">
+            <img src="images/profile.jpg" alt="Lukas Maar" class="img-fluid rounded-circle profile-photo">
           </div>
         </div>
 
-        <!-- Icons -->
-        <div class="row icon-row">
-          <span class="fa-stack fa-lg">
-            <a href="https://github.com/lukasmaar">
-              <i class="fa fa-github fa-stack-1x "></i>
-            </a>
-          </span>
-          <span class="fa-stack fa-lg">
-            <a href="https://scholar.google.com/citations?user=eM4rXzsAAAAJ">
-              <i class="fa fa-google fa-stack-1x"></i>
-            </a>
-          </span>
-          <span class="fa-stack fa-lg">
-            <a href="https://www.linkedin.com/in/lukas-maar-330678307/">
-              <i class="fa fa-linkedin fa-stack-1x"></i>
-            </a>
-          </span>
-          <span class="fa-stack fa-lg">
-            <a href="mailto:lukas.maar@tugraz.at">
-              <i class="fa fa-envelope fa-stack-1x"></i>
-            </a>
-          </span>
+        <!-- Social buttons -->
+        <div class="social-pills">
+          <a class="social-pill" href="https://github.com/lukasmaar" title="GitHub"><i class="fa fa-github"></i></a>
+          <a class="social-pill" href="https://scholar.google.com/citations?user=eM4rXzsAAAAJ" title="Google Scholar"><i class="fa fa-google"></i></a>
+          <a class="social-pill" href="https://www.linkedin.com/in/lukas-maar-330678307/" title="LinkedIn"><i class="fa fa-linkedin"></i></a>
+          <a class="social-pill" href="mailto:lukas.maar@tugraz.at" title="Mail"><i class="fa fa-envelope"></i></a>
         </div>
       </div>
 
       <!-- Description -->
       <div class="col-md-7">
-        <p>
-          Hey and welcome to my site. I am a security and vulnerability researcher from Austria. I defended my PhD titled <a
-            href="publications/kernel-security-in-the-wild.pdf">Kernel Security in the Wild</a> at the Institute of Information
-          Security (former IAIK), Graz University of Technology, supervised by <a
-          href="https://www.isec.tugraz.at/person/stefan-mangard/">Stefan Mangard</a>. My research focuses on system security,
-          with a particular focus on kernel attacks and defenses, side-channel attacks targeting the kernel, and Android kernel
-          security.
+        <p class="about-text">
+          Hey, welcome to my site. I am Lukas Maar, a Security Researcher at
+          <a href="https://calif.io/">Calif</a> and a Senior Security Researcher at
+          <a href="https://www.isec.tugraz.at/">ISEC</a>, TU Graz. I completed my PhD thesis,
+          <a href="publications/kernel-security-in-the-wild.pdf"><i>Kernel Security in the Wild</i></a>, in 2025 under
+          <a href="https://www.isec.tugraz.at/person/stefan-mangard/">Stefan Mangard</a>. My work focuses on low-level
+          security: kernel exploitation, defenses, and side channels targeting the Linux and Android kernels, including
+          <a href="publications/ndss25-kernelsnitch.pdf">KernelSnitch</a>, a universal side channel for heap KASLR leaks.
+          I have presented my research at USENIX Security, NDSS, Black Hat USA, Black Hat Asia, and Nullcon Berlin,
+          among others.
         </p>
-        <div class="row">
-          <div class="col-md-1"></div>
-          <div class="col-md-5">
-            <b>Interests</b>
-            <ul>
-              <li>System Security</li>
-              <li>Kernel Attacks and Defenses</li>
-              <li>Side-Channel Attacks</li>
-              <li>Android Kernel Security</li>
-            </ul>
-          </div>
-          <div class="col-md-6">
-            <b>Education</b>
-            <ul class="fa-ul edu-list">
-              <li><span class="fa-li"><i class="fa fa-graduation-cap"></i></span> PhD in Computer Science, 2025<br><span
-                  class="text-muted-small"> Graz University of Technology</span></li>
-              <li><span class="fa-li"><i class="fa fa-graduation-cap"></i></span> MSc in Electrical Engineering,
-                2022<br><span class="text-muted-small"> Graz University of Technology</span></li>
-              <li><span class="fa-li"><i class="fa fa-graduation-cap"></i></span> BSc in Computer Science, 2022<br><span
-                  class="text-muted-small"> Graz University of Technology</span></li>
-              <li><span class="fa-li"><i class="fa fa-graduation-cap"></i></span> BSc in Electrical Engineering,
-                2018<br><span class="text-muted-small"> Graz University of Technology</span></li>
-            </ul>
+
+        <div class="edu-section">
+          <div class="edu-label">Education</div>
+          <div class="edu-grid">
+            <div class="edu-card">
+              <div class="edu-degree"><a href="publications/kernel-security-in-the-wild.pdf">PhD in Computer Science</a></div>
+              <div class="edu-year">2025</div>
+              <div class="edu-inst">Graz University of Technology</div>
+            </div>
+            <div class="edu-card">
+              <div class="edu-degree">MSc in Electrical Engineering</div>
+              <div class="edu-year">2022</div>
+              <div class="edu-inst">Graz University of Technology</div>
+            </div>
+            <div class="edu-card">
+              <div class="edu-degree">BSc in Computer Science</div>
+              <div class="edu-year">2022</div>
+              <div class="edu-inst">Graz University of Technology</div>
+            </div>
+            <div class="edu-card">
+              <div class="edu-degree">BSc in Electrical Engineering</div>
+              <div class="edu-year">2018</div>
+              <div class="edu-inst">Graz University of Technology</div>
+            </div>
           </div>
         </div>
       </div>
@@ -206,8 +206,22 @@
     </footer>
   </div>
 
+  <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="infoModalTitle">Info</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" id="infoModalContent"></div>
+      </div>
+    </div>
+  </div>
+
   <div class="modal fade" id="bibtexModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">BibTeX</h5>
@@ -219,8 +233,7 @@
           <pre id="bibtexModalContent" class="pre-wrap"></pre>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" onclick="copyBibtex(this)">Copy</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-outline-dark" onclick="copyBibtex(this)"><i class="fa fa-clipboard"></i> Copy</button>
         </div>
       </div>
     </div>
@@ -228,12 +241,12 @@
 </body>
 
 <script>
-  function toggleBox(name) {
-    var el = document.getElementById(name);
-    if (!el) return;
-
-    var isHidden = window.getComputedStyle(el).display === "none";
-    el.style.display = isHidden ? "block" : "none";
+  function showInfo(id, title) {
+    var src = document.getElementById(id);
+    if (!src) return;
+    document.getElementById('infoModalTitle').textContent = title || 'Info';
+    document.getElementById('infoModalContent').innerHTML = src.innerHTML;
+    $('#infoModal').modal('show');
   }
 
   function showBibtex(id) {
@@ -246,9 +259,9 @@
   function copyBibtex(btn) {
     var text = document.getElementById('bibtexModalContent').textContent;
     navigator.clipboard.writeText(text).then(function () {
-      var old = btn.textContent;
-      btn.textContent = 'Copied!';
-      setTimeout(function () { btn.textContent = old; }, 1200);
+      var old = btn.innerHTML;
+      btn.innerHTML = '<i class="fa fa-check"></i> Copied!';
+      setTimeout(function () { btn.innerHTML = old; }, 1200);
     });
   }
 </script>

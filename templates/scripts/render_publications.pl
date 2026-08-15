@@ -1,8 +1,8 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use JSON::PP qw(decode_json);
 use utf8;
+use JSON::PP qw(decode_json);
 
 sub esc {
   my ($s) = @_;
@@ -15,7 +15,8 @@ sub esc {
 }
 
 my ($json_path, $out_path) = @ARGV;
-die "Usage: $0 <publications.json> <publications-section.html>\n" if !defined $out_path;
+die "Usage: $0 <publications.json> <publications-section.html>\n"
+  if !defined $json_path || !defined $out_path;
 
 open(my $in, '<', $json_path) or die "Cannot open $json_path: $!\n";
 local $/;
@@ -52,7 +53,7 @@ for my $e (@$entries) {
     $html .= qq{              <span id="publications$year" class="anchor">\n};
     $html .= qq{              </span>\n};
     $html .= qq{              <div class="col-xs-1">\n};
-    $html .= qq{                <b class="hi">\n};
+    $html .= qq{                <b>\n};
     $html .= qq{                  $year\n};
     $html .= qq{                </b>\n};
     $html .= qq{              </div>\n};
@@ -111,7 +112,7 @@ for my $e (@$entries) {
     }
     if (defined($applied) && ref($applied) eq 'ARRAY' && scalar(@$applied) > 0) {
       my $ap = join(", ", map { esc($_ // '') } @$applied);
-      push @badge_chunks, qq{<i class="fa fa-crosshairs text-black"></i> Applied: $ap};
+      push @badge_chunks, qq{<i class="fa fa-bolt text-black"></i> Applied: $ap};
     }
   }
 
@@ -126,7 +127,9 @@ for my $e (@$entries) {
   $html .= qq{                  <br>\n};
   if ($info_body ne '' && $info_id ne '') {
     my $iid = esc($info_id);
-    $html .= qq{                  <span class="sbtn" onclick="toggleBox('$iid')"><a href="#0"><i class="fa fa-info-circle"></i>\n};
+    (my $jstitle = $e->{title} // '') =~ s/'/\\'/g;
+    $jstitle = esc($jstitle);
+    $html .= qq{                  <span class="sbtn" onclick="showInfo('$iid', '$jstitle')"><a href="#0"><i class="fa fa-info-circle"></i>\n};
     $html .= qq{                      Info</a></span>\n};
   }
   if ($bib_text ne '' && $bib_id ne '') {
@@ -159,7 +162,7 @@ for my $e (@$entries) {
     $ibody =~ s/\r?\n/ /g;
     $ibody =~ s/\s{2,}/ /g;
     $ibody =~ s/^\s+|\s+$//g;
-    $html .= qq{                <div id="$iid" class="infobox is-hidden">\n};
+    $html .= qq{                <div id="$iid" class="is-hidden">\n};
     $html .= qq{                  $ibody\n};
     $html .= qq{                </div>\n};
   }

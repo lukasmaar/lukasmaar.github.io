@@ -35,7 +35,7 @@ echo "Press Ctrl+C to stop."
 run_build
 
 EXCLUDE_RE='(/templates/partials/index/|/templates/posts/.*\.(pdf|svg|aux|log|out|toc)$)'
-WATCH_PATHS=("$ROOT_DIR/templates" "$ROOT_DIR/styles" "$ROOT_DIR/style.css")
+WATCH_PATHS=("$ROOT_DIR/templates" "$ROOT_DIR/styles")
 
 if [[ "$WATCHER" == "inotifywait" ]]; then
   watch_cmd() {

@@ -1,6 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
+use utf8;
 use JSON::PP qw(decode_json);
 
 sub esc {
@@ -14,7 +15,8 @@ sub esc {
 }
 
 my ($json_path, $out_path) = @ARGV;
-die "Usage: $0 <awards.json> <awards-section.html>\n" if !defined $json_path || !defined $out_path;
+die "Usage: $0 <awards.json> <awards-section.html>\n"
+  if !defined $json_path || !defined $out_path;
 
 open(my $in, '<', $json_path) or die "Cannot open $json_path: $!\n";
 local $/;
@@ -31,7 +33,7 @@ $html .= qq{      </div>\n};
 $html .= qq{      <div class="col-md-10">\n};
 $html .= qq{        <div class="timeline">\n\n};
 
-my $current_year = undef;
+my $current_year;
 for my $e (@$entries) {
   my $year = $e->{year};
   die "Missing year in awards entry\n" if !defined $year;
@@ -42,7 +44,7 @@ for my $e (@$entries) {
     $html .= qq{              <span id="awards$year" class="anchor">\n};
     $html .= qq{              </span>\n};
     $html .= qq{              <div class="col-xs-1">\n};
-    $html .= qq{                <b class="hi">\n};
+    $html .= qq{                <b>\n};
     $html .= qq{                  $year\n};
     $html .= qq{                </b>\n};
     $html .= qq{              </div>\n};
@@ -106,6 +108,6 @@ $html .= qq{        </div>\n};
 $html .= qq{      </div>\n};
 $html .= qq{    </div>\n};
 
-open(my $out, '>', $out_path) or die "Cannot write $out_path: $!\n";
+open(my $out, '>:encoding(UTF-8)', $out_path) or die "Cannot write $out_path: $!\n";
 print {$out} $html;
 close($out);

@@ -3,7 +3,7 @@ body.article-page {
     --article-page-bg: var(--bg-page);
     --article-card-bg: var(--bg-card);
     --article-ink: var(--ink);
-    --article-muted: #555;
+    --article-muted: var(--muted);
     --article-rule: var(--rule);
     --article-code-bg: #eeeff3;
     --article-code-ink: #27303a;
@@ -20,8 +20,8 @@ body.article-page .article-shell {
 
 body.article-page .article-frame {
     background: var(--article-card-bg);
-    border: 2px solid #000;
-    border-radius: 0;
+    border: 2px solid rgba(0, 0, 0, 0.7);
+    border-radius: 10px;
     padding: 2.5rem 1.6rem 2rem;
 }
 

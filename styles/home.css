@@ -41,8 +41,8 @@ body.home-page .timeline-entry {
     left: 0;
     background: var(--bg-card);
     display: inline-block;
-    border-radius: 0;
-    border: 2px solid #000;
+    border-radius: 10px;
+    border: 2px solid rgba(0, 0, 0, 0.7);
     width: 100%;
 }
 
@@ -52,46 +52,6 @@ body.home-page .timeline-date {
     width: 100%;
     top: 25px;
     margin-bottom: 15px;
-}
-
-@media (min-width: 300px) {
-    body.home-page hr.timeline-sep {
-        top: -200px;
-    }
-}
-
-@media (min-width: 576px) {
-    body.home-page hr.timeline-sep {
-        position: relative;
-        top: -6px;
-        border-radius: 5px;
-    }
-}
-
-body.home-page .box {
-    background-color: var(--bg-white);
-    height: auto;
-    border-radius: 10px;
-    padding-top: 2px;
-    padding-left: 10px;
-    padding-right: 10px;
-}
-
-body.home-page .infobox code {
-    color: #5f6368;
-    font-family: Consolas, Monaco, "Courier New", monospace;
-    font-size: 0.88rem;
-}
-
-body.home-page .infobox {
-    background-color: var(--bg-white);
-    height: auto;
-    border-radius: 10px;
-    padding-top: 10px;
-    padding-bottom: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
-    margin-bottom: 7px;
 }
 
 body.home-page .link-target {
@@ -105,18 +65,153 @@ body.home-page .anchor {
     visibility: hidden;
 }
 
-body.home-page .icon-row {
-    margin: auto;
-    width: 171px;
+/* About Me: profile photo, social pills, education cards */
+body.home-page .profile-photo {
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.45);
+    max-width: 84%;
+    display: block;
+    margin: 0 auto;
 }
 
-body.home-page .edu-list {
-    margin-left: 50px;
+body.home-page .social-pills {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 18px;
 }
 
-body.home-page .text-muted-small {
+body.home-page .social-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    background: #343a40;
+    color: #fff;
+    font-size: 1.25rem;
+    text-decoration: none;
+}
+
+body.home-page .social-pill:hover {
+    background: #23272b;
+    color: #fff;
+    text-decoration: none;
+}
+
+body.home-page .about-text {
+    text-align: justify;
+    line-height: 1.7;
+}
+
+body.home-page .edu-section {
+    margin-top: 8px;
+}
+
+body.home-page .edu-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
     color: var(--muted);
-    font-size: 0.8em;
+    margin-bottom: 8px;
+}
+
+body.home-page .edu-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+body.home-page .edu-card {
+    background: var(--bg-white);
+    border: 1.5px solid rgba(0, 0, 0, 0.7);
+    border-radius: 10px;
+    padding: 12px 14px;
+}
+
+body.home-page .edu-degree {
+    font-weight: 600;
+    font-size: 0.92rem;
+    line-height: 1.25;
+}
+
+body.home-page .edu-degree a {
+    color: inherit;
+}
+
+body.home-page .edu-year {
+    color: var(--muted);
+    font-size: 0.82rem;
+    font-weight: 600;
+    margin-top: 2px;
+}
+
+body.home-page .edu-inst {
+    color: var(--muted);
+    font-size: 0.8rem;
+    margin-top: 2px;
+}
+
+@media (max-width: 767px) {
+    body.home-page .edu-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    body.home-page .profile-photo {
+        max-width: 240px;
+        margin-bottom: 6px;
+    }
+}
+
+@media (max-width: 575px) {
+    body.home-page .about-text {
+        text-align: left;
+    }
+}
+
+/* Info / BibTeX modal styling */
+body.home-page .modal-content {
+    border: none;
+    border-radius: 14px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+}
+
+body.home-page .modal-header {
+    background: #f2f2f4;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    border-top-left-radius: 14px;
+    border-top-right-radius: 14px;
+    padding: 1rem 1.25rem;
+}
+
+body.home-page .modal-title {
+    font-weight: 600;
+}
+
+body.home-page .modal-footer {
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    padding: 0.75rem 1.25rem;
+}
+
+body.home-page #bibtexModalContent {
+    background: #f6f6f8;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-family: Consolas, Monaco, "Courier New", monospace;
+    font-size: 0.88rem;
+    margin: 0;
+}
+
+body.home-page #infoModal .modal-body {
+    overflow: auto;
+}
+
+body.home-page #infoModal .modal-body img.thumb-left,
+body.home-page #infoModal .modal-body img.thumb-left-small {
+    float: left;
+    margin: 0 15px 10px 0;
 }
 
 body.home-page .text-muted {
@@ -141,12 +236,6 @@ body.home-page .pre-wrap {
 
 body.home-page .is-hidden {
     display: none;
-}
-
-body.home-page .is-hidden-overflow {
-    display: none;
-    max-height: 100%;
-    overflow: hidden;
 }
 
 body.home-page .thumb-left {

@@ -2,7 +2,11 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+DATA_DIR="$ROOT_DIR/templates/data"
+PARTIALS_DIR="$ROOT_DIR/templates/partials/index"
 TOPBAR_TEMPLATE="$ROOT_DIR/templates/partials/topbar.html"
+TOPBAR_ASSEMBLED="$PARTIALS_DIR/topbar-assembled.html"
+TOPBAR_YEARS_RENDERER="$ROOT_DIR/templates/scripts/render_topbar_years.pl"
 TALKS_DATA="$ROOT_DIR/templates/data/talks.json"
 TALKS_PARTIAL="$ROOT_DIR/templates/partials/index/talks-section.html"
 TALKS_RENDERER="$ROOT_DIR/templates/scripts/render_talks.pl"
@@ -79,13 +83,27 @@ render_blog_partial() {
   "$BLOG_RENDERER" "$BLOG_DATA" "$BLOG_PARTIAL"
 }
 
+render_topbar() {
+  # Generate per-section year dropdown items from JSON, then assemble
+  # topbar.html with those includes expanded (still containing {{INDEX_PREFIX}}).
+  "$TOPBAR_YEARS_RENDERER" "$DATA_DIR" "$PARTIALS_DIR"
+  ROOT_DIR="$ROOT_DIR" perl -0777 -pe '
+    s#\{\{INCLUDE:([^}]+)\}\}#do {
+      my $path = $ENV{ROOT_DIR} . "/" . $1;
+      open(my $fh, "<", $path) or die "Build failed: cannot open include $1\n";
+      local $/;
+      <$fh>;
+    }#ge
+  ' "$TOPBAR_TEMPLATE" > "$TOPBAR_ASSEMBLED"
+}
+
 render_page() {
   local src="$1"
   local dst="$2"
   local prefix="$3"
   local topbar
 
-  topbar="$(sed "s|{{INDEX_PREFIX}}|$prefix|g" "$TOPBAR_TEMPLATE")"
+  topbar="$(sed "s|{{INDEX_PREFIX}}|$prefix|g" "$TOPBAR_ASSEMBLED")"
 
   mkdir -p "$(dirname "$ROOT_DIR/$dst")"
   TOPBAR="$topbar" perl -0777 -pe 's/\{\{TOPBAR\}\}/$ENV{TOPBAR}/g' "$ROOT_DIR/$src" > "$ROOT_DIR/$dst"
@@ -183,116 +201,6 @@ check_topbar_placeholder() {
   fi
 }
 
-compute_counts() {
-  local index_file="$ROOT_DIR/index.html"
-
-  # Defaults in case a section/year is temporarily missing.
-  export COUNT_BLOG_2026=0
-  export COUNT_PUBLICATIONS_2026=0
-  export COUNT_PUBLICATIONS_2025=0
-  export COUNT_PUBLICATIONS_2024=0
-  export COUNT_PUBLICATIONS_2023=0
-  export COUNT_TALKS_2026=0
-  export COUNT_TALKS_2025=0
-  export COUNT_TALKS_2024=0
-  export COUNT_TALKS_2023=0
-  export COUNT_AWARDS_2026=0
-  export COUNT_AWARDS_2025=0
-  export COUNT_AWARDS_2024=0
-  export COUNT_AWARDS_2023=0
-
-  while IFS='=' read -r key value; do
-    export "$key=$value"
-  done < <(
-    awk '
-      BEGIN { section=""; year="" }
-
-      /<div id="blog" class="row">/   { section="blog";   year=""; next }
-      /<div id="publications" class="row">/ { section="publications"; year=""; next }
-      /<div id="talks" class="row">/  { section="talks";  year=""; next }
-      /<div id="awards" class="row">/ { section="awards"; year=""; next }
-      /<footer>/                    { section="";       year=""; next }
-
-      {
-        if (match($0, /id="(blog|publications|talks|awards)[0-9][0-9][0-9][0-9]"/)) {
-          s = substr($0, RSTART + 4, RLENGTH - 5)
-          sec = substr(s, 1, length(s) - 4)
-          if (section == sec) year = substr(s, length(s) - 3)
-        }
-      }
-
-      /<div class="timeline-entry">/ {
-        if (section != "" && section != "awards" && year != "") {
-          key = toupper(section) "_" year
-          count[key]++
-        }
-      }
-
-      /<a class="title"/ {
-        if (section == "awards" && year != "") {
-          awards_count[year]++
-        }
-      }
-
-      END {
-        print "COUNT_BLOG_2026=" (count["BLOG_2026"] + 0)
-        print "COUNT_PUBLICATIONS_2026=" (count["PUBLICATIONS_2026"] + 0)
-        print "COUNT_PUBLICATIONS_2025=" (count["PUBLICATIONS_2025"] + 0)
-        print "COUNT_PUBLICATIONS_2024=" (count["PUBLICATIONS_2024"] + 0)
-        print "COUNT_PUBLICATIONS_2023=" (count["PUBLICATIONS_2023"] + 0)
-        print "COUNT_TALKS_2026=" (count["TALKS_2026"] + 0)
-        print "COUNT_TALKS_2025=" (count["TALKS_2025"] + 0)
-        print "COUNT_TALKS_2024=" (count["TALKS_2024"] + 0)
-        print "COUNT_TALKS_2023=" (count["TALKS_2023"] + 0)
-        print "COUNT_AWARDS_2026=" (awards_count["2026"] + 0)
-        print "COUNT_AWARDS_2025=" (awards_count["2025"] + 0)
-        print "COUNT_AWARDS_2024=" (awards_count["2024"] + 0)
-        print "COUNT_AWARDS_2023=" (awards_count["2023"] + 0)
-      }
-    ' "$index_file"
-  )
-}
-
-apply_counts() {
-  local file="$1"
-  COUNT_BLOG_2026="$COUNT_BLOG_2026" \
-  COUNT_PUBLICATIONS_2026="$COUNT_PUBLICATIONS_2026" \
-  COUNT_PUBLICATIONS_2025="$COUNT_PUBLICATIONS_2025" \
-  COUNT_PUBLICATIONS_2024="$COUNT_PUBLICATIONS_2024" \
-  COUNT_PUBLICATIONS_2023="$COUNT_PUBLICATIONS_2023" \
-  COUNT_TALKS_2026="$COUNT_TALKS_2026" \
-  COUNT_TALKS_2025="$COUNT_TALKS_2025" \
-  COUNT_TALKS_2024="$COUNT_TALKS_2024" \
-  COUNT_TALKS_2023="$COUNT_TALKS_2023" \
-  COUNT_AWARDS_2026="$COUNT_AWARDS_2026" \
-  COUNT_AWARDS_2025="$COUNT_AWARDS_2025" \
-  COUNT_AWARDS_2024="$COUNT_AWARDS_2024" \
-  COUNT_AWARDS_2023="$COUNT_AWARDS_2023" \
-  perl -0777 -i -pe '
-    s/\{\{COUNT_BLOG_2026\}\}/$ENV{COUNT_BLOG_2026}/g;
-    s/\{\{COUNT_PUBLICATIONS_2026\}\}/$ENV{COUNT_PUBLICATIONS_2026}/g;
-    s/\{\{COUNT_PUBLICATIONS_2025\}\}/$ENV{COUNT_PUBLICATIONS_2025}/g;
-    s/\{\{COUNT_PUBLICATIONS_2024\}\}/$ENV{COUNT_PUBLICATIONS_2024}/g;
-    s/\{\{COUNT_PUBLICATIONS_2023\}\}/$ENV{COUNT_PUBLICATIONS_2023}/g;
-    s/\{\{COUNT_TALKS_2026\}\}/$ENV{COUNT_TALKS_2026}/g;
-    s/\{\{COUNT_TALKS_2025\}\}/$ENV{COUNT_TALKS_2025}/g;
-    s/\{\{COUNT_TALKS_2024\}\}/$ENV{COUNT_TALKS_2024}/g;
-    s/\{\{COUNT_TALKS_2023\}\}/$ENV{COUNT_TALKS_2023}/g;
-    s/\{\{COUNT_AWARDS_2026\}\}/$ENV{COUNT_AWARDS_2026}/g;
-    s/\{\{COUNT_AWARDS_2025\}\}/$ENV{COUNT_AWARDS_2025}/g;
-    s/\{\{COUNT_AWARDS_2024\}\}/$ENV{COUNT_AWARDS_2024}/g;
-    s/\{\{COUNT_AWARDS_2023\}\}/$ENV{COUNT_AWARDS_2023}/g;
-  ' "$ROOT_DIR/$file"
-}
-
-check_count_placeholders() {
-  local file="$1"
-  if grep -q "{{COUNT_" "$ROOT_DIR/$file"; then
-    echo "Build failed: unreplaced {{COUNT_...}} placeholder in $file" >&2
-    exit 1
-  fi
-}
-
 apply_last_updated() {
   local file="$1"
   local today
@@ -339,6 +247,7 @@ render_talks_partial
 render_awards_partial
 render_publications_partial
 render_blog_partial
+render_topbar
 compile_post_tex_pdfs
 copy_post_assets
 sync_legacy_papers_dir
@@ -350,12 +259,6 @@ render_posts
 expand_includes "index.html"
 for post_file in "${rendered_posts[@]}"; do
   expand_includes "$post_file"
-done
-
-compute_counts
-apply_counts "index.html"
-for post_file in "${rendered_posts[@]}"; do
-  apply_counts "$post_file"
 done
 
 apply_last_updated "index.html"
@@ -371,11 +274,6 @@ done
 check_include_placeholders "index.html"
 for post_file in "${rendered_posts[@]}"; do
   check_include_placeholders "$post_file"
-done
-
-check_count_placeholders "index.html"
-for post_file in "${rendered_posts[@]}"; do
-  check_count_placeholders "$post_file"
 done
 
 check_last_updated_placeholder "index.html"

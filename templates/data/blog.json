@@ -1,52 +1,36 @@
 [
   {
     "year": 2026,
+    "id": "QAICPageUAF",
     "title": "Privilege Escalation via a Page Use-After-Free in Qualcomm's AI Accelerator Linux Kernel Driver",
     "href": "posts/qaic-page-uaf/index.html",
-    "author_html": "<b>Lukas Maar</b>",
-    "info_id": "info:QAICPageUAF",
-    "github": "https://github.com/lukasmaar/qaic-page-uaf",
-    "info": {
-      "id": "info:QAICPageUAF",
-      "class": "infobox is-hidden",
-      "html": "<ul><li><b>Bug class:</b> A memory mapping lifetime bug in Qualcomm's QAIC AI accelerator driver leaves stale page-table state behind.</li><li><b>Exploit path:</b> The stale mapping survives after the original physical backing memory is freed, creating a page-level use after free that I reclaim with <code>pipe_buffer</code> metadata and turn into local privilege escalation.</li><li><b>Virtualized research:</b> By virtualizing the relevant QAIC driver path in QEMU, I could continue kernel-exploitation experiments on Linux v6.18 without access to the accelerator hardware.</li></ul>"
-    },
+    "authors": "<b>Lukas Maar</b>",
     "badges": {
-      "cves": [
-        "CVE-2026-57551"
-      ]
+      "cves": ["CVE-2026-57551"]
     },
-    "actions": [
-      {
-        "href": "https://lore.kernel.org/all/20260430193858.1178641-1-zachary.mckevitt@oss.qualcomm.com/",
-        "icon": "fa-code-fork",
-        "label": "Patch"
-      }
-    ]
+    "links": {
+      "github": "https://github.com/lukasmaar/qaic-page-uaf"
+    },
+    "extra_links": [
+      {"label": "Patch", "href": "https://lore.kernel.org/all/20260430193858.1178641-1-zachary.mckevitt@oss.qualcomm.com/", "icon": "fa-code-fork"}
+    ],
+    "info": "<ul><li><b>Bug class:</b> A memory mapping lifetime bug in Qualcomm's QAIC AI accelerator driver leaves stale page-table state behind.</li><li><b>Exploit path:</b> The stale mapping survives after the original physical backing memory is freed, creating a page-level use after free that I reclaim with <code>pipe_buffer</code> metadata and turn into local privilege escalation.</li><li><b>Virtualized research:</b> By virtualizing the relevant QAIC driver path in QEMU, I could continue kernel-exploitation experiments on Linux v6.18 without access to the accelerator hardware.</li></ul>"
   },
   {
     "year": 2026,
+    "id": "HeapKASLRLeak",
     "title": "From KernelSnitch to Practical msg_msg/pipe_buffer Heap KASLR Leaks",
     "href": "posts/heap-kaslr-leak/index.html",
-    "author_html": "<b>Lukas Maar</b>",
-    "info_id": "info:HeapKASLRLeak",
-    "github": "https://github.com/lukasmaar/kernelsnitch",
-    "info": {
-      "id": "info:HeapKASLRLeak",
-      "class": "infobox is-hidden",
-      "html": "<ul><li><b>Portable Core Leak:</b> KernelSnitch is a software-only timing side channel that leaks <code>mm_struct</code>-backed page locations without relying on a memory-safety bug, with its POC having a near-100% success rate.</li><li><b>Practical pivot:</b> Combined with cross-cache reuse, this core yields practical <code>msg_msg</code>/<code>pipe_buffer</code> heap KASLR leaks: above 98% on desktop kernels and KernelCTF instances, and practical on the Android kernel.</li><li><b>Security implication:</b> This leakage class remains exploitable under MTE because it avoids invalid tagged accesses, and the core leak can also recover the tag of tagged kernel <code>mm_struct</code> addresses.</li></ul>"
-    },
+    "authors": "<b>Lukas Maar</b>",
     "badges": {
-      "applied": [
-        "Android 17 root (IonStack)"
-      ]
+      "applied": ["Android 17 root (IonStack)"]
     },
-    "actions": [
-      {
-        "href": "https://nebusec.ai/research/ionstack-part-3/",
-        "icon": "fa-external-link",
-        "label": "IonStack"
-      }
-    ]
+    "links": {
+      "github": "https://github.com/lukasmaar/kernelsnitch"
+    },
+    "extra_links": [
+      {"label": "IonStack", "href": "https://nebusec.ai/research/ionstack-part-3/", "icon": "fa-external-link"}
+    ],
+    "info": "<ul><li><b>Portable Core Leak:</b> KernelSnitch is a software-only timing side channel that leaks <code>mm_struct</code>-backed page locations without relying on a memory-safety bug, with its POC having a near-100% success rate.</li><li><b>Practical pivot:</b> Combined with cross-cache reuse, this core yields practical <code>msg_msg</code>/<code>pipe_buffer</code> heap KASLR leaks: above 98% on desktop kernels and KernelCTF instances, and practical on the Android kernel.</li><li><b>Security implication:</b> This leakage class remains exploitable under MTE because it avoids invalid tagged accesses, and the core leak can also recover the tag of tagged kernel <code>mm_struct</code> addresses.</li></ul>"
   }
 ]
