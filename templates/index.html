@@ -68,11 +68,8 @@
       <div class="col-md-3">
 
         <!-- Image -->
-        <div class="row">
-          <div class="col-xs-12">
-            <img src="images/profile.jpg" alt="Lukas Maar" class="img-fluid rounded-circle profile-photo">
-          </div>
-        </div>
+        <img src="images/profile.jpg" alt="Lukas Maar" class="img-fluid rounded-circle profile-photo"
+             data-toggle="modal" data-target="#photoModal" title="Click to enlarge">
 
         <!-- Social buttons -->
         <div class="social-pills">
@@ -203,6 +200,14 @@
         </small>
       </p>
     </footer>
+  </div>
+
+  <div class="modal fade" id="photoModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content" data-dismiss="modal">
+        <img src="images/profile.jpg" alt="Lukas Maar">
+      </div>
+    </div>
   </div>
 
   <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-hidden="true">

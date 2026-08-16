@@ -22,6 +22,7 @@ body.article-page .article-frame {
     background: var(--article-card-bg);
     border: 2px solid rgba(0, 0, 0, 0.7);
     border-radius: 10px;
+    box-shadow: 0 3px 12px rgba(var(--dark-rgb), 0.2);
     padding: 2.5rem 1.6rem 2rem;
 }
 

@@ -7,6 +7,9 @@
     --rule: #5c5c5c;
     --timeline-rail: #474747;
     --brand-purple: #8c41ca;
+    /* Matches Bootstrap .bg-dark (navbar). Use --dark-rgb inside rgba(). */
+    --dark: #343a40;
+    --dark-rgb: 52, 58, 64;
 }
 
 /* Base */
@@ -19,6 +22,7 @@ body {
     background: no-repeat center center fixed;
     padding-top: 60px;
     position: relative;
+    overflow-x: hidden;
 }
 
 pre {

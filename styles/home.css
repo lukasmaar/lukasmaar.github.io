@@ -43,7 +43,13 @@ body.home-page .timeline-entry {
     display: inline-block;
     border-radius: 10px;
     border: 2px solid rgba(0, 0, 0, 0.7);
+    box-shadow: 0 3px 12px rgba(var(--dark-rgb), 0.2);
     width: 100%;
+    transition: box-shadow 0.15s ease;
+}
+
+body.home-page .timeline-entry:hover {
+    box-shadow: 0 0 24px rgba(var(--dark-rgb), 0.55);
 }
 
 body.home-page .timeline-date {
@@ -67,10 +73,29 @@ body.home-page .anchor {
 
 /* About Me: profile photo, social pills, education cards */
 body.home-page .profile-photo {
-    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.45);
-    max-width: 84%;
+    box-shadow: 0 8px 40px rgba(var(--dark-rgb), 0.55);
+    max-width: 92%;
     display: block;
     margin: 0 auto;
+    cursor: pointer;
+    transition: box-shadow 0.15s ease;
+}
+
+body.home-page .profile-photo:hover {
+    box-shadow: 0 10px 52px rgba(var(--dark-rgb), 0.75);
+}
+
+body.home-page #photoModal .modal-content {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+body.home-page #photoModal img {
+    width: 100%;
+    height: auto;
+    border-radius: 18px;
+    box-shadow: 0 20px 60px rgba(var(--dark-rgb), 0.5);
 }
 
 body.home-page .social-pills {
@@ -88,16 +113,18 @@ body.home-page .social-pill {
     width: 44px;
     height: 44px;
     border-radius: 8px;
-    background: #343a40;
+    background: var(--dark);
     color: #fff;
     font-size: 1.25rem;
     text-decoration: none;
+    transition: box-shadow 0.15s ease, background 0.15s ease;
 }
 
 body.home-page .social-pill:hover {
     background: #23272b;
     color: #fff;
     text-decoration: none;
+    box-shadow: 0 0 20px rgba(var(--dark-rgb), 0.45);
 }
 
 body.home-page .about-text {
@@ -128,7 +155,13 @@ body.home-page .edu-card {
     background: var(--bg-white);
     border: 1.5px solid rgba(0, 0, 0, 0.7);
     border-radius: 10px;
+    box-shadow: 0 3px 12px rgba(var(--dark-rgb), 0.2);
     padding: 12px 14px;
+    transition: box-shadow 0.15s ease;
+}
+
+body.home-page .edu-card:hover {
+    box-shadow: 0 0 20px rgba(var(--dark-rgb), 0.45);
 }
 
 body.home-page .edu-degree {
@@ -159,14 +192,24 @@ body.home-page .edu-inst {
         grid-template-columns: repeat(2, 1fr);
     }
     body.home-page .profile-photo {
-        max-width: 240px;
+        max-width: 280px;
+        margin-top: 4px;
         margin-bottom: 6px;
     }
-}
-
-@media (max-width: 575px) {
-    body.home-page .about-text {
-        text-align: left;
+    /* Keep a small gutter between cards and the viewport edge; the nested
+       .timeline > .row negative margins otherwise cancel the column padding.
+       Shift the rail by the same 15px so the year label stays clear of it. */
+    body.home-page .timeline > .row {
+        margin-left: 0;
+        margin-right: 0;
+    }
+    body.home-page .timeline:before {
+        left: 55px;
+    }
+    body.home-page .about-text,
+    body.home-page .edu-section {
+        padding-left: 4px;
+        padding-right: 4px;
     }
 }
 
@@ -174,7 +217,7 @@ body.home-page .edu-inst {
 body.home-page .modal-content {
     border: none;
     border-radius: 14px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 20px 60px rgba(var(--dark-rgb), 0.4);
 }
 
 body.home-page .modal-header {
