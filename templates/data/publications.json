@@ -11,6 +11,9 @@
         "Available"
       ]
     },
+    "links": {
+      "zenodo": "https://zenodo.org/records/20411196"
+    },
     "bibtex": "@inproceedings{Garcia2026Fence2Pwn,\n  author = {Ernesto Martinez Garcia and Lukas Maar and Martin Unterguggenberger and Stefan Mangard},\n  booktitle = {{USENIX Security}},\n  title = {{Fence2Pwn: KFENCE-Enabled Kernel Exploitation Bypassing Slab Hardening and Memory Tagging}},\n  year = {2026}\n}",
     "info": "In this paper, we present Fence2Pwn, which abuses Linux's memory-safety detector, KFENCE, to bypass state-of-the-art slab defenses. It uses a timing side channel to detect KFENCE fallback allocations and exploits their exemption from slab segregation and memory tagging to turn a UAF into cross-type, cross-size object overlay on production kernels."
   },
