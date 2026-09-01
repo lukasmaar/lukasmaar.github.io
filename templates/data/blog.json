@@ -1,6 +1,14 @@
 [
   {
     "year": 2026,
+    "id": "OEMpocalypse",
+    "title": "OEMpocalypse Now: A Generic Exploitation Strategy from Android Untrusted App to Root",
+    "href": "https://calif.io/research/oempocalypse",
+    "authors": "<b>Lukas Maar</b>",
+    "info": "<ul><li><b>Strategy:</b> Exploit a page UAF in an OEM-specific kernel driver. If SELinux gates it behind a privileged domain, reach it first via an OEM-specific sandbox escape.</li><li><b>Why:</b> A page UAF reached from the right context gives a reliable, physical page-level primitive that is largely independent of kernel version, slab hardening, KASLR, CFI, and phone model.</li><li><b>Coverage:</b> Three instantiations of the strategy cover all Samsung flagships (Galaxy S23&ndash;S26, recent Z series), most Xiaomi mid-range to flagship devices, and recent Oppo/OnePlus/Realme flagships.</li></ul>"
+  },
+  {
+    "year": 2026,
     "id": "QAICPageUAF",
     "title": "Privilege Escalation via a Page Use-After-Free in Qualcomm's AI Accelerator Linux Kernel Driver",
     "href": "posts/qaic-page-uaf/index.html",

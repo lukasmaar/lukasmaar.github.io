@@ -58,7 +58,7 @@
       <li class="nav-item dropdown topbar-item">
         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Blog</a>
         <div class="dropdown-menu">
-          <a class="dropdown-item" href="index.html#blog2026">2026: 2</a>
+          <a class="dropdown-item" href="index.html#blog2026">2026: 3</a>
         </div>
       </li>
       <li class="nav-item dropdown topbar-item">
@@ -197,6 +197,30 @@
                 </b>
               </div>
               <div class="col-xs-11">
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="timeline-entry">
+              <div class="col-md-1">
+              </div>
+              <div class="col-md-11">
+                <i class="fa fa-edit">
+                </i>
+                <a class="title" href="https://calif.io/research/oempocalypse">
+                  OEMpocalypse Now: A Generic Exploitation Strategy from Android Untrusted App to Root
+                </a>
+                <br>
+                <small>
+                  <b>Lukas Maar</b>
+                  <br>
+                  <span class="sbtn" onclick="showInfo('info:OEMpocalypse', 'OEMpocalypse Now: A Generic Exploitation Strategy from Android Untrusted App to Root')"><a href="#0"><i class="fa fa-info-circle"></i>
+                      Info</a></span>
+                </small>
+                <div id="info:OEMpocalypse" class="is-hidden">
+                  <ul><li><b>Strategy:</b> Exploit a page UAF in an OEM-specific kernel driver. If SELinux gates it behind a privileged domain, reach it first via an OEM-specific sandbox escape.</li><li><b>Why:</b> A page UAF reached from the right context gives a reliable, physical page-level primitive that is largely independent of kernel version, slab hardening, KASLR, CFI, and phone model.</li><li><b>Coverage:</b> Three instantiations of the strategy cover all Samsung flagships (Galaxy S23&ndash;S26, recent Z series), most Xiaomi mid-range to flagship devices, and recent Oppo/OnePlus/Realme flagships.</li></ul>
+                </div>
               </div>
             </div>
           </div>
@@ -1675,7 +1699,7 @@
     <footer>
       <p>&copy; 2026 Lukas Maar.
         <small>
-          Last updated: 16.08.2026. Template by
+          Last updated: 01.09.2026. Template by
           <a class="title" href="https://andreaskogler.com/">Andreas Kogler</a> <span
             class="footer-arrow">&#10230;</span> <a class="title" href="https://fabianrauscher.com/">Fabian
             Rauscher</a> <span class="footer-arrow">&#10230;</span> <a class="title" href="#">Lukas Maar</a>
