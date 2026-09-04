@@ -1,6 +1,22 @@
 [
   {
     "year": 2026,
+    "icon": "fa-bug",
+    "items": [
+      {"label": "", "href": ""}
+    ],
+    "note": "Full Root: Kernel-Driver Page UAF and Confused-Deputy Vuln in Samsungs DualDAR Subsystem"
+  },
+  {
+    "year": 2026,
+    "icon": "fa-bug",
+    "items": [
+      {"label": "", "href": ""}
+    ],
+    "note": "DMA-After-Free: Exploiting a Stale IOMMU TLB for Privilege Escalation on Qualcomm-Based Mobile Devices"
+  },
+  {
+    "year": 2026,
     "icon": "fa-trophy",
     "items": [
       {

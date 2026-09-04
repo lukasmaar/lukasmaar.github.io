@@ -1,6 +1,21 @@
 [
   {
     "year": 2026,
+    "href": "",
+    "title": "LeakyTree: Cross-VM Bit-by-Bit Deduplicated Page Leakage via Linux Kernel Samepage Merging Internals",
+    "authors": "Ernesto Martínez García, <b>Lukas Maar</b>, Martin Unterguggenberger, Mathias Oberhuber, Stefan Mangard",
+    "venue": "ACM Conference on Computer and Communications Security (CCS) 2026",
+    "id": "LeakyTree",
+    "badges": {
+      "artifacts": [
+        "Available"
+      ]
+    },
+    "bibtex": "@inproceedings{Garcia2026LeakyTree,\n  author = {Ernesto Martinez Garcia and Lukas Maar and Martin Unterguggenberger and Mathias Oberhuber and Stefan Mangard},\n  booktitle = {{CCS}},\n  title = {{LeakyTree: Cross-VM Bit-by-Bit Deduplicated Page Leakage via Linux Kernel Samepage Merging Internals}},\n  year = {2026}\n}",
+    "info": ""
+  },
+  {
+    "year": 2026,
     "href": "https://ls.ecomaikgolf.com/papers/fence2pwn-usenix.pdf",
     "title": "Fence2Pwn: KFENCE-Enabled Kernel Exploitation Bypassing Slab Hardening and Memory Tagging",
     "authors": "Ernesto Martínez García, <b>Lukas Maar</b>, Martin Unterguggenberger, Stefan Mangard",
