@@ -5,9 +5,9 @@ body.article-page {
     --article-ink: var(--ink);
     --article-muted: var(--muted);
     --article-rule: var(--rule);
-    --article-code-bg: #eeeff3;
-    --article-code-ink: #27303a;
-    --article-code-border: #d5d9e0;
+    --article-code-bg: var(--bg-inset);
+    --article-code-ink: var(--ink);
+    --article-code-border: var(--border-subtle);
     background-color: var(--article-page-bg);
     color: var(--article-ink);
 }
@@ -20,9 +20,9 @@ body.article-page .article-shell {
 
 body.article-page .article-frame {
     background: var(--article-card-bg);
-    border: 2px solid rgba(0, 0, 0, 0.7);
+    border: 2px solid var(--card-border);
     border-radius: 10px;
-    box-shadow: 0 3px 12px rgba(var(--dark-rgb), 0.2);
+    box-shadow: 0 3px 12px rgba(var(--shadow-rgb), 0.2);
     padding: 2.5rem 1.6rem 2rem;
 }
 
@@ -50,7 +50,7 @@ body.article-page .article-subtitle {
 
 body.article-page .article-meta {
     font-size: 0.88rem;
-    color: #2e2e2e;
+    color: var(--article-ink);
     padding-bottom: 1rem;
     border-bottom: 1px solid var(--article-rule);
     margin-bottom: 1.7rem;
@@ -87,8 +87,8 @@ body.article-page .article-frame ol {
 }
 
 body.article-page .article-note {
-    border-left: 4px solid #111;
-    background: #efefef;
+    border-left: 4px solid var(--article-ink);
+    background: var(--bg-inset);
     padding: 0.9rem 1rem;
     margin: 1.1rem 0;
     font-size: 0.88rem;
@@ -127,15 +127,15 @@ body.article-page pre.terminal-log .term-ok {
 }
 
 body.article-page .article-formula {
-    background: #ececf1;
-    border: 1px solid #d6d8df;
+    background: var(--bg-inset);
+    border: 1px solid var(--border-subtle);
     border-radius: 10px;
     padding: 0.8rem 1rem;
     margin: 1rem 0;
 }
 
 body.article-page .article-formula code {
-    color: #1f2530;
+    color: var(--article-ink);
     font-size: 0.86rem;
 }
 
@@ -158,7 +158,7 @@ body.article-page .article-frame h3 code {
 }
 
 body.article-page :not(pre) > code {
-    color: #5f6368;
+    color: var(--article-muted);
 }
 
 /* Keep inline code inside links in the same color as the link text. */
@@ -183,11 +183,32 @@ body.article-page .article-figure {
     margin: 1rem 0 1.2rem;
 }
 
+/* The base .caption rule pulls captions up by -0.3rem, tuned for when
+   figures had no visible background. Now that figures have an opaque
+   panel behind them, that negative margin makes the panel visually
+   overlap the caption text, so cancel it here. */
+body.article-page .article-figure .caption {
+    margin-top: 0.5rem;
+}
+
 body.article-page .article-figure-media {
     width: var(--figure-width, 100%);
     max-width: 100%;
     height: auto;
     display: inline-block;
+    /* These are LaTeX-compiled diagrams with black/grey strokes on a
+       transparent background, not theme-aware. Give them a fixed light
+       panel (independent of --bg-* theme vars) so they stay legible in
+       dark mode instead of turning near-invisible.
+       Deliberately content-box (not border-box): the auto-height for an
+       SVG <img> is derived from its intrinsic aspect ratio against the
+       content width, so border-box padding here made that computation
+       run against the wrong width and let the image visually overflow
+       past the panel into the caption below. */
+    background: #f4f5f7;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
+    padding: 8px;
 }
 
 body.article-page .article-video-grid {
@@ -259,18 +280,18 @@ body.article-page .eval-table {
 
 body.article-page .eval-table th,
 body.article-page .eval-table td {
-    border: 1px solid #d5d9e0;
+    border: 1px solid var(--border-subtle);
     padding: 0.45rem 0.55rem;
     vertical-align: top;
 }
 
 body.article-page .eval-table th {
-    background: #eeeff3;
+    background: var(--bg-inset);
     font-weight: 700;
 }
 
 body.article-page .eval-table td {
-    background: #fafbfc;
+    background: var(--article-card-bg);
 }
 
 @media (min-width: 768px) {

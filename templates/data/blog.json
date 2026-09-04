@@ -17,7 +17,8 @@
       "cves": ["CVE-2026-57551"]
     },
     "links": {
-      "github": "https://github.com/lukasmaar/qaic-page-uaf"
+      "github": "https://github.com/lukasmaar/qaic-page-uaf",
+      "slides": ""
     },
     "extra_links": [
       {"label": "Patch", "href": "https://lore.kernel.org/all/20260430193858.1178641-1-zachary.mckevitt@oss.qualcomm.com/", "icon": "fa-code-fork"}

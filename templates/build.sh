@@ -19,6 +19,9 @@ PUBLICATIONS_RENDERER="$ROOT_DIR/templates/scripts/render_publications.pl"
 BLOG_DATA="$ROOT_DIR/templates/data/blog.json"
 BLOG_PARTIAL="$ROOT_DIR/templates/partials/index/blog-section.html"
 BLOG_RENDERER="$ROOT_DIR/templates/scripts/render_blog.pl"
+NOTABLE_DATA="$ROOT_DIR/templates/data/notable-mentions.json"
+NOTABLE_PARTIAL="$ROOT_DIR/templates/partials/index/notable-mentions-section.html"
+NOTABLE_RENDERER="$ROOT_DIR/templates/scripts/render_notable_mentions.pl"
 
 compile_post_tex_pdfs() {
   local tex_dir="$ROOT_DIR/templates/posts"
@@ -81,6 +84,10 @@ render_publications_partial() {
 
 render_blog_partial() {
   "$BLOG_RENDERER" "$BLOG_DATA" "$BLOG_PARTIAL"
+}
+
+render_notable_mentions_partial() {
+  "$NOTABLE_RENDERER" "$NOTABLE_DATA" "$NOTABLE_PARTIAL"
 }
 
 render_topbar() {
@@ -247,6 +254,7 @@ render_talks_partial
 render_awards_partial
 render_publications_partial
 render_blog_partial
+render_notable_mentions_partial
 render_topbar
 compile_post_tex_pdfs
 copy_post_assets

@@ -6,6 +6,18 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+  <!-- Set the theme before first paint to avoid a light/dark flash. -->
+  <script>
+    (function () {
+      var theme = null;
+      try { theme = localStorage.getItem('theme'); } catch (e) {}
+      if (!theme) {
+        theme = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+      }
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
+
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -48,9 +60,17 @@
 <body class="home-page" data-spy="scroll" data-target="#navbar" data-offset="0">
   <nav class="navbar navbar-dark bg-dark navbar-expand-md fixed-top" id="navbar">
   <a class="navbar-brand" href="index.html">Lukas Maar</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
+  <div class="navbar-controls">
+    <button type="button" class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode" title="Toggle dark mode">
+      <span class="theme-toggle-thumb">
+        <i class="fa fa-sun-o theme-toggle-icon-light"></i>
+        <i class="fa fa-moon-o theme-toggle-icon-dark"></i>
+      </span>
+    </button>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  </div>
 
   <div class="collapse navbar-collapse nav-pills" id="navbar-collapse">
     <ul class="navbar-nav ml-auto">
@@ -91,6 +111,15 @@
     </ul>
   </div>
 </nav>
+
+<script>
+  function toggleTheme() {
+    var root = document.documentElement;
+    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('theme', next); } catch (e) {}
+  }
+</script>
 
   <div class="container">
     <!-- About Me -->
@@ -165,6 +194,45 @@
       </div>
       <div class="col-md-2"></div>
     </div>
+
+    <!-- Notable Mentions -->
+    <div id="highlights" class="row">
+      <div class="col-md-1"></div>
+      <div class="col-md-10">
+        <hr>
+        <h3><i class="fa fa-star"></i>
+          Notable Mentions
+        </h3>
+      </div>
+      <div class="col-md-1"></div>
+    </div>
+
+        <div class="row">
+      <div class="col-md-1"></div>
+      <div class="col-md-10">
+        <div class="highlight-grid">
+
+          <div class="highlight-card">
+            <div class="hl-title">KernelSnitch</div>
+            <div class="hl-badge"><i class="fa fa-star"></i> Universal heap KASLR leak</div>
+            <div class="hl-blurb">
+              Hardware-agnostic timing side channel on kernel hash tables, yielding a universal heap KASLR leak, including MTE tag recovery. Confirmed on Linux and Android; macOS is also susceptible.
+            </div>
+          </div>
+
+          <div class="highlight-card">
+            <div class="hl-title">OEMpocalypse</div>
+            <div class="hl-badge"><i class="fa fa-android"></i> Untrusted app to root</div>
+            <div class="hl-blurb">
+              A generic page-UAF exploitation strategy against Android OEM kernel drivers, yielding full root chains on Samsung, Xiaomi, Oppo, OnePlus, and Realme devices.
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="col-md-1"></div>
+    </div>
+
 
     <div id="blog" class="row">
       <div class="col-md-1">
@@ -1701,7 +1769,7 @@
     <footer>
       <p>&copy; 2026 Lukas Maar.
         <small>
-          Last updated: 01.09.2026. Template by
+          Last updated: 04.09.2026. Template by
           <a class="title" href="https://andreaskogler.com/">Andreas Kogler</a> <span
             class="footer-arrow">&#10230;</span> <a class="title" href="https://fabianrauscher.com/">Fabian
             Rauscher</a> <span class="footer-arrow">&#10230;</span> <a class="title" href="#">Lukas Maar</a>

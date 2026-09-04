@@ -6,6 +6,18 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+  <!-- Set the theme before first paint to avoid a light/dark flash. -->
+  <script>
+    (function () {
+      var theme = null;
+      try { theme = localStorage.getItem('theme'); } catch (e) {}
+      if (!theme) {
+        theme = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+      }
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
+
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -121,6 +133,20 @@
       </div>
       <div class="col-md-2"></div>
     </div>
+
+    <!-- Notable Mentions -->
+    <div id="highlights" class="row">
+      <div class="col-md-1"></div>
+      <div class="col-md-10">
+        <hr>
+        <h3><i class="fa fa-star"></i>
+          Notable Mentions
+        </h3>
+      </div>
+      <div class="col-md-1"></div>
+    </div>
+
+    {{INCLUDE:templates/partials/index/notable-mentions-section.html}}
 
     <div id="blog" class="row">
       <div class="col-md-1">

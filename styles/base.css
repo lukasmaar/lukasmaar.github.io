@@ -7,9 +7,74 @@
     --rule: #5c5c5c;
     --timeline-rail: #474747;
     --brand-purple: #8c41ca;
-    /* Matches Bootstrap .bg-dark (navbar). Use --dark-rgb inside rgba(). */
+    /* Matches Bootstrap .bg-dark (navbar). Same in both themes: the navbar
+       is already a dark surface in light mode. Use --dark-rgb inside rgba(). */
     --dark: #343a40;
     --dark-rgb: 52, 58, 64;
+    /* Shadow color is intentionally decoupled from --dark-rgb: shadows must
+       stay darker than the page behind them in both themes, while --dark
+       itself does not change between themes. */
+    --shadow-rgb: 0, 0, 0;
+    /* Hover "glow" is a separate concept from resting shadow: on a dark
+       page a black glow is invisible, so dark mode needs a light halo
+       instead. Light mode keeps the original black glow. */
+    --hover-glow-rgb: 0, 0, 0;
+    --card-border: rgba(0, 0, 0, 0.7);
+    --bg-inset: #eef0f2;
+    --border-subtle: #d7dadd;
+    --divider: rgba(0, 0, 0, 0.06);
+    --text-strong: #000;
+    /* Regular body copy vs. headings/bold: kept identical in light mode
+       (already near-black either way). */
+    --ink-strong: #000;
+    --link-color: #007bff;
+    --link-hover: #0056b3;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --bg-page: #17181a;
+        --bg-card: #202124;
+        --bg-white: #27292c;
+        /* Regular text is dimmed slightly off pure white; headings/bold
+           text uses --ink-strong for full brightness. */
+        --ink: rgba(255, 255, 255, 0.82);
+        --ink-strong: #fff;
+        --muted: #9a9ea3;
+        --rule: #3a3c3f;
+        --timeline-rail: #55585c;
+        --brand-purple: #b07ee0;
+        --shadow-rgb: 0, 0, 0;
+        --hover-glow-rgb: 255, 255, 255;
+        --card-border: rgba(255, 255, 255, 0.14);
+        --bg-inset: #2c2e31;
+        --border-subtle: rgba(255, 255, 255, 0.12);
+        --divider: rgba(255, 255, 255, 0.08);
+        --text-strong: #f2f2f2;
+        --link-color: #6ea8fe;
+        --link-hover: #9ec5fe;
+    }
+}
+
+:root[data-theme="dark"] {
+    --bg-page: #17181a;
+    --bg-card: #202124;
+    --bg-white: #27292c;
+    --ink: rgba(255, 255, 255, 0.82);
+    --ink-strong: #fff;
+    --muted: #9a9ea3;
+    --rule: #3a3c3f;
+    --timeline-rail: #55585c;
+    --brand-purple: #b07ee0;
+    --shadow-rgb: 0, 0, 0;
+    --hover-glow-rgb: 255, 255, 255;
+    --card-border: rgba(255, 255, 255, 0.14);
+    --bg-inset: #2c2e31;
+    --border-subtle: rgba(255, 255, 255, 0.12);
+    --divider: rgba(255, 255, 255, 0.08);
+    --text-strong: #f2f2f2;
+    --link-color: #6ea8fe;
+    --link-hover: #9ec5fe;
 }
 
 /* Base */
@@ -20,9 +85,26 @@ html {
 
 body {
     background: no-repeat center center fixed;
+    color: var(--ink);
     padding-top: 60px;
     position: relative;
     overflow-x: hidden;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+a {
+    color: var(--link-color);
+}
+
+a:hover {
+    color: var(--link-hover);
+}
+
+/* Headings and bold/strong text stay at full brightness; everything else
+   uses the slightly dimmer --ink for regular body copy. */
+h1, h2, h3, h4, h5, h6,
+b, strong {
+    color: var(--ink-strong);
 }
 
 pre {
@@ -35,4 +117,92 @@ pre {
 
 .sbtn {
     margin-left: 1em;
+}
+
+/* The nav dropdowns always sit on the dark navbar, in both site themes, so
+   they keep a fixed dark look rather than following the page theme. */
+.dropdown-menu {
+    background-color: var(--dark);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dropdown-item {
+    color: #e8e8e8;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: #fff;
+}
+
+/* Theme toggle switch */
+.navbar-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-left: auto;
+}
+
+.theme-toggle {
+    position: relative;
+    width: 46px;
+    height: 24px;
+    flex-shrink: 0;
+    border: none;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 0;
+    cursor: pointer;
+}
+
+.theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.22);
+}
+
+.theme-toggle-thumb {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #fff;
+    color: var(--dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    transition: transform 0.15s ease;
+}
+
+.theme-toggle-thumb .theme-toggle-icon-dark {
+    display: none;
+}
+
+:root[data-theme="dark"] .theme-toggle-thumb {
+    transform: translateX(22px);
+}
+
+:root[data-theme="dark"] .theme-toggle-thumb .theme-toggle-icon-light {
+    display: none;
+}
+
+:root[data-theme="dark"] .theme-toggle-thumb .theme-toggle-icon-dark {
+    display: inline;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .theme-toggle-thumb {
+        transform: translateX(22px);
+    }
+
+    :root:not([data-theme="light"]) .theme-toggle-thumb .theme-toggle-icon-light {
+        display: none;
+    }
+
+    :root:not([data-theme="light"]) .theme-toggle-thumb .theme-toggle-icon-dark {
+        display: inline;
+    }
 }
