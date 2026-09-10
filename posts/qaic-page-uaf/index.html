@@ -68,59 +68,12 @@
 </head>
 
 <body class="article-page">
-  <nav class="navbar navbar-dark bg-dark navbar-expand-md fixed-top" id="navbar">
-  <a class="navbar-brand" href="../../index.html">Lukas Maar</a>
-  <div class="navbar-controls">
-    <button type="button" class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode" title="Toggle dark mode">
-      <span class="theme-toggle-thumb">
-        <i class="fa fa-sun-o theme-toggle-icon-light"></i>
-        <i class="fa fa-moon-o theme-toggle-icon-dark"></i>
-      </span>
-    </button>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-  </div>
-
-  <div class="collapse navbar-collapse nav-pills" id="navbar-collapse">
-    <ul class="navbar-nav ml-auto">
-      <li class="nav-item topbar-item"><a class="nav-link" href="../../index.html#about_me">About Me</a></li>
-      <li class="nav-item dropdown topbar-item">
-        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Blog</a>
-        <div class="dropdown-menu">
-          <a class="dropdown-item" href="../../index.html#blog2026">2026: 3</a>
-        </div>
-      </li>
-      <li class="nav-item dropdown topbar-item">
-        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Publications</a>
-        <div class="dropdown-menu">
-          <a class="dropdown-item" href="../../index.html#publications2026">2026: 4</a>
-          <a class="dropdown-item" href="../../index.html#publications2025">2025: 7</a>
-          <a class="dropdown-item" href="../../index.html#publications2024">2024: 5</a>
-          <a class="dropdown-item" href="../../index.html#publications2023">2023: 1</a>
-        </div>
-      </li>
-      <li class="nav-item dropdown topbar-item">
-        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Talks</a>
-        <div class="dropdown-menu">
-          <a class="dropdown-item" href="../../index.html#talks2026">2026: 4</a>
-          <a class="dropdown-item" href="../../index.html#talks2025">2025: 8</a>
-          <a class="dropdown-item" href="../../index.html#talks2024">2024: 4</a>
-          <a class="dropdown-item" href="../../index.html#talks2023">2023: 1</a>
-        </div>
-      </li>
-      <li class="nav-item dropdown topbar-item">
-        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Awards and CVEs</a>
-        <div class="dropdown-menu">
-          <a class="dropdown-item" href="../../index.html#awards2026">2026: 5</a>
-          <a class="dropdown-item" href="../../index.html#awards2025">2025: 13</a>
-          <a class="dropdown-item" href="../../index.html#awards2024">2024: 1</a>
-          <a class="dropdown-item" href="../../index.html#awards2023">2023: 1</a>
-        </div>
-      </li>
-    </ul>
-  </div>
-</nav>
+  <button type="button" class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode" title="Toggle dark mode">
+  <span class="theme-toggle-thumb">
+    <i class="fa fa-sun-o theme-toggle-icon-light"></i>
+    <i class="fa fa-moon-o theme-toggle-icon-dark"></i>
+  </span>
+</button>
 
 <script>
   function toggleTheme() {
@@ -131,7 +84,9 @@
   }
 </script>
 
+
   <main class="article-shell">
+    <a class="back-link" href="../../index.html"><i class="fa fa-arrow-left"></i> Lukas Maar</a>
     <article class="article-frame">
       <div class="article-kicker">Security Blog</div>
       <h1 class="article-title">Privilege Escalation via a Page Use-After-Free in Qualcomm's AI Accelerator Linux Kernel Driver</h1>

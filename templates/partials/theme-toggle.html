@@ -1,0 +1,15 @@
+<button type="button" class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode" title="Toggle dark mode">
+  <span class="theme-toggle-thumb">
+    <i class="fa fa-sun-o theme-toggle-icon-light"></i>
+    <i class="fa fa-moon-o theme-toggle-icon-dark"></i>
+  </span>
+</button>
+
+<script>
+  function toggleTheme() {
+    var root = document.documentElement;
+    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('theme', next); } catch (e) {}
+  }
+</script>

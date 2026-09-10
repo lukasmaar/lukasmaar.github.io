@@ -68,9 +68,10 @@
 </head>
 
 <body class="article-page">
-  {{TOPBAR}}
+  {{INCLUDE:templates/partials/theme-toggle.html}}
 
   <main class="article-shell">
+    <a class="back-link" href="{{INDEX_PREFIX}}index.html"><i class="fa fa-arrow-left"></i> Lukas Maar</a>
     <article class="article-frame">
       <div class="article-kicker">Security Blog</div>
       <h1 class="article-title">Privilege Escalation via a Page Use-After-Free in Qualcomm's AI Accelerator Linux Kernel Driver</h1>

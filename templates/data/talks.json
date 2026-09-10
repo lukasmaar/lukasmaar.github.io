@@ -1,13 +1,6 @@
 [
   {
     "year": 2026,
-    "title": "Full Root: Kernel-Driver Page UAF and Confused-Deputy Vuln in Samsungs DualDAR Subsystem",
-    "href": "",
-    "authors": "<b>Lukas Maar</b>",
-    "venue": "Hexacon 2026"
-  },
-  {
-    "year": 2026,
     "title": "DMA-After-Free: Exploiting a Stale IOMMU TLB for Privilege Escalation on Qualcomm-Based Mobile Devices",
     "href": "",
     "authors": "<b>Lukas Maar</b>",
@@ -15,8 +8,15 @@
   },
   {
     "year": 2026,
-    "title": "Privilege Escalation via a Page Use-After-Free in Qualcomm's AI Accelerator Linux Kernel Driver",
+    "title": "Full Root: Kernel-Driver Page UAF and Confused-Deputy Vuln in Samsungs DualDAR Subsystem",
     "href": "",
+    "authors": "<b>Lukas Maar</b>",
+    "venue": "Hexacon 2026"
+  },
+  {
+    "year": 2026,
+    "title": "Privilege Escalation via a Page Use-After-Free in Qualcomm's AI Accelerator Linux Kernel Driver",
+    "href": "slides/prasec26-qaic-page-uaf.pdf",
     "authors": "<b>Lukas Maar</b>",
     "venue": "PraSec 2026"
   },

@@ -4,9 +4,6 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 DATA_DIR="$ROOT_DIR/templates/data"
 PARTIALS_DIR="$ROOT_DIR/templates/partials/index"
-TOPBAR_TEMPLATE="$ROOT_DIR/templates/partials/topbar.html"
-TOPBAR_ASSEMBLED="$PARTIALS_DIR/topbar-assembled.html"
-TOPBAR_YEARS_RENDERER="$ROOT_DIR/templates/scripts/render_topbar_years.pl"
 TALKS_DATA="$ROOT_DIR/templates/data/talks.json"
 TALKS_PARTIAL="$ROOT_DIR/templates/partials/index/talks-section.html"
 TALKS_RENDERER="$ROOT_DIR/templates/scripts/render_talks.pl"
@@ -90,30 +87,13 @@ render_notable_mentions_partial() {
   "$NOTABLE_RENDERER" "$NOTABLE_DATA" "$NOTABLE_PARTIAL"
 }
 
-render_topbar() {
-  # Generate per-section year dropdown items from JSON, then assemble
-  # topbar.html with those includes expanded (still containing {{INDEX_PREFIX}}).
-  "$TOPBAR_YEARS_RENDERER" "$DATA_DIR" "$PARTIALS_DIR"
-  ROOT_DIR="$ROOT_DIR" perl -0777 -pe '
-    s#\{\{INCLUDE:([^}]+)\}\}#do {
-      my $path = $ENV{ROOT_DIR} . "/" . $1;
-      open(my $fh, "<", $path) or die "Build failed: cannot open include $1\n";
-      local $/;
-      <$fh>;
-    }#ge
-  ' "$TOPBAR_TEMPLATE" > "$TOPBAR_ASSEMBLED"
-}
-
 render_page() {
   local src="$1"
   local dst="$2"
   local prefix="$3"
-  local topbar
-
-  topbar="$(sed "s|{{INDEX_PREFIX}}|$prefix|g" "$TOPBAR_ASSEMBLED")"
 
   mkdir -p "$(dirname "$ROOT_DIR/$dst")"
-  TOPBAR="$topbar" perl -0777 -pe 's/\{\{TOPBAR\}\}/$ENV{TOPBAR}/g' "$ROOT_DIR/$src" > "$ROOT_DIR/$dst"
+  sed "s|{{INDEX_PREFIX}}|$prefix|g" "$ROOT_DIR/$src" > "$ROOT_DIR/$dst"
 }
 
 index_prefix_for_post() {
@@ -200,10 +180,10 @@ sync_legacy_papers_dir() {
   done
 }
 
-check_topbar_placeholder() {
+check_index_prefix_placeholder() {
   local file="$1"
-  if grep -q "{{TOPBAR}}" "$ROOT_DIR/$file"; then
-    echo "Build failed: unreplaced {{TOPBAR}} placeholder in $file" >&2
+  if grep -q "{{INDEX_PREFIX}}" "$ROOT_DIR/$file"; then
+    echo "Build failed: unreplaced {{INDEX_PREFIX}} placeholder in $file" >&2
     exit 1
   fi
 }
@@ -255,7 +235,6 @@ render_awards_partial
 render_publications_partial
 render_blog_partial
 render_notable_mentions_partial
-render_topbar
 compile_post_tex_pdfs
 copy_post_assets
 sync_legacy_papers_dir
@@ -264,29 +243,26 @@ render_page "templates/index.html" "index.html" ""
 declare -a rendered_posts=()
 render_posts
 
-expand_includes "index.html"
-for post_file in "${rendered_posts[@]}"; do
-  expand_includes "$post_file"
+all_files=(index.html "${rendered_posts[@]}")
+
+for f in "${all_files[@]}"; do
+  expand_includes "$f"
 done
 
-apply_last_updated "index.html"
-for post_file in "${rendered_posts[@]}"; do
-  apply_last_updated "$post_file"
+for f in "${all_files[@]}"; do
+  apply_last_updated "$f"
 done
 
-check_topbar_placeholder "index.html"
-for post_file in "${rendered_posts[@]}"; do
-  check_topbar_placeholder "$post_file"
+for f in "${all_files[@]}"; do
+  check_index_prefix_placeholder "$f"
 done
 
-check_include_placeholders "index.html"
-for post_file in "${rendered_posts[@]}"; do
-  check_include_placeholders "$post_file"
+for f in "${all_files[@]}"; do
+  check_include_placeholders "$f"
 done
 
-check_last_updated_placeholder "index.html"
-for post_file in "${rendered_posts[@]}"; do
-  check_last_updated_placeholder "$post_file"
+for f in "${all_files[@]}"; do
+  check_last_updated_placeholder "$f"
 done
 
 echo "Build complete"

@@ -57,12 +57,11 @@
   <title>Lukas Maar</title>
 </head>
 
-<body class="home-page" data-spy="scroll" data-target="#navbar" data-offset="0">
-  {{TOPBAR}}
+<body class="home-page">
+  {{INCLUDE:templates/partials/theme-toggle.html}}
 
   <div class="container">
     <!-- About Me -->
-    <div class="link-target" id="about_me"></div>
     <div class="row">
       <div class="col-md-1"></div>
       <div class="col-md-10">
@@ -148,81 +147,64 @@
 
     {{INCLUDE:templates/partials/index/notable-mentions-section.html}}
 
-    <div id="blog" class="row">
-      <div class="col-md-1">
-      </div>
+    <div class="row">
+      <div class="col-md-1"></div>
       <div class="col-md-10">
         <hr>
-        <h3>
-          <i class="fa fa-edit">
-          </i>
-          Blog
-        </h3>
       </div>
-      <div class="col-md-1">
-      </div>
+      <div class="col-md-1"></div>
     </div>
 
-    {{INCLUDE:templates/partials/index/blog-section.html}}
-
-    <div id="publications" class="row">
-      <div class="col-md-1">
-      </div>
+    <div class="row">
+      <div class="col-md-1"></div>
       <div class="col-md-10">
-        <hr>
-        <h3>
-          <i class="fa fa-file">
-          </i>
-          Publications
-        </h3>
+        <div class="tab-bar" role="tablist">
+          <button type="button" class="tab-btn active" data-tab="blog" onclick="showTab('blog')"><i class="fa fa-edit"></i> Blog</button>
+          <button type="button" class="tab-btn" data-tab="publications" onclick="showTab('publications')"><i class="fa fa-file"></i> Publications</button>
+          <button type="button" class="tab-btn" data-tab="talks" onclick="showTab('talks')"><i class="fa fa-television"></i> Talks</button>
+          <button type="button" class="tab-btn" data-tab="awards" onclick="showTab('awards')"><i class="fa fa-trophy"></i> Awards and CVEs</button>
+        </div>
       </div>
-      <div class="col-md-1">
-      </div>
+      <div class="col-md-1"></div>
     </div>
 
-    {{INCLUDE:templates/partials/index/publications-section.html}}
-
-    <div id="talks" class="row">
-      <div class="col-md-1">
-      </div>
-      <div class="col-md-10">
-        <hr>
-        <h3>
-          <i class="fa fa-television">
-          </i>
-          Talks
-        </h3>
-      </div>
-      <div class="col-md-1">
-      </div>
+    <div class="tab-pane" data-tab="blog">
+      {{INCLUDE:templates/partials/index/blog-section.html}}
+    </div>
+    <div class="tab-pane" data-tab="publications" hidden>
+      {{INCLUDE:templates/partials/index/publications-section.html}}
+    </div>
+    <div class="tab-pane" data-tab="talks" hidden>
+      {{INCLUDE:templates/partials/index/talks-section.html}}
+    </div>
+    <div class="tab-pane" data-tab="awards" hidden>
+      {{INCLUDE:templates/partials/index/awards-section.html}}
     </div>
 
-    {{INCLUDE:templates/partials/index/talks-section.html}}
-
-    <div id="awards" class="row">
-      <div class="col-md-1">
-      </div>
-      <div class="col-md-10">
-        <hr>
-        <h3>
-          <i class="fa fa-trophy">
-          </i>
-          Awards and CVEs
-        </h3>
-      </div>
-      <div class="col-md-1">
-      </div>
-    </div>
-
-    {{INCLUDE:templates/partials/index/awards-section.html}}
+    <script>
+      function showTab(name) {
+        document.querySelectorAll('.tab-pane').forEach(function (el) {
+          el.hidden = el.getAttribute('data-tab') !== name;
+        });
+        document.querySelectorAll('.tab-btn').forEach(function (el) {
+          el.classList.toggle('active', el.getAttribute('data-tab') === name);
+        });
+        try { localStorage.setItem('activeTab', name); } catch (e) {}
+      }
+      (function () {
+        var valid = ['blog', 'publications', 'talks', 'awards'];
+        var hash = location.hash.replace('#', '');
+        var stored = null;
+        try { stored = localStorage.getItem('activeTab'); } catch (e) {}
+        var initial = valid.indexOf(hash) !== -1 ? hash : (valid.indexOf(stored) !== -1 ? stored : 'blog');
+        showTab(initial);
+      })();
+    </script>
 
     <footer>
       <p>&copy; 2026 Lukas Maar.
         <small>
-          Last updated: {{LAST_UPDATED}}. Template by
-          <a class="title" href="https://andreaskogler.com/">Andreas Kogler</a> <span
-            class="footer-arrow">&#10230;</span> <a class="title" href="https://fabianrauscher.com/">Fabian
-            Rauscher</a> <span class="footer-arrow">&#10230;</span> <a class="title" href="#">Lukas Maar</a>
+          Last updated: {{LAST_UPDATED}}.
         </small>
       </p>
     </footer>
@@ -236,64 +218,9 @@
     </div>
   </div>
 
-  <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="infoModalTitle">Info</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body" id="infoModalContent"></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal fade" id="bibtexModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">BibTeX</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <pre id="bibtexModalContent" class="pre-wrap"></pre>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-dark" onclick="copyBibtex(this)"><i class="fa fa-clipboard"></i> Copy</button>
-        </div>
-      </div>
-    </div>
-  </div>
+  {{INCLUDE:templates/partials/modals.html}}
 </body>
 
-<script>
-  function showInfo(id, title) {
-    var src = document.getElementById(id);
-    if (!src) return;
-    document.getElementById('infoModalTitle').textContent = title || 'Info';
-    document.getElementById('infoModalContent').innerHTML = src.innerHTML;
-    $('#infoModal').modal('show');
-  }
-
-  function showBibtex(id) {
-    var src = document.getElementById(id);
-    if (!src) return;
-    document.getElementById('bibtexModalContent').textContent = src.textContent.replace(/^\n+|\n+$/g, '');
-    $('#bibtexModal').modal('show');
-  }
-
-  function copyBibtex(btn) {
-    var text = document.getElementById('bibtexModalContent').textContent;
-    navigator.clipboard.writeText(text).then(function () {
-      var old = btn.innerHTML;
-      btn.innerHTML = '<i class="fa fa-check"></i> Copied!';
-      setTimeout(function () { btn.innerHTML = old; }, 1200);
-    });
-  }
-</script>
+{{INCLUDE:templates/partials/scripts.html}}
 
 </html>

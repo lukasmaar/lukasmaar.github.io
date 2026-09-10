@@ -1,0 +1,25 @@
+<script>
+  function showInfo(id, title) {
+    var src = document.getElementById(id);
+    if (!src) return;
+    document.getElementById('infoModalTitle').textContent = title || 'Info';
+    document.getElementById('infoModalContent').innerHTML = src.innerHTML;
+    $('#infoModal').modal('show');
+  }
+
+  function showBibtex(id) {
+    var src = document.getElementById(id);
+    if (!src) return;
+    document.getElementById('bibtexModalContent').textContent = src.textContent.replace(/^\n+|\n+$/g, '');
+    $('#bibtexModal').modal('show');
+  }
+
+  function copyBibtex(btn) {
+    var text = document.getElementById('bibtexModalContent').textContent;
+    navigator.clipboard.writeText(text).then(function () {
+      var old = btn.innerHTML;
+      btn.innerHTML = '<i class="fa fa-check"></i> Copied!';
+      setTimeout(function () { btn.innerHTML = old; }, 1200);
+    });
+  }
+</script>

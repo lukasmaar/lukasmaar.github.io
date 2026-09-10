@@ -57,60 +57,13 @@
   <title>Lukas Maar</title>
 </head>
 
-<body class="home-page" data-spy="scroll" data-target="#navbar" data-offset="0">
-  <nav class="navbar navbar-dark bg-dark navbar-expand-md fixed-top" id="navbar">
-  <a class="navbar-brand" href="index.html">Lukas Maar</a>
-  <div class="navbar-controls">
-    <button type="button" class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode" title="Toggle dark mode">
-      <span class="theme-toggle-thumb">
-        <i class="fa fa-sun-o theme-toggle-icon-light"></i>
-        <i class="fa fa-moon-o theme-toggle-icon-dark"></i>
-      </span>
-    </button>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-  </div>
-
-  <div class="collapse navbar-collapse nav-pills" id="navbar-collapse">
-    <ul class="navbar-nav ml-auto">
-      <li class="nav-item topbar-item"><a class="nav-link" href="index.html#about_me">About Me</a></li>
-      <li class="nav-item dropdown topbar-item">
-        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Blog</a>
-        <div class="dropdown-menu">
-          <a class="dropdown-item" href="index.html#blog2026">2026: 3</a>
-        </div>
-      </li>
-      <li class="nav-item dropdown topbar-item">
-        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Publications</a>
-        <div class="dropdown-menu">
-          <a class="dropdown-item" href="index.html#publications2026">2026: 4</a>
-          <a class="dropdown-item" href="index.html#publications2025">2025: 7</a>
-          <a class="dropdown-item" href="index.html#publications2024">2024: 5</a>
-          <a class="dropdown-item" href="index.html#publications2023">2023: 1</a>
-        </div>
-      </li>
-      <li class="nav-item dropdown topbar-item">
-        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Talks</a>
-        <div class="dropdown-menu">
-          <a class="dropdown-item" href="index.html#talks2026">2026: 4</a>
-          <a class="dropdown-item" href="index.html#talks2025">2025: 8</a>
-          <a class="dropdown-item" href="index.html#talks2024">2024: 4</a>
-          <a class="dropdown-item" href="index.html#talks2023">2023: 1</a>
-        </div>
-      </li>
-      <li class="nav-item dropdown topbar-item">
-        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Awards and CVEs</a>
-        <div class="dropdown-menu">
-          <a class="dropdown-item" href="index.html#awards2026">2026: 5</a>
-          <a class="dropdown-item" href="index.html#awards2025">2025: 13</a>
-          <a class="dropdown-item" href="index.html#awards2024">2024: 1</a>
-          <a class="dropdown-item" href="index.html#awards2023">2023: 1</a>
-        </div>
-      </li>
-    </ul>
-  </div>
-</nav>
+<body class="home-page">
+  <button type="button" class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode" title="Toggle dark mode">
+  <span class="theme-toggle-thumb">
+    <i class="fa fa-sun-o theme-toggle-icon-light"></i>
+    <i class="fa fa-moon-o theme-toggle-icon-dark"></i>
+  </span>
+</button>
 
 <script>
   function toggleTheme() {
@@ -121,9 +74,9 @@
   }
 </script>
 
+
   <div class="container">
     <!-- About Me -->
-    <div class="link-target" id="about_me"></div>
     <div class="row">
       <div class="col-md-1"></div>
       <div class="col-md-10">
@@ -234,22 +187,29 @@
     </div>
 
 
-    <div id="blog" class="row">
-      <div class="col-md-1">
-      </div>
+    <div class="row">
+      <div class="col-md-1"></div>
       <div class="col-md-10">
         <hr>
-        <h3>
-          <i class="fa fa-edit">
-          </i>
-          Blog
-        </h3>
       </div>
-      <div class="col-md-1">
-      </div>
+      <div class="col-md-1"></div>
     </div>
 
-        <div class="row">
+    <div class="row">
+      <div class="col-md-1"></div>
+      <div class="col-md-10">
+        <div class="tab-bar" role="tablist">
+          <button type="button" class="tab-btn active" data-tab="blog" onclick="showTab('blog')"><i class="fa fa-edit"></i> Blog</button>
+          <button type="button" class="tab-btn" data-tab="publications" onclick="showTab('publications')"><i class="fa fa-file"></i> Publications</button>
+          <button type="button" class="tab-btn" data-tab="talks" onclick="showTab('talks')"><i class="fa fa-television"></i> Talks</button>
+          <button type="button" class="tab-btn" data-tab="awards" onclick="showTab('awards')"><i class="fa fa-trophy"></i> Awards and CVEs</button>
+        </div>
+      </div>
+      <div class="col-md-1"></div>
+    </div>
+
+    <div class="tab-pane" data-tab="blog">
+          <div class="row">
       <div class="col-md-1">
       </div>
       <div class="col-md-10">
@@ -282,6 +242,10 @@
                 <br>
                 <small>
                   <b>Lukas Maar</b>
+                  <br>
+                  <span class="text-muted">
+                    <i class="fa fa-bug text-black"></i> CVE-2026-21102
+                  </span>
                   <br>
                   <span class="sbtn" onclick="showInfo('info:OEMpocalypse', 'OEMpocalypse Now: A Generic Exploitation Strategy from Android Untrusted App to Root')"><a href="#0"><i class="fa fa-info-circle"></i>
                       Info</a></span>
@@ -361,23 +325,9 @@
       </div>
     </div>
 
-
-    <div id="publications" class="row">
-      <div class="col-md-1">
-      </div>
-      <div class="col-md-10">
-        <hr>
-        <h3>
-          <i class="fa fa-file">
-          </i>
-          Publications
-        </h3>
-      </div>
-      <div class="col-md-1">
-      </div>
     </div>
-
-        <div class="row">
+    <div class="tab-pane" data-tab="publications" hidden>
+          <div class="row">
       <div class="col-md-1">
       </div>
       <div class="col-md-10">
@@ -1121,23 +1071,9 @@
       </div>
     </div>
 
-
-    <div id="talks" class="row">
-      <div class="col-md-1">
-      </div>
-      <div class="col-md-10">
-        <hr>
-        <h3>
-          <i class="fa fa-television">
-          </i>
-          Talks
-        </h3>
-      </div>
-      <div class="col-md-1">
-      </div>
     </div>
-
-        <div class="row">
+    <div class="tab-pane" data-tab="talks" hidden>
+          <div class="row">
       <div class="col-md-1">
       </div>
       <div class="col-md-10">
@@ -1153,26 +1089,6 @@
                 </b>
               </div>
               <div class="col-xs-11">
-              </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="timeline-entry">
-              <div class="col-md-1">
-              </div>
-              <div class="col-md-11">
-                <i class="fa fa-television">
-                </i>
-                <a class="title" href="">
-                  Full Root: Kernel-Driver Page UAF and Confused-Deputy Vuln in Samsungs DualDAR Subsystem
-                </a>
-                <br>
-                <small>
-                  <b>Lukas Maar</b>
-                  <br>
-                  Hexacon 2026
-                </small>
               </div>
             </div>
           </div>
@@ -1205,6 +1121,26 @@
                 <i class="fa fa-television">
                 </i>
                 <a class="title" href="">
+                  Full Root: Kernel-Driver Page UAF and Confused-Deputy Vuln in Samsungs DualDAR Subsystem
+                </a>
+                <br>
+                <small>
+                  <b>Lukas Maar</b>
+                  <br>
+                  Hexacon 2026
+                </small>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="timeline-entry">
+              <div class="col-md-1">
+              </div>
+              <div class="col-md-11">
+                <i class="fa fa-television">
+                </i>
+                <a class="title" href="slides/prasec26-qaic-page-uaf.pdf">
                   Privilege Escalation via a Page Use-After-Free in Qualcomm's AI Accelerator Linux Kernel Driver
                 </a>
                 <br>
@@ -1587,23 +1523,9 @@
       </div>
     </div>
 
-
-    <div id="awards" class="row">
-      <div class="col-md-1">
-      </div>
-      <div class="col-md-10">
-        <hr>
-        <h3>
-          <i class="fa fa-trophy">
-          </i>
-          Awards and CVEs
-        </h3>
-      </div>
-      <div class="col-md-1">
-      </div>
     </div>
-
-        <div class="row">
+    <div class="tab-pane" data-tab="awards" hidden>
+          <div class="row">
       <div class="col-md-1">
       </div>
       <div class="col-md-10">
@@ -1631,13 +1553,27 @@
                 <i class="fa fa-bug">
                 </i>
                 <a class="title">
-                  </a>
+                  CVE-2026-21102</a>
                 <br>
                 <small>
                   <span class="sbtn text-muted">
                     Full Root: Kernel-Driver Page UAF and Confused-Deputy Vuln in Samsungs DualDAR Subsystem
                   </span>
                 </small>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="timeline-entry">
+              <div class="col-md-1">
+              </div>
+              <div class="col-md-11">
+                <i class="fa fa-bug">
+                </i>
+                <a class="title">
+                  CVE-2026-21101</a>
+                <br>
               </div>
             </div>
           </div>
@@ -1896,14 +1832,32 @@
       </div>
     </div>
 
+    </div>
+
+    <script>
+      function showTab(name) {
+        document.querySelectorAll('.tab-pane').forEach(function (el) {
+          el.hidden = el.getAttribute('data-tab') !== name;
+        });
+        document.querySelectorAll('.tab-btn').forEach(function (el) {
+          el.classList.toggle('active', el.getAttribute('data-tab') === name);
+        });
+        try { localStorage.setItem('activeTab', name); } catch (e) {}
+      }
+      (function () {
+        var valid = ['blog', 'publications', 'talks', 'awards'];
+        var hash = location.hash.replace('#', '');
+        var stored = null;
+        try { stored = localStorage.getItem('activeTab'); } catch (e) {}
+        var initial = valid.indexOf(hash) !== -1 ? hash : (valid.indexOf(stored) !== -1 ? stored : 'blog');
+        showTab(initial);
+      })();
+    </script>
 
     <footer>
       <p>&copy; 2026 Lukas Maar.
         <small>
-          Last updated: 04.09.2026. Template by
-          <a class="title" href="https://andreaskogler.com/">Andreas Kogler</a> <span
-            class="footer-arrow">&#10230;</span> <a class="title" href="https://fabianrauscher.com/">Fabian
-            Rauscher</a> <span class="footer-arrow">&#10230;</span> <a class="title" href="#">Lukas Maar</a>
+          Last updated: 08.09.2026.
         </small>
       </p>
     </footer>
@@ -1917,7 +1871,7 @@
     </div>
   </div>
 
-  <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -1949,6 +1903,7 @@
       </div>
     </div>
   </div>
+
 </body>
 
 <script>
@@ -1976,5 +1931,6 @@
     });
   }
 </script>
+
 
 </html>

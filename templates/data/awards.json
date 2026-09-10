@@ -3,9 +3,16 @@
     "year": 2026,
     "icon": "fa-bug",
     "items": [
-      {"label": "", "href": ""}
+      {"label": "CVE-2026-21102", "href": ""}
     ],
     "note": "Full Root: Kernel-Driver Page UAF and Confused-Deputy Vuln in Samsungs DualDAR Subsystem"
+  },
+  {
+    "year": 2026,
+    "icon": "fa-bug",
+    "items": [
+      {"label": "CVE-2026-21101", "href": ""}
+    ]
   },
   {
     "year": 2026,

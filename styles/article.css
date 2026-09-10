@@ -14,8 +14,32 @@ body.article-page {
 
 body.article-page .article-shell {
     max-width: 1020px;
-    margin: 2.5rem auto 4rem;
+    margin: 1.1rem auto 4rem;
     padding: 0 1rem;
+}
+
+body.article-page .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-bottom: 1.2rem;
+    color: var(--article-muted);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+body.article-page .back-link i {
+    font-size: 0.78rem;
+    transition: transform 0.15s ease;
+}
+
+body.article-page .back-link:hover {
+    color: var(--article-ink);
+}
+
+body.article-page .back-link:hover i {
+    transform: translateX(-3px);
 }
 
 body.article-page .article-frame {
@@ -244,11 +268,6 @@ body.article-page .ref-list {
 body.article-page .ref-list li {
     margin-bottom: 0.55rem;
     margin-left: 0;
-}
-
-body.article-page .back-link {
-    margin-top: 2rem;
-    font-size: 0.9rem;
 }
 
 body.article-page .toc ul {

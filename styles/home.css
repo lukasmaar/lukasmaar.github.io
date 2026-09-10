@@ -60,11 +60,11 @@ body.home-page .timeline-date {
     margin-bottom: 15px;
 }
 
-/* Notable Mentions: dark inverted feature cards, deliberately distinct from
-   the light timeline cards below so the section reads as "featured". */
+/* Feature cards used by Notable Mentions: a tier brighter than the timeline
+   cards below so the section reads as "featured". */
 body.home-page .highlight-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 18px;
     margin-top: 6px;
     margin-bottom: 10px;
@@ -117,14 +117,46 @@ body.home-page .hl-blurb {
     flex: 1;
 }
 
-body.home-page .link-target {
-    margin-top: -60px;
-    position: absolute;
+/* Activity tab switcher: one section (Blog/Publications/Talks/Awards) shown
+   at a time, so none of them get buried under the others on a long scroll. */
+body.home-page .tab-bar {
+    display: flex;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 20px;
+}
+
+body.home-page .tab-btn {
+    flex: 1;
+    min-width: 140px;
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -1px;
+    padding: 10px 8px;
+    font-size: 1.15rem;
+    color: var(--muted);
+    cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+body.home-page .tab-btn:hover {
+    color: var(--ink);
+}
+
+body.home-page .tab-btn.active {
+    color: var(--ink-strong);
+    border-bottom-color: var(--ink-strong);
+    font-weight: 600;
+}
+
+body.home-page .tab-btn i {
+    margin-right: 6px;
 }
 
 body.home-page .anchor {
     position: absolute;
-    top: -60px;
+    top: 0;
     visibility: hidden;
 }
 
@@ -260,10 +292,6 @@ body.home-page .edu-inst {
     body.home-page .timeline > .row {
         margin-left: 0;
         margin-right: 0;
-    }
-    body.home-page .highlight-grid {
-        grid-template-columns: 1fr;
-        gap: 14px;
     }
     body.home-page .timeline:before {
         left: 55px;
