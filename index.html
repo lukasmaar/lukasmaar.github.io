@@ -169,7 +169,7 @@
             <div class="hl-title">KernelSnitch</div>
             <div class="hl-badge"><i class="fa fa-star"></i> Universal heap KASLR leak</div>
             <div class="hl-blurb">
-              Hardware-agnostic timing side channel on kernel hash tables, yielding a universal heap KASLR leak, including MTE tag recovery. Confirmed on Linux and Android; macOS is also susceptible.
+              Hardware-agnostic timing side channel on kernel hash tables, yielding a universal heap KASLR leak, including MTE tag recovery. Confirmed on Linux and Android; macOS was also susceptible.
             </div>
           </div>
 
@@ -304,7 +304,7 @@
                   <b>Lukas Maar</b>
                   <br>
                   <span class="text-muted">
-                    <i class="fa fa-bolt text-black"></i> Applied: Android 17 root (IonStack)
+                    <i class="fa fa-bolt text-black"></i> Applied: Android 17 root (IonStack), MacOS (CVE-2026-43754)
                   </span>
                   <br>
                   <span class="sbtn" onclick="showInfo('info:HeapKASLRLeak', 'From KernelSnitch to Practical msg_msg/pipe_buffer Heap KASLR Leaks')"><a href="#0"><i class="fa fa-info-circle"></i>
@@ -313,6 +313,8 @@
                       GitHub</a></span>
                   <span class="sbtn"><a href="https://nebusec.ai/research/ionstack-part-3/"><i class="fa fa-external-link"></i>
                       IonStack</a></span>
+                  <span class="sbtn"><a href="https://support.apple.com/en-us/128067"><i class="fa fa-apple"></i>
+                      MacOS</a></span>
                 </small>
                 <div id="info:HeapKASLRLeak" class="is-hidden">
                   <ul><li><b>Portable Core Leak:</b> KernelSnitch is a software-only timing side channel that leaks <code>mm_struct</code>-backed page locations without relying on a memory-safety bug, with its POC having a near-100% success rate.</li><li><b>Practical pivot:</b> Combined with cross-cache reuse, this core yields practical <code>msg_msg</code>/<code>pipe_buffer</code> heap KASLR leaks: above 98% on desktop kernels and KernelCTF instances, and practical on the Android kernel.</li><li><b>Security implication:</b> This leakage class remains exploitable under MTE because it avoids invalid tagged accesses, and the core leak can also recover the tag of tagged kernel <code>mm_struct</code> addresses.</li></ul>
@@ -387,6 +389,44 @@
               <div class="col-md-11">
                 <i class="fa fa-file">
                 </i>
+                <a class="title" href="https://floriandraschbacher.com/papers/esorics26-clone2pwn.pdf">
+                  Clone2Pwn: A Systematic Security Analysis of Data Migration Tools in the Android Ecosystem
+                </a>
+                <br>
+                <small>
+                  Florian Draschbacher, <b>Lukas Maar</b>, Lorenz Schumm, Rene Denifl, Lukas Treffner, Stefan Mangard
+                  <br>
+                  European Symposium on Research in Computer Security (ESORICS) 2026
+                  <br>
+                  <span class="text-muted">
+                    <i class="fa fa-bug text-black"></i> CVE-2025-15515, CVE-2025-21060, CVE-2025-21061, CVE-2025-21062, CVE-2025-21064, CVE-2025-21078, CVE-2025-27387
+                  </span>
+                  <br>
+                  <span class="sbtn" onclick="showInfo('info:Clone2Pwn', 'Clone2Pwn: A Systematic Security Analysis of Data Migration Tools in the Android Ecosystem')"><a href="#0"><i class="fa fa-info-circle"></i>
+                      Info</a></span>
+                  <span class="sbtn" onclick="showBibtex('bibtex:Clone2Pwn')"><a href="#0"><i class="fa fa-quote-left"></i>
+                      BibTex</a></span>
+                </small>
+                <div id="info:Clone2Pwn" class="is-hidden">
+                  In this paper, we systematically analyze the security of data migration tools from seven major Android vendors. We uncover severe vulnerabilities in all tested tools, allowing nearby attackers to eavesdrop sensitive user data during device migration. Moreover, five tools allow attackers to inject data, enabling code execution.
+                </div>
+                <pre id="bibtex:Clone2Pwn" class="is-hidden">@inproceedings{Draschbacher2026Clone2Pwn,
+  author = {Florian Draschbacher and Lukas Maar and Lorenz Schumm and Rene Denifl and Lukas Treffner and Stefan Mangard},
+  booktitle = {{ESORICS}},
+  title = {{Clone2Pwn: A Systematic Security Analysis of Data Migration Tools in the Android Ecosystem}},
+  year = {2026}
+}</pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="timeline-entry">
+              <div class="col-md-1">
+              </div>
+              <div class="col-md-11">
+                <i class="fa fa-file">
+                </i>
                 <a class="title" href="https://ls.ecomaikgolf.com/papers/fence2pwn-usenix.pdf">
                   Fence2Pwn: KFENCE-Enabled Kernel Exploitation Bypassing Slab Hardening and Memory Tagging
                 </a>
@@ -414,39 +454,6 @@
   author = {Ernesto Martinez Garcia and Lukas Maar and Martin Unterguggenberger and Stefan Mangard},
   booktitle = {{USENIX Security}},
   title = {{Fence2Pwn: KFENCE-Enabled Kernel Exploitation Bypassing Slab Hardening and Memory Tagging}},
-  year = {2026}
-}</pre>
-              </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="timeline-entry">
-              <div class="col-md-1">
-              </div>
-              <div class="col-md-11">
-                <i class="fa fa-file">
-                </i>
-                <a class="title" href="#">
-                  Clone2Pwn: A Systematic Security Analysis of Data Migration Tools in the Android Ecosystem
-                </a>
-                <br>
-                <small>
-                  Florian Draschbacher, <b>Lukas Maar</b>, Lorenz Schumm, Rene Denifl, Lukas Treffner, Stefan Mangard
-                  <br>
-                  European Symposium on Research in Computer Security (ESORICS) 2026
-                  <br>
-                  <span class="text-muted">
-                    <i class="fa fa-bug text-black"></i> CVE-2025-15515, CVE-2025-21060, CVE-2025-21061, CVE-2025-21062, CVE-2025-21064, CVE-2025-21078, CVE-2025-27387
-                  </span>
-                  <br>
-                  <span class="sbtn" onclick="showBibtex('bibtex:Clone2Pwn')"><a href="#0"><i class="fa fa-quote-left"></i>
-                      BibTex</a></span>
-                </small>
-                <pre id="bibtex:Clone2Pwn" class="is-hidden">@inproceedings{Draschbacher2026Clone2Pwn,
-  author = {Florian Draschbacher and Lukas Maar and Lorenz Schumm and Rene Denifl and Lukas Treffner and Stefan Mangard},
-  booktitle = {{ESORICS}},
-  title = {{Clone2Pwn: A Systematic Security Analysis of Data Migration Tools in the Android Ecosystem}},
   year = {2026}
 }</pre>
               </div>
@@ -1552,7 +1559,7 @@
               <div class="col-md-11">
                 <i class="fa fa-bug">
                 </i>
-                <a class="title">
+                <a class="title" href="https://nvd.nist.gov/vuln/detail/cve-2026-21102">
                   CVE-2026-21102</a>
                 <br>
                 <small>
@@ -1571,7 +1578,7 @@
               <div class="col-md-11">
                 <i class="fa fa-bug">
                 </i>
-                <a class="title">
+                <a class="title" href="https://nvd.nist.gov/vuln/detail/cve-2026-21101">
                   CVE-2026-21101</a>
                 <br>
               </div>
@@ -1857,7 +1864,7 @@
     <footer>
       <p>&copy; 2026 Lukas Maar.
         <small>
-          Last updated: 08.09.2026.
+          Last updated: 21.09.2026.
         </small>
       </p>
     </footer>

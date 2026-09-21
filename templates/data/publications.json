@@ -16,6 +16,21 @@
   },
   {
     "year": 2026,
+    "href": "https://floriandraschbacher.com/papers/esorics26-clone2pwn.pdf",
+    "title": "Clone2Pwn: A Systematic Security Analysis of Data Migration Tools in the Android Ecosystem",
+    "authors": "Florian Draschbacher, <b>Lukas Maar</b>, Lorenz Schumm, Rene Denifl, Lukas Treffner, Stefan Mangard",
+    "venue": "European Symposium on Research in Computer Security (ESORICS) 2026",
+    "id": "Clone2Pwn",
+    "badges": {
+      "cves": [
+        "CVE-2025-15515, CVE-2025-21060, CVE-2025-21061, CVE-2025-21062, CVE-2025-21064, CVE-2025-21078, CVE-2025-27387"
+      ]
+    },
+    "bibtex": "@inproceedings{Draschbacher2026Clone2Pwn,\n  author = {Florian Draschbacher and Lukas Maar and Lorenz Schumm and Rene Denifl and Lukas Treffner and Stefan Mangard},\n  booktitle = {{ESORICS}},\n  title = {{Clone2Pwn: A Systematic Security Analysis of Data Migration Tools in the Android Ecosystem}},\n  year = {2026}\n}",
+    "info": "In this paper, we systematically analyze the security of data migration tools from seven major Android vendors. We uncover severe vulnerabilities in all tested tools, allowing nearby attackers to eavesdrop sensitive user data during device migration. Moreover, five tools allow attackers to inject data, enabling code execution."
+  },
+  {
+    "year": 2026,
     "href": "https://ls.ecomaikgolf.com/papers/fence2pwn-usenix.pdf",
     "title": "Fence2Pwn: KFENCE-Enabled Kernel Exploitation Bypassing Slab Hardening and Memory Tagging",
     "authors": "Ernesto Martínez García, <b>Lukas Maar</b>, Martin Unterguggenberger, Stefan Mangard",
@@ -31,20 +46,6 @@
     },
     "bibtex": "@inproceedings{Garcia2026Fence2Pwn,\n  author = {Ernesto Martinez Garcia and Lukas Maar and Martin Unterguggenberger and Stefan Mangard},\n  booktitle = {{USENIX Security}},\n  title = {{Fence2Pwn: KFENCE-Enabled Kernel Exploitation Bypassing Slab Hardening and Memory Tagging}},\n  year = {2026}\n}",
     "info": "In this paper, we present Fence2Pwn, which abuses Linux's memory-safety detector, KFENCE, to bypass state-of-the-art slab defenses. It uses a timing side channel to detect KFENCE fallback allocations and exploits their exemption from slab segregation and memory tagging to turn a UAF into cross-type, cross-size object overlay on production kernels."
-  },
-  {
-    "year": 2026,
-    "href": "#",
-    "title": "Clone2Pwn: A Systematic Security Analysis of Data Migration Tools in the Android Ecosystem",
-    "authors": "Florian Draschbacher, <b>Lukas Maar</b>, Lorenz Schumm, Rene Denifl, Lukas Treffner, Stefan Mangard",
-    "venue": "European Symposium on Research in Computer Security (ESORICS) 2026",
-    "id": "Clone2Pwn",
-    "badges": {
-      "cves": [
-        "CVE-2025-15515, CVE-2025-21060, CVE-2025-21061, CVE-2025-21062, CVE-2025-21064, CVE-2025-21078, CVE-2025-27387"
-      ]
-    },
-    "bibtex": "@inproceedings{Draschbacher2026Clone2Pwn,\n  author = {Florian Draschbacher and Lukas Maar and Lorenz Schumm and Rene Denifl and Lukas Treffner and Stefan Mangard},\n  booktitle = {{ESORICS}},\n  title = {{Clone2Pwn: A Systematic Security Analysis of Data Migration Tools in the Android Ecosystem}},\n  year = {2026}\n}"
   },
   {
     "year": 2026,
