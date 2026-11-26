@@ -2,16 +2,30 @@
   {
     "year": 2026,
     "title": "DMA-After-Free: Exploiting a Stale IOMMU TLB for Privilege Escalation on Qualcomm-Based Mobile Devices",
-    "href": "",
+    "href": "https://calif.io/research/slides/2026/nullcon-berlin-dma-after-free.pdf",
     "authors": "<b>Lukas Maar</b>",
-    "venue": "Nullcon Berlin 2026"
+    "venue": "Nullcon Berlin 2026",
+    "links": [
+      {
+        "href": "https://nullcon.net/talk/dma-after-free-exploiting-a-stale-iommu-tlb-for-privilege-escalation-on-qualcomm-based-mobile-devices/",
+        "icon": "fa-globe",
+        "label": "Website"
+      }
+    ]
   },
   {
     "year": 2026,
     "title": "Full Root: Kernel-Driver Page UAF and Confused-Deputy Vuln in Samsungs DualDAR Subsystem",
-    "href": "",
+    "href": "https://calif.io/research/slides/2026/hexacon-full-root-samsung-dualdar.pdf",
     "authors": "<b>Lukas Maar</b>",
-    "venue": "Hexacon 2026"
+    "venue": "Hexacon 2026",
+    "links": [
+      {
+        "href": "https://www.hexacon.fr/conference/speakers/#full_root",
+        "icon": "fa-globe",
+        "label": "Website"
+      }
+    ]
   },
   {
     "year": 2026,
@@ -42,7 +56,7 @@
     "venue": "Nullcon Berlin 2025",
     "links": [
       {
-        "href": "https://nullcon.net/berlin-2025/speaker-speaker-derandomizing-kernel-object-locations",
+        "href": "https://nullcon.net/talk/derandomizing-kernel-object-locations-with-software-and-hardware-induced-side-channels/",
         "icon": "fa-globe",
         "label": "Website"
       },

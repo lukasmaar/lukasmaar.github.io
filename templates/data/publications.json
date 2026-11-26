@@ -1,7 +1,7 @@
 [
   {
     "year": 2026,
-    "href": "",
+    "href": "https://ls.ecomaikgolf.com/papers/leakytree-ccs.pdf",
     "title": "LeakyTree: Cross-VM Bit-by-Bit Deduplicated Page Leakage via Linux Kernel Samepage Merging Internals",
     "authors": "Ernesto Martínez García, <b>Lukas Maar</b>, Martin Unterguggenberger, Mathias Oberhuber, Stefan Mangard",
     "venue": "ACM Conference on Computer and Communications Security (CCS) 2026",
@@ -12,7 +12,7 @@
       ]
     },
     "bibtex": "@inproceedings{Garcia2026LeakyTree,\n  author = {Ernesto Martinez Garcia and Lukas Maar and Martin Unterguggenberger and Mathias Oberhuber and Stefan Mangard},\n  booktitle = {{CCS}},\n  title = {{LeakyTree: Cross-VM Bit-by-Bit Deduplicated Page Leakage via Linux Kernel Samepage Merging Internals}},\n  year = {2026}\n}",
-    "info": ""
+    "info": "In this paper, we present LeakyTree, a novel side-channel attack on Linux Kernel Samepage Merging (KSM) that leaks deduplicated pages bit by bit with O(n) complexity. By massaging KSM's red-black stable tree and observing traversal page comparisons via a CPU cache side channel, we leak high-entropy secrets like RSA keys cross-process and cross-VM at up to 30 bits per second. "
   },
   {
     "year": 2026,
@@ -333,7 +333,7 @@
       ]
     },
     "links": {
-      "github": "https://extgit.iaik.tugraz.at/sesys/dope",
+      "github": "https://extgit.isec.tugraz.at/sesys/dope",
       "slides": "slides/acsac23-dope.pdf"
     },
     "info": "<div> <img src=\"images/dope.svg\" alt=\"image:DOPE\" width=\"145px\" class=\"thumb-left\" /> </div> In this paper, we present DOPE, a novel approach leveraging Intel PKS to protect sensitive data from data-oriented attacks. We implement and evaluate a DOPE proof-of-concept, demonstrating reasonable performance overhead while providing superior protection compared to other kernel data protection schemes.",

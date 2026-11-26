@@ -1,16 +1,34 @@
 [
   {
     "year": 2026,
-    "id": "OEMpocalypse",
-    "title": "OEMpocalypse Now: A Generic Exploitation Strategy from Android Untrusted App to Root",
-    "href": "https://calif.io/research/oempocalypse",
+    "id": "OEMpocalypse2",
+    "title": "OEMpocalypse Part 2: Rooting Samsung Flagships via Knox DualDAR",
+    "href": "https://calif.io/research/oempocalypse-part-2",
     "authors": "<b>Lukas Maar</b>",
     "badges": {
       "cves": [
         "CVE-2026-21102"
       ]
     },
-    "info": "<ul><li><b>Strategy:</b> Exploit a page UAF in an OEM-specific kernel driver. If SELinux gates it behind a privileged domain, reach it first via an OEM-specific sandbox escape.</li><li><b>Why:</b> A page UAF reached from the right context gives a reliable, physical page-level primitive that is largely independent of kernel version, slab hardening, KASLR, CFI, and phone model.</li><li><b>Coverage:</b> Three instantiations of the strategy cover all Samsung flagships (Galaxy S23&ndash;S26, recent Z series), most Xiaomi mid-range to flagship devices, and recent Oppo/OnePlus/Realme flagships.</li></ul>"
+    "links": {
+      "slides": "https://calif.io/research/slides/2026/hexacon-full-root-samsung-dualdar.pdf"
+    },
+    "extra_links": [
+      {
+        "label": "Hexacon",
+        "href": "https://www.hexacon.fr/conference/speakers/#full_root",
+        "icon": "fa-user-secret"
+      }
+    ],
+    "info": "<div> <img src=\"images/oempocalypse-part2.jpg\" alt=\"image:OEMpocalypse Part 2\" width=\"190px\" class=\"thumb-left\" /> </div> <ul><li><b>Stage 1 (sandbox escape):</b> The Knox DualDAR service dispatches commands on a background thread, losing the caller's Binder identity, so its UID check accepts any SELinux domain. A library-load command then gives code execution in the privileged crypto daemon.</li><li><b>Stage 2 (page UAF):</b> The DualDAR driver frees a per-inode metadata page while leaving it mapped, yielding a readable and writable alias to freed physical memory. Reclaiming it with <code>pipe_buffer</code> gives arbitrary kernel read/write.</li><li><b>Root on a hardened Samsung:</b> The chain disables SELinux, sidesteps RKP by patching a page-cache library, and disables DEFEX through a kernel-module kprobe. One codebase roots the Galaxy S23 and S26 across Snapdragon and Exynos.</li></ul>"
+  },
+  {
+    "year": 2026,
+    "id": "OEMpocalypse1",
+    "title": "OEMpocalypse Now: A Generic Exploitation Strategy from Android Untrusted App to Root",
+    "href": "https://calif.io/research/oempocalypse",
+    "authors": "<b>Lukas Maar</b>",
+    "info": "<div> <img src=\"images/oempocalypse.jpg\" alt=\"image:OEMpocalypse\" width=\"190px\" class=\"thumb-left\" /> </div> <ul><li><b>Strategy:</b> Exploit a page UAF in an OEM-specific kernel driver. If SELinux gates it behind a privileged domain, reach it first via an OEM-specific sandbox escape.</li><li><b>Why:</b> A page UAF reached from the right context gives a reliable, physical page-level primitive that is largely independent of kernel version, slab hardening, KASLR, CFI, and phone model.</li><li><b>Coverage:</b> Three instantiations of the strategy cover all Samsung flagships (Galaxy S23&ndash;S26, recent Z series), most Xiaomi mid-range to flagship devices, and recent Oppo/OnePlus/Realme flagships.</li></ul>"
   },
   {
     "year": 2026,
@@ -23,7 +41,7 @@
     },
     "links": {
       "github": "https://github.com/lukasmaar/qaic-page-uaf",
-      "slides": ""
+      "slides": "slides/prasec26-qaic-page-uaf.pdf"
     },
     "extra_links": [
       {"label": "Patch", "href": "https://lore.kernel.org/all/20260430193858.1178641-1-zachary.mckevitt@oss.qualcomm.com/", "icon": "fa-code-fork"}
@@ -44,7 +62,8 @@
     },
     "extra_links": [
       {"label": "IonStack", "href": "https://nebusec.ai/research/ionstack-part-3/", "icon": "fa-external-link"},
-      {"label": "MacOS", "href": "https://support.apple.com/en-us/128067", "icon": "fa-apple"}
+      {"label": "MacOS", "href": "https://support.apple.com/en-us/128067", "icon": "fa-apple"},
+      {"label": "Patch", "href": "https://lore.kernel.org/all/20261019183334.29433-1-kylebot@openai.com/", "icon": "fa-code-fork"}
     ],
     "info": "<ul><li><b>Portable Core Leak:</b> KernelSnitch is a software-only timing side channel that leaks <code>mm_struct</code>-backed page locations without relying on a memory-safety bug, with its POC having a near-100% success rate.</li><li><b>Practical pivot:</b> Combined with cross-cache reuse, this core yields practical <code>msg_msg</code>/<code>pipe_buffer</code> heap KASLR leaks: above 98% on desktop kernels and KernelCTF instances, and practical on the Android kernel.</li><li><b>Security implication:</b> This leakage class remains exploitable under MTE because it avoids invalid tagged accesses, and the core leak can also recover the tag of tagged kernel <code>mm_struct</code> addresses.</li></ul>"
   }

@@ -5,7 +5,7 @@
     "blurb": "Hardware-agnostic timing side channel on kernel hash tables, yielding a universal heap KASLR leak, including MTE tag recovery. Confirmed on Linux and Android; macOS was also susceptible."
   },
   {
-    "title": "OEMpocalypse",
+    "title": "OEMpocalypse Series",
     "badge": {"icon": "fa-android", "text": "Untrusted app to root"},
     "blurb": "A generic page-UAF exploitation strategy against Android OEM kernel drivers, yielding full root chains on Samsung, Xiaomi, Oppo, OnePlus, and Realme devices."
   }

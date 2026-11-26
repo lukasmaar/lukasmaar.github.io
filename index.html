@@ -34,10 +34,10 @@
   <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
 
   <!-- SEO / social preview -->
-  <meta name="description" content="Lukas Maar — Security Researcher at Calif and Senior Security Researcher at ISEC, TU Graz. Linux and Android kernel exploitation, defenses, and side channels.">
+  <meta name="description" content="Lukas Maar — Security Researcher at Calif and ISEC, TU Graz. Exploiting Linux and Android kernels, Android system services, and side channels.">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Lukas Maar">
-  <meta property="og:description" content="Security Researcher at Calif and Senior Security Researcher at ISEC, TU Graz. Linux and Android kernel exploitation, defenses, and side channels.">
+  <meta property="og:description" content="Security Researcher at Calif and ISEC, TU Graz. Exploiting Linux and Android kernels, Android system services, and side channels.">
   <meta property="og:url" content="https://lukasmaar.github.io/">
   <meta property="og:image" content="https://lukasmaar.github.io/images/profile.jpg">
   <meta name="twitter:card" content="summary">
@@ -112,11 +112,12 @@
           Hey and welcome to my site. I am Lukas Maar, a Security Researcher at
           <a href="https://calif.io/">Calif</a> and a Senior Security Researcher at
           <a href="https://www.isec.tugraz.at/">ISEC</a>, TU Graz. I completed my PhD
-          <a href="publications/kernel-security-in-the-wild.pdf">thesis</a> in 2025 under
-          <a href="https://www.isec.tugraz.at/person/stefan-mangard/">Stefan Mangard</a>. My work focuses on low-level
-          security: kernel exploitation, defenses, and side channels targeting the Linux and Android kernels, including
-          KernelSnitch, a universal side channel for heap KASLR leaks. I have presented my research at USENIX Security,
-          NDSS, Black Hat USA, Black Hat Asia, and Nullcon Berlin, among others.
+          <a href="publications/kernel-security-in-the-wild.pdf">thesis</a> under
+          <a href="https://www.isec.tugraz.at/person/stefan-mangard/">Stefan Mangard</a> in 2025. My work spans
+          vulnerability research and exploit development across the software stack, with a focus on the Linux kernel,
+          the Android kernel, Android system services, and side channels that make exploitation more reliable,
+          ultimately to understand how to make these systems more secure. I have presented my research at USENIX
+          Security, NDSS, Hexacon, Black Hat, among others.
         </p>
 
         <div class="edu-section">
@@ -174,7 +175,7 @@
           </div>
 
           <div class="highlight-card">
-            <div class="hl-title">OEMpocalypse</div>
+            <div class="hl-title">OEMpocalypse Series</div>
             <div class="hl-badge"><i class="fa fa-android"></i> Untrusted app to root</div>
             <div class="hl-blurb">
               A generic page-UAF exploitation strategy against Android OEM kernel drivers, yielding full root chains on Samsung, Xiaomi, Oppo, OnePlus, and Realme devices.
@@ -236,8 +237,8 @@
               <div class="col-md-11">
                 <i class="fa fa-edit">
                 </i>
-                <a class="title" href="https://calif.io/research/oempocalypse">
-                  OEMpocalypse Now: A Generic Exploitation Strategy from Android Untrusted App to Root
+                <a class="title" href="https://calif.io/research/oempocalypse-part-2">
+                  OEMpocalypse Part 2: Rooting Samsung Flagships via Knox DualDAR
                 </a>
                 <br>
                 <small>
@@ -247,11 +248,39 @@
                     <i class="fa fa-bug text-black"></i> CVE-2026-21102
                   </span>
                   <br>
-                  <span class="sbtn" onclick="showInfo('info:OEMpocalypse', 'OEMpocalypse Now: A Generic Exploitation Strategy from Android Untrusted App to Root')"><a href="#0"><i class="fa fa-info-circle"></i>
+                  <span class="sbtn" onclick="showInfo('info:OEMpocalypse2', 'OEMpocalypse Part 2: Rooting Samsung Flagships via Knox DualDAR')"><a href="#0"><i class="fa fa-info-circle"></i>
+                      Info</a></span>
+                  <span class="sbtn"><a href="https://calif.io/research/slides/2026/hexacon-full-root-samsung-dualdar.pdf"><i class="fa fa-slideshare"></i>
+                      Slides</a></span>
+                  <span class="sbtn"><a href="https://www.hexacon.fr/conference/speakers/#full_root"><i class="fa fa-user-secret"></i>
+                      Hexacon</a></span>
+                </small>
+                <div id="info:OEMpocalypse2" class="is-hidden">
+                  <div> <img src="images/oempocalypse-part2.jpg" alt="image:OEMpocalypse Part 2" width="190px" class="thumb-left" /> </div> <ul><li><b>Stage 1 (sandbox escape):</b> The Knox DualDAR service dispatches commands on a background thread, losing the caller's Binder identity, so its UID check accepts any SELinux domain. A library-load command then gives code execution in the privileged crypto daemon.</li><li><b>Stage 2 (page UAF):</b> The DualDAR driver frees a per-inode metadata page while leaving it mapped, yielding a readable and writable alias to freed physical memory. Reclaiming it with <code>pipe_buffer</code> gives arbitrary kernel read/write.</li><li><b>Root on a hardened Samsung:</b> The chain disables SELinux, sidesteps RKP by patching a page-cache library, and disables DEFEX through a kernel-module kprobe. One codebase roots the Galaxy S23 and S26 across Snapdragon and Exynos.</li></ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="timeline-entry">
+              <div class="col-md-1">
+              </div>
+              <div class="col-md-11">
+                <i class="fa fa-edit">
+                </i>
+                <a class="title" href="https://calif.io/research/oempocalypse">
+                  OEMpocalypse Now: A Generic Exploitation Strategy from Android Untrusted App to Root
+                </a>
+                <br>
+                <small>
+                  <b>Lukas Maar</b>
+                  <br>
+                  <span class="sbtn" onclick="showInfo('info:OEMpocalypse1', 'OEMpocalypse Now: A Generic Exploitation Strategy from Android Untrusted App to Root')"><a href="#0"><i class="fa fa-info-circle"></i>
                       Info</a></span>
                 </small>
-                <div id="info:OEMpocalypse" class="is-hidden">
-                  <ul><li><b>Strategy:</b> Exploit a page UAF in an OEM-specific kernel driver. If SELinux gates it behind a privileged domain, reach it first via an OEM-specific sandbox escape.</li><li><b>Why:</b> A page UAF reached from the right context gives a reliable, physical page-level primitive that is largely independent of kernel version, slab hardening, KASLR, CFI, and phone model.</li><li><b>Coverage:</b> Three instantiations of the strategy cover all Samsung flagships (Galaxy S23&ndash;S26, recent Z series), most Xiaomi mid-range to flagship devices, and recent Oppo/OnePlus/Realme flagships.</li></ul>
+                <div id="info:OEMpocalypse1" class="is-hidden">
+                  <div> <img src="images/oempocalypse.jpg" alt="image:OEMpocalypse" width="190px" class="thumb-left" /> </div> <ul><li><b>Strategy:</b> Exploit a page UAF in an OEM-specific kernel driver. If SELinux gates it behind a privileged domain, reach it first via an OEM-specific sandbox escape.</li><li><b>Why:</b> A page UAF reached from the right context gives a reliable, physical page-level primitive that is largely independent of kernel version, slab hardening, KASLR, CFI, and phone model.</li><li><b>Coverage:</b> Three instantiations of the strategy cover all Samsung flagships (Galaxy S23&ndash;S26, recent Z series), most Xiaomi mid-range to flagship devices, and recent Oppo/OnePlus/Realme flagships.</li></ul>
                 </div>
               </div>
             </div>
@@ -279,6 +308,8 @@
                       Info</a></span>
                   <span class="sbtn"><a href="https://github.com/lukasmaar/qaic-page-uaf"><i class="fa fa-github"></i>
                       GitHub</a></span>
+                  <span class="sbtn"><a href="slides/prasec26-qaic-page-uaf.pdf"><i class="fa fa-slideshare"></i>
+                      Slides</a></span>
                   <span class="sbtn"><a href="https://lore.kernel.org/all/20260430193858.1178641-1-zachary.mckevitt@oss.qualcomm.com/"><i class="fa fa-code-fork"></i>
                       Patch</a></span>
                 </small>
@@ -315,6 +346,8 @@
                       IonStack</a></span>
                   <span class="sbtn"><a href="https://support.apple.com/en-us/128067"><i class="fa fa-apple"></i>
                       MacOS</a></span>
+                  <span class="sbtn"><a href="https://lore.kernel.org/all/20261019183334.29433-1-kylebot@openai.com/"><i class="fa fa-code-fork"></i>
+                      Patch</a></span>
                 </small>
                 <div id="info:HeapKASLRLeak" class="is-hidden">
                   <ul><li><b>Portable Core Leak:</b> KernelSnitch is a software-only timing side channel that leaks <code>mm_struct</code>-backed page locations without relying on a memory-safety bug, with its POC having a near-100% success rate.</li><li><b>Practical pivot:</b> Combined with cross-cache reuse, this core yields practical <code>msg_msg</code>/<code>pipe_buffer</code> heap KASLR leaks: above 98% on desktop kernels and KernelCTF instances, and practical on the Android kernel.</li><li><b>Security implication:</b> This leakage class remains exploitable under MTE because it avoids invalid tagged accesses, and the core leak can also recover the tag of tagged kernel <code>mm_struct</code> addresses.</li></ul>
@@ -356,7 +389,7 @@
               <div class="col-md-11">
                 <i class="fa fa-file">
                 </i>
-                <a class="title" href="">
+                <a class="title" href="https://ls.ecomaikgolf.com/papers/leakytree-ccs.pdf">
                   LeakyTree: Cross-VM Bit-by-Bit Deduplicated Page Leakage via Linux Kernel Samepage Merging Internals
                 </a>
                 <br>
@@ -369,9 +402,14 @@
                     <i class="fa fa-certificate text-purple"></i> Artifacts evaluated: Available
                   </span>
                   <br>
+                  <span class="sbtn" onclick="showInfo('info:LeakyTree', 'LeakyTree: Cross-VM Bit-by-Bit Deduplicated Page Leakage via Linux Kernel Samepage Merging Internals')"><a href="#0"><i class="fa fa-info-circle"></i>
+                      Info</a></span>
                   <span class="sbtn" onclick="showBibtex('bibtex:LeakyTree')"><a href="#0"><i class="fa fa-quote-left"></i>
                       BibTex</a></span>
                 </small>
+                <div id="info:LeakyTree" class="is-hidden">
+                  In this paper, we present LeakyTree, a novel side-channel attack on Linux Kernel Samepage Merging (KSM) that leaks deduplicated pages bit by bit with O(n) complexity. By massaging KSM's red-black stable tree and observing traversal page comparisons via a CPU cache side channel, we leak high-entropy secrets like RSA keys cross-process and cross-VM at up to 30 bits per second.
+                </div>
                 <pre id="bibtex:LeakyTree" class="is-hidden">@inproceedings{Garcia2026LeakyTree,
   author = {Ernesto Martinez Garcia and Lukas Maar and Martin Unterguggenberger and Mathias Oberhuber and Stefan Mangard},
   booktitle = {{CCS}},
@@ -1056,7 +1094,7 @@
                       Info</a></span>
                   <span class="sbtn" onclick="showBibtex('bibtex:DOPE')"><a href="#0"><i class="fa fa-quote-left"></i>
                       BibTex</a></span>
-                  <span class="sbtn"><a href="https://extgit.iaik.tugraz.at/sesys/dope"><i class="fa fa-github"></i>
+                  <span class="sbtn"><a href="https://extgit.isec.tugraz.at/sesys/dope"><i class="fa fa-github"></i>
                       GitHub</a></span>
                   <span class="sbtn"><a href="slides/acsac23-dope.pdf"><i class="fa fa-slideshare"></i>
                       Slides</a></span>
@@ -1107,7 +1145,7 @@
               <div class="col-md-11">
                 <i class="fa fa-television">
                 </i>
-                <a class="title" href="">
+                <a class="title" href="https://calif.io/research/slides/2026/nullcon-berlin-dma-after-free.pdf">
                   DMA-After-Free: Exploiting a Stale IOMMU TLB for Privilege Escalation on Qualcomm-Based Mobile Devices
                 </a>
                 <br>
@@ -1115,6 +1153,9 @@
                   <b>Lukas Maar</b>
                   <br>
                   Nullcon Berlin 2026
+                  <br>
+                  <span class="sbtn"><a href="https://nullcon.net/talk/dma-after-free-exploiting-a-stale-iommu-tlb-for-privilege-escalation-on-qualcomm-based-mobile-devices/"><i class="fa fa-globe"></i>
+                      Website</a></span>
                 </small>
               </div>
             </div>
@@ -1127,7 +1168,7 @@
               <div class="col-md-11">
                 <i class="fa fa-television">
                 </i>
-                <a class="title" href="">
+                <a class="title" href="https://calif.io/research/slides/2026/hexacon-full-root-samsung-dualdar.pdf">
                   Full Root: Kernel-Driver Page UAF and Confused-Deputy Vuln in Samsungs DualDAR Subsystem
                 </a>
                 <br>
@@ -1135,6 +1176,9 @@
                   <b>Lukas Maar</b>
                   <br>
                   Hexacon 2026
+                  <br>
+                  <span class="sbtn"><a href="https://www.hexacon.fr/conference/speakers/#full_root"><i class="fa fa-globe"></i>
+                      Website</a></span>
                 </small>
               </div>
             </div>
@@ -1230,7 +1274,7 @@
                   <br>
                   Nullcon Berlin 2025
                   <br>
-                  <span class="sbtn"><a href="https://nullcon.net/berlin-2025/speaker-speaker-derandomizing-kernel-object-locations"><i class="fa fa-globe"></i>
+                  <span class="sbtn"><a href="https://nullcon.net/talk/derandomizing-kernel-object-locations-with-software-and-hardware-induced-side-channels/"><i class="fa fa-globe"></i>
                       Website</a></span>
                   <span class="sbtn"><a href="https://www.youtube.com/watch?v=_6BcuHpp9eU"><i class="fa fa-television"></i>
                       Recording</a></span>
@@ -1592,8 +1636,10 @@
               <div class="col-md-11">
                 <i class="fa fa-bug">
                 </i>
-                <a class="title">
-                  </a>
+                <a class="title" href="https://docs.qualcomm.com/securitybulletin/november-2026-bulletin.html">
+                  CVE-2026-80013</a>,
+                <a class="title" href="https://docs.qualcomm.com/securitybulletin/november-2026-bulletin.html">
+                  CVE-2026-80015</a>
                 <br>
                 <small>
                   <span class="sbtn text-muted">
@@ -1682,19 +1728,19 @@
               <div class="col-md-11">
                 <i class="fa fa-bug">
                 </i>
-                <a class="title" href="https://nvd.nist.gov/vuln/detail/CVE-2025-15515">
+                <a class="title" href="https://nvd.nist.gov/vuln/detail/cve-2025-15515">
                   CVE-2025-15515</a>,
-                <a class="title" href="https://nvd.nist.gov/vuln/detail/CVE-2025-21060">
+                <a class="title" href="https://nvd.nist.gov/vuln/detail/cve-2025-21060">
                   CVE-2025-21060</a>,
-                <a class="title" href="https://nvd.nist.gov/vuln/detail/CVE-2025-21061">
+                <a class="title" href="https://nvd.nist.gov/vuln/detail/cve-2025-21061">
                   CVE-2025-21061</a>,
-                <a class="title" href="https://nvd.nist.gov/vuln/detail/CVE-2025-21062">
+                <a class="title" href="https://nvd.nist.gov/vuln/detail/cve-2025-21062">
                   CVE-2025-21062</a>,
-                <a class="title" href="https://nvd.nist.gov/vuln/detail/CVE-2025-21064">
+                <a class="title" href="https://nvd.nist.gov/vuln/detail/cve-2025-21064">
                   CVE-2025-21064</a>,
-                <a class="title" href="https://nvd.nist.gov/vuln/detail/CVE-2025-21078">
+                <a class="title" href="https://nvd.nist.gov/vuln/detail/cve-2025-21078">
                   CVE-2025-21078</a>,
-                <a class="title" href="https://nvd.nist.gov/vuln/detail/CVE-2025-27387">
+                <a class="title" href="https://nvd.nist.gov/vuln/detail/cve-2025-27387">
                   CVE-2025-27387</a>
                 <br>
                 <small>
@@ -1713,7 +1759,7 @@
               <div class="col-md-11">
                 <i class="fa fa-bug">
                 </i>
-                <a class="title" href="https://nvd.nist.gov/vuln/detail/CVE-2025-21691">
+                <a class="title" href="https://nvd.nist.gov/vuln/detail/cve-2025-21691">
                   CVE-2025-21691</a>
                 <br>
                 <small>
@@ -1751,13 +1797,13 @@
               <div class="col-md-11">
                 <i class="fa fa-bug">
                 </i>
-                <a class="title" href="https://nvd.nist.gov/vuln/detail/CVE-2025-24193">
+                <a class="title" href="https://nvd.nist.gov/vuln/detail/cve-2025-54096">
                   CVE-2024-54096</a>,
-                <a class="title" href="https://nvd.nist.gov/vuln/detail/CVE-2024-20900">
+                <a class="title" href="https://nvd.nist.gov/vuln/detail/cve-2024-20900">
                   CVE-2024-20900</a>,
-                <a class="title" href="https://nvd.nist.gov/vuln/detail/CVE-2024-43085">
+                <a class="title" href="https://nvd.nist.gov/vuln/detail/cve-2024-43085">
                   CVE-2024-43085</a>,
-                <a class="title" href="https://nvd.nist.gov/vuln/detail/CVE-2024-54096">
+                <a class="title" href="https://nvd.nist.gov/vuln/detail/cve-2024-24193">
                   CVE-2025-24193</a>
                 <br>
                 <small>
@@ -1823,7 +1869,7 @@
               <div class="col-md-11">
                 <i class="fa fa-bug">
                 </i>
-                <a class="title" href="https://nvd.nist.gov/vuln/detail/CVE-2023-21387">
+                <a class="title" href="https://nvd.nist.gov/vuln/detail/cve-2023-21387">
                   CVE-2023-21387</a>
                 <br>
                 <small>
@@ -1864,7 +1910,7 @@
     <footer>
       <p>&copy; 2026 Lukas Maar.
         <small>
-          Last updated: 21.09.2026.
+          Last updated: 26.11.2026.
         </small>
       </p>
     </footer>

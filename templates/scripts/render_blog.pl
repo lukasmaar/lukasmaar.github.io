@@ -27,9 +27,10 @@ my $entries = decode_json($json_text);
 die "Expected blog JSON array\n" if ref($entries) ne 'ARRAY';
 
 # Well-known link keys -> [icon, label], rendered in this order.
-my @LINK_ORDER = qw(github);
+my @LINK_ORDER = qw(github slides);
 my %LINK_META = (
-  github => ['fa-github', 'GitHub'],
+  github => ['fa-github',     'GitHub'],
+  slides => ['fa-slideshare', 'Slides'],
 );
 
 my $html = "";
